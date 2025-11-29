@@ -1,4 +1,4 @@
-package names
+package routes
 
 import servers.NameServer
 import zio._

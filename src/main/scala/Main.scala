@@ -1,8 +1,7 @@
 import com.typesafe.config.ConfigFactory
-import models.Name
-import names.NameRoute
-import repositories.{NameRepositoryLive, NameRepository}
-import servers.NameServer
+import routes.{NameRoute, RaceRoute}
+import repositories.{NameRepositoryLive, RaceRepositoryLive}
+import servers.{NameServer, RaceServer}
 import zio._
 import zio.http._
 import zio.http.Method
@@ -20,15 +19,19 @@ object Main extends ZIOAppDefault {
       .attempt(ConfigFactory.load().getInt("server.port"))
       .flatMap { port =>
         val program = for {
-          routes <- ZIO.serviceWith[NameRoute](_.routes)
-          _      <- Server.serve(app ++ routes)
+          nameRoutes <- ZIO.serviceWith[NameRoute](_.routes)
+          raceRoutes <- ZIO.serviceWith[RaceRoute](_.routes)
+          _          <- Server.serve(app ++ nameRoutes ++ raceRoutes)
         } yield ()
 
         program.provide(
           Server.defaultWithPort(port),
           NameRepositoryLive.layer,
+          RaceRepositoryLive.layer,
           NameServer.live,
-          NameRoute.live
+          RaceServer.live,
+          NameRoute.live,
+          RaceRoute.live
         )
       }
       .orDie
