@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 - Standard sbt layout: app code in `src/main/scala`, tests in `src/test/scala`, shared configs/assets in `src/main/resources`.
-- Current features: `models/Name.scala`, `repositories/*`, `servers/NameServer.scala`, `names/NameRoute.scala`.
+- Current features: Names and Races. `models/Name.scala`, `repositories/NameRepository*.scala`, `servers/NameServer.scala`, `routes/NameRoute.scala`; plus `models/Race.scala`, `repositories/RaceRepository*.scala`, `servers/RaceServer.scala`, `routes/RaceRoute.scala`.
 - Config: `application.conf` (server.port, mongodb.uri, optional mongodb.collection defaulting to `Name`); `local-dev.conf` is git-ignored and can override Mongo.
 
 ## Build, Test, and Development Commands
@@ -33,6 +33,6 @@
 - Scrub sensitive fields before logging; keep logs minimal in production.
 
 ## HTTP & Persistence Notes
-- HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, and `/names` (list names).
-- Model: `models.Name` with zio-json codecs and Mongo `ObjectId` encode/decode.
-- Persistence: `NameRepository` trait with `NameRepositoryLive` using Mongo codec registries.
+- HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, `/names` (list names), `/races` (list races).
+- Models: `models.Name` and `models.Race` (with nested `RaceAbility`) include zio-json codecs and Mongo `ObjectId` encode/decode.
+- Persistence: `NameRepository` and `RaceRepository` traits with live implementations using Mongo codec registries. Race codec registry must include `RaceAbility` provider.
