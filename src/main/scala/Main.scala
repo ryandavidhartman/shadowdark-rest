@@ -1,6 +1,6 @@
 import com.typesafe.config.ConfigFactory
 import routes.{CharacterRoute, NameRoute, RaceRoute}
-import repositories.{CharacterRepositoryLive, NameRepositoryLive, RaceRepositoryLive}
+import repositories.{CharacterClassRepositoryLive, CharacterRepositoryLive, NameRepositoryLive, RaceRepositoryLive}
 import servers.{CharacterServer, NameServer, RaceServer}
 import zio._
 import zio.http._
@@ -30,6 +30,7 @@ object Main extends ZIOAppDefault {
           CharacterRepositoryLive.layer,
           NameRepositoryLive.layer,
           RaceRepositoryLive.layer,
+          CharacterClassRepositoryLive.layer,
           CharacterServer.live,
           NameServer.live,
           RaceServer.live,

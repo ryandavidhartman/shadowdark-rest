@@ -2,8 +2,10 @@
 
 ## Project Structure & Module Organization
 - Standard sbt layout: app code in `src/main/scala`, tests in `src/test/scala`, shared configs/assets in `src/main/resources`.
-- Current features: Names and Races. `models/Name.scala`, `repositories/NameRepository*.scala`, `servers/NameServer.scala`, `routes/NameRoute.scala`; plus `models/Race.scala`, `repositories/RaceRepository*.scala`, `servers/RaceServer.scala`, `routes/RaceRoute.scala`.
+- Core models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, AC/HP, gear, talents/features/spells/languages), `CharacterClass` + supporting types (`ClassFeature`, `Talent`, `Spellcasting`, etc.), `Language`.
+- Repositories/servers/routes: Names and Races (`NameRepository*`, `NameServer`, `NameRoute`; `RaceRepository*`, `RaceServer`, `RaceRoute`); Characters (`CharacterRepository*`, `CharacterServer`, `CharacterRoute`); Character Classes (`CharacterClassRepository*`).
 - Config: `application.conf` (server.port, mongodb.uri, optional mongodb.collection defaulting to `Name`); `local-dev.conf` is git-ignored and can override Mongo.
+- Data seeding: `data/seed-classes.js` seeds the `Classes` Mongo collection with core class data; run via `mongosh --file data/seed-classes.js "$MONGO_URI"`.
 
 ## Build, Test, and Development Commands
 - `sbt compile` — compile and fetch deps (Mongo driver 5.6.1, ZIO 2.1.23, zio-http 3.6.0, zio-json 0.7.0).
@@ -33,6 +35,9 @@
 - Scrub sensitive fields before logging; keep logs minimal in production.
 
 ## HTTP & Persistence Notes
-- HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, `/names` (list names), `/races` (list races).
-- Models: `models.Name` and `models.Race` (with nested `RaceAbility`) include zio-json codecs and Mongo `ObjectId` encode/decode.
-- Persistence: `NameRepository` and `RaceRepository` traits with live implementations using Mongo codec registries. Race codec registry must include `RaceAbility` provider.
+- HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, `/names` (list names), `/races` (list races), `/random-character` (random or stored character).
+- Models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, HP/AC, gear, features, talents, spells, languages), `CharacterClass` (+ `ClassFeature`, `Talent`, `Spellcasting`, etc.), `Language`; all have zio-json codecs and Mongo ObjectId encode/decode where needed.
+- Persistence: `NameRepository`, `RaceRepository`, `CharacterRepository`, `CharacterClassRepository` with live Mongo implementations using codec registries. Race codec registry must include `RaceAbility`; class registry must include class support types.
+- Characters: `CharacterServer` builds random characters with weighted races, class-driven HP, features, talents (rolled 2d6 per talent level), spell summaries, gear, and language selection (Common + race languages + class-granted picks, resolving “extra” placeholders to actual common/rare languages).
+- Caching: `NameServer` and `RaceServer` cache list fetches for 5 minutes via zio-cache (capacity 1) and invalidate on create.
+- Names API: `/names` GET returns cached list; POST accepts JSON (`name`, `race`, optional `gender`, `firstName`, `lastName`) and inserts a new ObjectId-backed `Name`, returns 201 JSON and clears cache.

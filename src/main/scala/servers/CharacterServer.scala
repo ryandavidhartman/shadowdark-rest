@@ -1,8 +1,8 @@
 package servers
 
-import models.{AbilityScore, AbilityScores, Character, Name, Race}
+import models._
 import org.mongodb.scala.bson.ObjectId
-import repositories.{CharacterRepository, NameRepository, RaceRepository}
+import repositories.{CharacterClassRepository, CharacterRepository, NameRepository, RaceRepository}
 import zio._
 
 import java.util.concurrent.ThreadLocalRandom
@@ -12,12 +12,13 @@ final case class CharacterServer(
   characterRepository: CharacterRepository,
   nameRepository: NameRepository,
   raceRepository: RaceRepository,
+  characterClassRepository: CharacterClassRepository,
 ) {
 
-  private val classes     = List("Cleric", "Fighter", "Rogue", "Wizard", "Ranger", "Champion")
   private val backgrounds = List("Acolyte", "Commoner", "Outlander", "Scholar", "Soldier")
   private val alignments  = List("Lawful", "Neutral", "Chaotic")
   private val deities     = List("Arden", "Gloom", "Ithis", "Lunara", "Shadow")
+  private val baseLanguages = Language.default
   private val gearChoices = List(
     "Backpack",
     "Bedroll",
@@ -33,6 +34,9 @@ final case class CharacterServer(
 
   private def rng: ThreadLocalRandom = ThreadLocalRandom.current()
 
+  private def roll2d6: UIO[Int] =
+    ZIO.succeed(rng.nextInt(1, 7) + rng.nextInt(1, 7))
+
   private def roll3d6: UIO[Int] =
     ZIO.succeed(rng.nextInt(1, 7) + rng.nextInt(1, 7) + rng.nextInt(1, 7))
 
@@ -47,6 +51,9 @@ final case class CharacterServer(
       if (values.isEmpty) List.empty
       else Random.shuffle(values).take(count)
     }
+
+  private def pickDistinctFromPool(pool: List[String], count: Int, exclude: Set[String]): List[String] =
+    Random.shuffle(pool.filterNot(exclude)).distinct.take(count)
 
   private def pickWeightedRace(races: List[Race]): UIO[Option[Race]] =
     ZIO.succeed {
@@ -97,11 +104,26 @@ final case class CharacterServer(
     }
   }
 
+  private def ensureClasses: Task[List[StoredCharacterClass]] =
+    characterClassRepository.list()
+
+  private def hitDieSides(characterClass: StoredCharacterClass): Int =
+    characterClass.hitPointsPerLevel match {
+      case hp if hp.startsWith("1d8") => 8
+      case hp if hp.startsWith("1d6") => 6
+      case hp if hp.startsWith("1d4") => 4
+      case _                          => 8
+    }
+
+  private def pickDistinct[A](pool: List[A], count: Int): List[A] =
+    Random.shuffle(pool).distinct.take(count)
+
   private def generateCharacter: Task[Character] =
     for {
       // fall back to defaults if name/race collections are empty; still fail on repo errors
       names         <- nameRepository.list()
       races         <- raceRepository.list()
+      classes       <- ensureClasses
       randomRace    <- pickWeightedRace(races).flatMap {
                          case some @ Some(_) => ZIO.succeed(some)
                          case None           => pickOne(races)
@@ -123,6 +145,41 @@ final case class CharacterServer(
       gold          <- ZIO.succeed(rng.nextInt(0, 21))
       silver        <- ZIO.succeed(rng.nextInt(0, 51))
       copper        <- ZIO.succeed(rng.nextInt(0, 101))
+      languages       = {
+                          val extraCommonPattern = "(?i)(\\d+) extra common language[s]?".r
+                          val extraRarePattern   = "(?i)(\\d+) extra rare language[s]?".r
+
+                          val racialRaw       = randomRace.map(_.languages).getOrElse(List.empty)
+                          var extraCommonPick = 0
+                          var extraRarePick   = 0
+
+                          val racialLangs = racialRaw.flatMap {
+                            case extraCommonPattern(n) =>
+                              extraCommonPick += n.toInt
+                              None
+                            case extraRarePattern(n) =>
+                              extraRarePick += n.toInt
+                              None
+                            case other => Some(other)
+                          }
+
+                          val classLangs = pickedClass
+                            .flatMap(_.languages)
+                            .map { lb =>
+                              val chosen = pickDistinct(lb.choices, lb.choose)
+                              extraCommonPick += lb.extraCommon
+                              extraRarePick += lb.extraRare
+                              chosen
+                            }
+                            .getOrElse(List.empty)
+
+                          val known       = (List("Common") ++ racialLangs ++ classLangs).toSet
+                          val extraCommon = pickDistinctFromPool(baseLanguages.common, extraCommonPick, known)
+                          val knownPlus   = known ++ extraCommon
+                          val extraRare   = pickDistinctFromPool(baseLanguages.rare, extraRarePick, knownPlus)
+
+                          (known ++ extraCommon ++ extraRare).toSet
+                        }
       abilities      = AbilityScores(
                          AbilityScore(strScore),
                          AbilityScore(dexScore),
@@ -132,16 +189,39 @@ final case class CharacterServer(
                          AbilityScore(chaScore),
                        )
       conMod         = abilities.constitution.modifier
-      hpRoll         = rng.nextInt(1, 9)
+      hpSides        = pickedClass.map(hitDieSides).getOrElse(8)
+      hpRoll         = rng.nextInt(1, hpSides + 1)
       hitPoints      = Math.max(1, hpRoll + conMod)
       armorClass     = 10 + abilities.dexterity.modifier
       attacks        = List(s"Weapon attack ${formatMod(abilities.strength.modifier)} (1d6)")
+      level          = 1
+      talentRolls    = (level + 1) / 2
+      classTalents   <- pickedClass
+                          .map { cls =>
+                            ZIO
+                              .foreach(List.fill(talentRolls)(())) { _ =>
+                                roll2d6.map(roll => cls.talents.find(t => roll >= t.range.min && roll <= t.range.max))
+                              }
+                              .map(_.flatten.map(_.effect))
+                          }
+                          .getOrElse(ZIO.succeed(List.empty[String]))
+      classFeatures   = pickedClass.map(_.features).getOrElse(List.empty)
+      raceFeatures     = randomRace.map(r => ClassFeature(r.ability.name, r.ability.description)).toList
+      classSpells     = pickedClass
+                          .flatMap(_.spellcasting)
+                          .map { sc =>
+                            val known = sc.initialKnown.toList.sortBy(_._1).map { case (tier, count) =>
+                              s"Tier $tier spells known: $count"
+                            }
+                            known ++ sc.notes
+                          }
+                          .getOrElse(List.empty)
     } yield Character(
       _id = new ObjectId(),
       name = randomName,
       ancestry = randomRace.map(_.race),
-      characterClass = pickedClass,
-      level = Some(1),
+      characterClass = pickedClass.map(_.name),
+      level = Some(level),
       xp = Some(0),
       title = None,
       alignment = pickedAlign,
@@ -150,9 +230,12 @@ final case class CharacterServer(
       abilities = abilities,
       hitPoints = hitPoints,
       armorClass = armorClass,
-      talentsOrSpells = List.empty,
+      features = raceFeatures ++ classFeatures,
+      talents = classTalents,
+      spells = classSpells,
       attacks = attacks,
       gear = gearPicked,
+      languages = languages,
       gender = randomGender,
       goldPieces = gold,
       silverPieces = silver,
@@ -169,6 +252,10 @@ final case class CharacterServer(
 }
 
 object CharacterServer {
-  val live: ZLayer[CharacterRepository with NameRepository with RaceRepository, Nothing, CharacterServer] =
+  val live: ZLayer[
+    CharacterRepository with NameRepository with RaceRepository with CharacterClassRepository,
+    Nothing,
+    CharacterServer,
+  ] =
     ZLayer.fromFunction(CharacterServer.apply _)
 }

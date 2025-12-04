@@ -2,6 +2,7 @@ package models
 
 import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
+import models.StoredCharacterClass._
 
 final case class AbilityScore(score: Int) {
   val modifier: Int = score match {
@@ -40,9 +41,12 @@ final case class Character(
   abilities: AbilityScores,
   hitPoints: Int,
   armorClass: Int,
-  talentsOrSpells: List[String] = List.empty,
+  features: List[ClassFeature] = List.empty,
+  talents: List[String] = List.empty,
+  spells: List[String] = List.empty,
   attacks: List[String] = List.empty,
   gear: List[String] = List.empty,
+  languages: Set[String] = Set.empty,
   gender: Option[String] = None,
   goldPieces: Int = 0,
   silverPieces: Int = 0,
