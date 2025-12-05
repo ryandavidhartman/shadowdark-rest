@@ -47,6 +47,7 @@ final case class Character(
   attacks: List[String] = List.empty,
   gear: List[String] = List.empty,
   languages: Set[String] = Set.empty,
+  personalities: List[String] = List.empty,
   gender: Option[String] = None,
   goldPieces: Int = 0,
   silverPieces: Int = 0,

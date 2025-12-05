@@ -2,7 +2,7 @@ package servers
 
 import models._
 import org.mongodb.scala.bson.ObjectId
-import repositories.{CharacterClassRepository, CharacterRepository, NameRepository, RaceRepository}
+import repositories.{CharacterClassRepository, CharacterRepository}
 import zio._
 
 import java.util.concurrent.ThreadLocalRandom
@@ -10,8 +10,9 @@ import scala.util.Random
 
 final case class CharacterServer(
   characterRepository: CharacterRepository,
-  nameRepository: NameRepository,
-  raceRepository: RaceRepository,
+  nameServer: NameServer,
+  raceServer: RaceServer,
+  personalityServer: PersonalityServer,
   characterClassRepository: CharacterClassRepository,
 ) {
 
@@ -118,12 +119,41 @@ final case class CharacterServer(
   private def pickDistinct[A](pool: List[A], count: Int): List[A] =
     Random.shuffle(pool).distinct.take(count)
 
+  private val abilityNames = List("strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma")
+
+  private def normalizedAbilityPriority(pickedClass: Option[StoredCharacterClass]): List[String] = {
+    val prioritized = pickedClass
+      .map(_.abilityPriority.flatMap(a => abilityNames.find(_.equalsIgnoreCase(a))).distinct)
+      .getOrElse(List.empty)
+
+    val missing = abilityNames.filterNot(prioritized.contains)
+    val merged  = prioritized ++ missing
+
+    if (merged.nonEmpty) merged else abilityNames
+  }
+
+  private def orderedAbilityScores(rolled: List[Int], pickedClass: Option[StoredCharacterClass]): AbilityScores = {
+    val priority    = normalizedAbilityPriority(pickedClass)
+    val sortedRolls = rolled.sorted(Ordering[Int].reverse)
+    val assigned    = priority.zip(sortedRolls).toMap
+
+    AbilityScores(
+      AbilityScore(assigned("strength")),
+      AbilityScore(assigned("dexterity")),
+      AbilityScore(assigned("constitution")),
+      AbilityScore(assigned("intelligence")),
+      AbilityScore(assigned("wisdom")),
+      AbilityScore(assigned("charisma")),
+    )
+  }
+
   private def generateCharacter: Task[Character] =
     for {
       // fall back to defaults if name/race collections are empty; still fail on repo errors
-      names         <- nameRepository.list()
-      races         <- raceRepository.list()
+      names         <- nameServer.getNames
+      races         <- raceServer.getRaces
       classes       <- ensureClasses
+      personalities <- personalityServer.getPersonalities
       randomRace    <- pickWeightedRace(races).flatMap {
                          case some @ Some(_) => ZIO.succeed(some)
                          case None           => pickOne(races)
@@ -179,15 +209,24 @@ final case class CharacterServer(
                           val extraRare   = pickDistinctFromPool(baseLanguages.rare, extraRarePick, knownPlus)
 
                           (known ++ extraCommon ++ extraRare).toSet
-                        }
-      abilities      = AbilityScores(
-                         AbilityScore(strScore),
-                         AbilityScore(dexScore),
-                         AbilityScore(conScore),
-                         AbilityScore(intScore),
-                         AbilityScore(wisScore),
-                         AbilityScore(chaScore),
+       }
+      abilities      = orderedAbilityScores(
+                         List(strScore, dexScore, conScore, intScore, wisScore, chaScore),
+                         pickedClass,
                        )
+      allowedPersonalityAlignments = pickedAlign
+        .map(_.toLowerCase match {
+          case "lawful"  => Set("lawful", "neutral")
+          case "neutral" => Set("neutral")
+          case "chaotic" => Set("chaotic", "neutral")
+          case other      => Set(other.toLowerCase)
+        })
+        .getOrElse(Set("lawful", "neutral", "chaotic"))
+      pickedPersonalities <- {
+                               val eligible = personalities.filter(p => allowedPersonalityAlignments.contains(p.alignment.toLowerCase))
+                               val pool     = if (eligible.nonEmpty) eligible else personalities
+                               pickSome(pool.map(_.name), 3)
+                             }
       conMod         = abilities.constitution.modifier
       hpSides        = pickedClass.map(hitDieSides).getOrElse(8)
       hpRoll         = rng.nextInt(1, hpSides + 1)
@@ -236,6 +275,7 @@ final case class CharacterServer(
       attacks = attacks,
       gear = gearPicked,
       languages = languages,
+      personalities = pickedPersonalities,
       gender = randomGender,
       goldPieces = gold,
       silverPieces = silver,
@@ -253,7 +293,7 @@ final case class CharacterServer(
 
 object CharacterServer {
   val live: ZLayer[
-    CharacterRepository with NameRepository with RaceRepository with CharacterClassRepository,
+    CharacterRepository with NameServer with RaceServer with PersonalityServer with CharacterClassRepository,
     Nothing,
     CharacterServer,
   ] =

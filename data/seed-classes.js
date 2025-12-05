@@ -1,15 +1,21 @@
 // Seed the Classes collection with core class data.
-// Run with: mongosh --file data/seed-classes.js "${MONGO_URI:-mongodb://localhost:27017/shadowdark}"
+// Run with: mongosh --file data/seed-classes.js "mongodb://localhost:27017/shadowdark"
 
 /* global Mongo, ObjectId */
 
-const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/shadowdark';
+const positionalArgs = process.argv.slice(2).filter(a => !a.startsWith('--'));
+const uriArg = positionalArgs.find(a => a.startsWith('mongodb'));
+const dbArg = positionalArgs.find(a => a.startsWith('db='));
+const collectionArg = positionalArgs.find(a => a.startsWith('collection='));
+
+const uri = uriArg || process.env.MONGO_URI || 'mongodb://localhost:27017/shadowdark';
 
 const parsed = new URL(uri);
 const dbName =
+  (dbArg && dbArg.split('=')[1]) ||
   process.env.MONGO_DB ||
   (parsed.pathname && parsed.pathname !== '/' ? parsed.pathname.slice(1) : 'shadowdark');
-const collectionName = process.env.MONGO_COLLECTION || 'Classes';
+const collectionName = (collectionArg && collectionArg.split('=')[1]) || process.env.MONGO_COLLECTION || 'Classes';
 
 const classes = [
   {
@@ -25,6 +31,7 @@ const classes = [
       extraRare: 0,
       notes: 'Choose one divine language.',
     },
+    abilityPriority: ['Wisdom', 'Constitution', 'Strength', 'Dexterity', 'Charisma', 'Intelligence'],
     features: [
       { name: 'Turn Undead', description: 'You know the turn undead spell; it does not count against spells known.' },
       { name: 'Deity', description: 'Serve a god matching your alignment; you carry a holy symbol that uses no gear slot.' },
@@ -72,6 +79,7 @@ const classes = [
     armor: ['All armor', 'Shields'],
     hitPointsPerLevel: '1d8 (plus Con mod)',
     languages: null,
+    abilityPriority: ['Strength', 'Constitution', 'Dexterity', 'Wisdom', 'Charisma', 'Intelligence'],
     features: [
       { name: 'Hauler', description: 'Add your Constitution modifier, if positive, to your gear slots.' },
       {
@@ -112,6 +120,7 @@ const classes = [
       extraRare: 2,
       notes: 'Learn two additional common languages and two rare languages.',
     },
+    abilityPriority: ['Intelligence', 'Dexterity', 'Constitution', 'Wisdom', 'Charisma', 'Strength'],
     features: [
       {
         name: 'Learning Spells',
@@ -167,6 +176,7 @@ const classes = [
       extraRare: 0,
       notes: 'Thieves always know Thieves’ Cant.',
     },
+    abilityPriority: ['Dexterity', 'Constitution', 'Strength', 'Intelligence', 'Wisdom', 'Charisma'],
     features: [
       {
         name: 'Backstab',

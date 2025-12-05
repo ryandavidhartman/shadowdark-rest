@@ -9,6 +9,7 @@ sealed trait CharacterClass {
   def armor: List[String]
   def hitPointsPerLevel: String
   def languages: Option[LanguageBenefit]
+  def abilityPriority: List[String]
   def features: List[ClassFeature]
   def spellcasting: Option[Spellcasting]
   def talents: List[Talent]
@@ -83,6 +84,7 @@ final case class StoredCharacterClass(
   armor: List[String],
   hitPointsPerLevel: String,
   languages: Option[LanguageBenefit],
+  abilityPriority: List[String] = List.empty,
   features: List[ClassFeature],
   spellcasting: Option[Spellcasting],
   talents: List[Talent],
@@ -98,6 +100,7 @@ object StoredCharacterClass {
       armor = characterClass.armor,
       hitPointsPerLevel = characterClass.hitPointsPerLevel,
       languages = characterClass.languages,
+      abilityPriority = characterClass.abilityPriority,
       features = characterClass.features,
       spellcasting = characterClass.spellcasting,
       talents = characterClass.talents,

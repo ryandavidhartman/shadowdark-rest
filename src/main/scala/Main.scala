@@ -1,7 +1,7 @@
 import com.typesafe.config.ConfigFactory
-import routes.{CharacterRoute, NameRoute, RaceRoute}
-import repositories.{CharacterClassRepositoryLive, CharacterRepositoryLive, NameRepositoryLive, RaceRepositoryLive}
-import servers.{CharacterServer, NameServer, RaceServer}
+import routes.{CharacterRoute, NameRoute, PersonalityRoute, RaceRoute}
+import repositories.{CharacterClassRepositoryLive, CharacterRepositoryLive, NameRepositoryLive, PersonalityRepositoryLive, RaceRepositoryLive}
+import servers.{CharacterServer, NameServer, PersonalityServer, RaceServer}
 import zio._
 import zio.http._
 import zio.http.Method
@@ -22,7 +22,8 @@ object Main extends ZIOAppDefault {
           nameRoutes      <- ZIO.serviceWith[NameRoute](_.routes)
           raceRoutes      <- ZIO.serviceWith[RaceRoute](_.routes)
           characterRoutes <- ZIO.serviceWith[CharacterRoute](_.routes)
-          _               <- Server.serve(app ++ nameRoutes ++ raceRoutes ++ characterRoutes)
+          personalityRoutes <- ZIO.serviceWith[PersonalityRoute](_.routes)
+          _                 <- Server.serve(app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes)
         } yield ()
 
         program.provide(
@@ -31,12 +32,15 @@ object Main extends ZIOAppDefault {
           NameRepositoryLive.layer,
           RaceRepositoryLive.layer,
           CharacterClassRepositoryLive.layer,
-          CharacterServer.live,
+          PersonalityRepositoryLive.layer,
           NameServer.live,
           RaceServer.live,
+          PersonalityServer.live,
+          CharacterServer.live,
           CharacterRoute.live,
           NameRoute.live,
-          RaceRoute.live
+          RaceRoute.live,
+          PersonalityRoute.live
         )
       }
       .orDie
