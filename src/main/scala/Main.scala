@@ -1,7 +1,14 @@
 import com.typesafe.config.ConfigFactory
-import routes.{CharacterRoute, NameRoute, PersonalityRoute, RaceRoute}
-import repositories.{CharacterClassRepositoryLive, CharacterRepositoryLive, NameRepositoryLive, PersonalityRepositoryLive, RaceRepositoryLive}
-import servers.{CharacterServer, NameServer, PersonalityServer, RaceServer}
+import routes.{BackgroundRoute, CharacterClassRoute, CharacterRoute, NameRoute, PersonalityRoute, RaceRoute}
+import repositories.{
+  BackgroundRepositoryLive,
+  CharacterClassRepositoryLive,
+  CharacterRepositoryLive,
+  NameRepositoryLive,
+  PersonalityRepositoryLive,
+  RaceRepositoryLive,
+}
+import servers.{BackgroundServer, CharacterClassServer, CharacterServer, NameServer, PersonalityServer, RaceServer}
 import zio._
 import zio.http._
 import zio.http.Method
@@ -23,7 +30,9 @@ object Main extends ZIOAppDefault {
           raceRoutes      <- ZIO.serviceWith[RaceRoute](_.routes)
           characterRoutes <- ZIO.serviceWith[CharacterRoute](_.routes)
           personalityRoutes <- ZIO.serviceWith[PersonalityRoute](_.routes)
-          _                 <- Server.serve(app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes)
+          backgroundRoutes  <- ZIO.serviceWith[BackgroundRoute](_.routes)
+          classRoutes       <- ZIO.serviceWith[CharacterClassRoute](_.routes)
+          _                 <- Server.serve(app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes)
         } yield ()
 
         program.provide(
@@ -33,14 +42,19 @@ object Main extends ZIOAppDefault {
           RaceRepositoryLive.layer,
           CharacterClassRepositoryLive.layer,
           PersonalityRepositoryLive.layer,
+          BackgroundRepositoryLive.layer,
           NameServer.live,
           RaceServer.live,
           PersonalityServer.live,
+          BackgroundServer.live,
+          CharacterClassServer.live,
           CharacterServer.live,
           CharacterRoute.live,
           NameRoute.live,
           RaceRoute.live,
-          PersonalityRoute.live
+          PersonalityRoute.live,
+          BackgroundRoute.live,
+          CharacterClassRoute.live,
         )
       }
       .orDie

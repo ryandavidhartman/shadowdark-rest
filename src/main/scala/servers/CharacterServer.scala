@@ -2,7 +2,7 @@ package servers
 
 import models._
 import org.mongodb.scala.bson.ObjectId
-import repositories.{CharacterClassRepository, CharacterRepository}
+import repositories.CharacterRepository
 import zio._
 
 import java.util.concurrent.ThreadLocalRandom
@@ -13,10 +13,10 @@ final case class CharacterServer(
   nameServer: NameServer,
   raceServer: RaceServer,
   personalityServer: PersonalityServer,
-  characterClassRepository: CharacterClassRepository,
+  backgroundServer: BackgroundServer,
+  characterClassServer: CharacterClassServer,
 ) {
 
-  private val backgrounds = List("Acolyte", "Commoner", "Outlander", "Scholar", "Soldier")
   private val alignments  = List("Lawful", "Neutral", "Chaotic")
   private val deities     = List("Arden", "Gloom", "Ithis", "Lunara", "Shadow")
   private val baseLanguages = Language.default
@@ -106,7 +106,7 @@ final case class CharacterServer(
   }
 
   private def ensureClasses: Task[List[StoredCharacterClass]] =
-    characterClassRepository.list()
+    characterClassServer.getClasses
 
   private def hitDieSides(characterClass: StoredCharacterClass): Int =
     characterClass.hitPointsPerLevel match {
@@ -118,6 +118,23 @@ final case class CharacterServer(
 
   private def pickDistinct[A](pool: List[A], count: Int): List[A] =
     Random.shuffle(pool).distinct.take(count)
+
+  private def pickWeightedBackground(backgrounds: List[Background]): UIO[Option[Background]] =
+    ZIO.succeed {
+      val weighted = backgrounds.map { bg =>
+        val weight = Math.max(0, bg.range.max - bg.range.min + 1)
+        (bg, weight)
+      }
+      val total    = weighted.map(_._2).sum
+      if (backgrounds.isEmpty || total <= 0) None
+      else {
+        val roll = rng.nextInt(1, total + 1)
+        weighted
+          .scanLeft((Option.empty[Background], 0)) { case ((_, acc), (bg, weight)) => (Some(bg), acc + weight) }
+          .collectFirst { case (maybeBg, acc) if roll <= acc => maybeBg }
+          .flatten
+      }
+    }
 
   private val abilityNames = List("strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma")
 
@@ -153,6 +170,7 @@ final case class CharacterServer(
       names         <- nameServer.getNames
       races         <- raceServer.getRaces
       classes       <- ensureClasses
+      backgrounds   <- backgroundServer.getBackgrounds
       personalities <- personalityServer.getPersonalities
       randomRace    <- pickWeightedRace(races).flatMap {
                          case some @ Some(_) => ZIO.succeed(some)
@@ -169,7 +187,7 @@ final case class CharacterServer(
       chaScore      <- roll3d6
       pickedClass   <- pickOne(classes)
       pickedAlign   <- pickOne(alignments)
-      pickedBg      <- pickOne(backgrounds)
+      pickedBg      <- pickWeightedBackground(backgrounds)
       pickedDeity   <- pickOne(deities)
       gearPicked    <- pickSome(gearChoices, 3)
       gold          <- ZIO.succeed(rng.nextInt(0, 21))
@@ -264,7 +282,7 @@ final case class CharacterServer(
       xp = Some(0),
       title = None,
       alignment = pickedAlign,
-      background = pickedBg,
+      background = pickedBg.map(_.name),
       deity = pickedDeity,
       abilities = abilities,
       hitPoints = hitPoints,
@@ -293,7 +311,12 @@ final case class CharacterServer(
 
 object CharacterServer {
   val live: ZLayer[
-    CharacterRepository with NameServer with RaceServer with PersonalityServer with CharacterClassRepository,
+    CharacterRepository
+      with NameServer
+      with RaceServer
+      with PersonalityServer
+      with BackgroundServer
+      with CharacterClassServer,
     Nothing,
     CharacterServer,
   ] =
