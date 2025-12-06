@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 - Standard sbt layout: app code in `src/main/scala`, tests in `src/test/scala`, shared configs/assets in `src/main/resources`.
 - Core models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, AC/HP, gear, talents/features/spells/languages), `CharacterClass` + supporting types (`ClassFeature`, `Talent`, `Spellcasting`, etc.), `Language`.
-- Spells: `Spell` model in `src/main/scala/models/Spell.scala` (ObjectId, name, tier, castingAttribute, spellType/range/duration/dc, description, damage/healing details, scaling and opposed info).
+- Spells: `Spell` model in `src/main/scala/models/Spell.scala` (ObjectId, name, tier, castingAttribute: List[String], optional prohibitedAlignments: List[String], spellType/range/duration/dc, description, damage/healing details, scaling and opposed info).
 - Repositories/servers/routes: Names and Races (`NameRepository*`, `NameServer`, `NameRoute`; `RaceRepository*`, `RaceServer`, `RaceRoute`); Characters (`CharacterRepository*`, `CharacterServer`, `CharacterRoute`); Character Classes (`CharacterClassRepository*`, `CharacterClassServer`, `CharacterClassRoute`); Personalities (`PersonalityRepository*`, `PersonalityServer`, `PersonalityRoute`); Backgrounds (`BackgroundRepository*`, `BackgroundServer`, `BackgroundRoute`).
 - Config: `application.conf` (server.port, mongodb.uri, optional mongodb.collection defaulting to `Name`); `local-dev.conf` is git-ignored and can override Mongo.
 - Data seeding: `data/seed-classes.js` seeds the `Classes` Mongo collection with core class data; run via `mongosh --file data/seed-classes.js "$MONGO_URI"`. `data/seed-backgrounds.js` seeds `Backgrounds` (CLI URI/db/collection args or env supported).

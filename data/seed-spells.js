@@ -24,19 +24,19 @@ const spells = [
   {
     "name": "Acid Arrow",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Focus",
     "dc": 12,
-    "description": "You conjure a corrosive bolt that hits one foe, dealing 1d6 acid damage a round. The bolt remains in the target for as long as you focus.\n\nImage: Acid Arrow",
+    "description": "You conjure a corrosive bolt that hits one foe, dealing 1d6 acid damage a round. The bolt remains in the target for as long as you focus.",
     "damage": "1d6",
     "damageType": "acid"
   },
   {
     "name": "Alarm",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "1 day",
     "dc": 11,
@@ -45,7 +45,7 @@ const spells = [
   {
     "name": "Alter Self",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "5 rounds",
     "dc": 12,
@@ -54,7 +54,7 @@ const spells = [
   {
     "name": "Anathema",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Instant",
     "dc": 15,
@@ -63,7 +63,7 @@ const spells = [
   {
     "name": "Ancestral Guidance",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": [],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -72,7 +72,7 @@ const spells = [
   {
     "name": "Animal Totem",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": [],
     "range": "Close",
     "duration": "1 Day",
     "dc": 13,
@@ -81,7 +81,7 @@ const spells = [
   {
     "name": "Animate Dead",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "1 day",
     "dc": 13,
@@ -90,7 +90,7 @@ const spells = [
   {
     "name": "Antimagic Shell",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "Focus",
     "dc": 15,
@@ -99,7 +99,7 @@ const spells = [
   {
     "name": "Arbor Vantage",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": [],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -108,7 +108,7 @@ const spells = [
   {
     "name": "Arcane Eye",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -117,7 +117,7 @@ const spells = [
   {
     "name": "Armaments of the Ancients",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -126,7 +126,7 @@ const spells = [
   {
     "name": "Arrow of Hornets",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
@@ -138,7 +138,7 @@ const spells = [
   {
     "name": "Augury",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Cleric", "Witch"],
     "range": "Self",
     "duration": "Instant",
     "dc": 12,
@@ -147,7 +147,7 @@ const spells = [
   {
     "name": "Barkhide",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 11,
@@ -156,7 +156,7 @@ const spells = [
   {
     "name": "Beguile",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -168,7 +168,7 @@ const spells = [
   {
     "name": "Bite of the Mantis",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -177,7 +177,7 @@ const spells = [
   {
     "name": "Black Blood",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 14,
@@ -189,7 +189,7 @@ const spells = [
   {
     "name": "Bless",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Close",
     "duration": "Instant",
     "dc": 12,
@@ -198,7 +198,7 @@ const spells = [
   {
     "name": "Blind",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -207,7 +207,7 @@ const spells = [
   {
     "name": "Blood Pact",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 13,
@@ -216,7 +216,7 @@ const spells = [
   {
     "name": "Bloomquake",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -231,7 +231,7 @@ const spells = [
   {
     "name": "Bogboil",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Far",
     "duration": "5 rounds",
     "dc": 12,
@@ -243,7 +243,7 @@ const spells = [
   {
     "name": "Bone Ballista",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "Focus",
@@ -255,19 +255,19 @@ const spells = [
   {
     "name": "Bone Storm",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
-    "description": "You call upon deathly winds to create a tornado of whirling bones that cover a near cube.\nAny creatures caught inside take 5d6 blunt damage per round.\nYou can forgo moving to move the storm a near distance.\n\nImage: Bone Storm",
+    "description": "You call upon deathly winds to create a tornado of whirling bones that cover a near cube.\nAny creatures caught inside take 5d6 blunt damage per round.\nYou can forgo moving to move the storm a near distance.",
     "damage": "5d6",
     "damageType": "blunt"
   },
   {
     "name": "Bonebound Sentry",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 12,
@@ -276,16 +276,16 @@ const spells = [
   {
     "name": "Bonefire",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 rest",
     "dc": 12,
-    "description": "You light a corpse into a magical campfire that cannot be moved, illuminating a near distance.\nThere is a 50% chance that the necromantic energy from the fire will deter random monsters.\n\nImage: Bonefire"
+    "description": "You light a corpse into a magical campfire that cannot be moved, illuminating a near distance.\nThere is a 50% chance that the necromantic energy from the fire will deter random monsters."
   },
   {
     "name": "Boneskin",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "10 rounds",
     "dc": 12,
@@ -294,7 +294,7 @@ const spells = [
   {
     "name": "Bramble Bridge",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 13,
@@ -303,7 +303,7 @@ const spells = [
   {
     "name": "Broomstick",
     "tier": 3,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Focus",
     "dc": 13,
@@ -312,7 +312,7 @@ const spells = [
   {
     "name": "Burning Hands",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "Instant",
@@ -324,7 +324,7 @@ const spells = [
   {
     "name": "Cacklerot",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Focus",
     "dc": 12,
@@ -333,7 +333,7 @@ const spells = [
   {
     "name": "Call to the Wild",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 12,
@@ -342,7 +342,7 @@ const spells = [
   {
     "name": "Carrion Stench",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Instant",
     "dc": 11,
@@ -354,7 +354,7 @@ const spells = [
   {
     "name": "Cast Out",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Far",
     "duration": "Focus",
     "dc": 13,
@@ -363,7 +363,7 @@ const spells = [
   {
     "name": "Cat's Eye",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Focus",
     "dc": 12,
@@ -372,7 +372,7 @@ const spells = [
   {
     "name": "Cauldron",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Close",
     "duration": "1 round",
     "dc": 11,
@@ -381,7 +381,7 @@ const spells = [
   {
     "name": "Chant",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Self",
     "duration": "Focus",
     "dc": 11,
@@ -390,7 +390,7 @@ const spells = [
   {
     "name": "Charm Animals",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "1 day",
     "dc": 12,
@@ -399,7 +399,7 @@ const spells = [
   {
     "name": "Charm Person",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "1d8 days",
     "dc": 11,
@@ -408,7 +408,7 @@ const spells = [
   {
     "name": "Chilling Shriek",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Instant",
     "dc": 13,
@@ -420,19 +420,19 @@ const spells = [
   {
     "name": "Cleansing Weapon",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "5 rounds",
     "dc": 12,
-    "description": "One weapon you touch is wreathed in purifying flames. It deals an additional 1d4 radiant damage (1d6 vs. undead) for the duration. [Note: FG effects can only add more dice for a given monster type, not substitute dice. Therefore, the effect has been changed to 1d4, plus an additional 1d2 vs. undead.]\n\nImage: Cleansing Weapon",
+    "description": "One weapon you touch is wreathed in purifying flames. It deals an additional 1d4 radiant damage (1d6 vs. undead) for the duration. [Note: FG effects can only add more dice for a given monster type, not substitute dice. Therefore, the effect has been changed to 1d4, plus an additional 1d2 vs. undead.]",
     "damage": "1d4",
     "damageType": "radiant"
   },
   {
     "name": "Cloak of Night",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Duration: 8 rounds",
     "duration": "Cloak of the Night|AC: 5|8 rounds|self|",
     "dc": 14,
@@ -441,7 +441,7 @@ const spells = [
   {
     "name": "Cloudkill",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "5 rounds",
@@ -453,7 +453,7 @@ const spells = [
   {
     "name": "Command",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Far",
     "duration": "Focus",
     "dc": 13,
@@ -465,7 +465,7 @@ const spells = [
   {
     "name": "Commune",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Self",
     "duration": "Instant",
     "dc": 14,
@@ -474,7 +474,7 @@ const spells = [
   {
     "name": "Companion Sight",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 14,
@@ -483,7 +483,7 @@ const spells = [
   {
     "name": "Confusion",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -495,34 +495,25 @@ const spells = [
   {
     "name": "Conjure Wraith",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "1 day",
     "dc": 15,
     "description": "You touch a fresh corpse to conjure a vengeful wraith to do your bidding. It acts on your turn. After 1 day it turns to dust.\nOnly one instance of this spell may be active at a time. A second casting while another instance exists immediately destroys the previous wraith, even if the spell fails. The wraith counts against the LV limit of other undead minions.\nA critical fail on casting this spell still conjures the wraith, but it turns against you. Do not roll on the mishap table."
   },
   {
-    "name": "Control Water (Priest)",
+    "name": "Control Water",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric", "Magic-User"],
     "range": "Far",
     "duration": "Focus",
     "dc": 14,
-    "description": "You move and shape water. You can cause a section of water up to 100 feet in width and depth to change shape, defy gravity, or flow in a different direction.\n\nImage: Control Water"
-  },
-  {
-    "name": "Control Water (Wizard)",
-    "tier": 4,
-    "castingAttribute": "Intelligence",
-    "range": "Far",
-    "duration": "Focus",
-    "dc": 14,
-    "description": "You move and shape water. You can cause a section of water up to 100 feet in width and depth to change shape, defy gravity, or flow in a different direction.\n\nImage: Control Water"
+    "description": "You move and shape water. You can cause a section of water up to 100 feet in width and depth to change shape, defy gravity, or flow in a different direction."
   },
   {
     "name": "Corpse Companion",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "10 rounds",
     "dc": 11,
@@ -531,19 +522,19 @@ const spells = [
   {
     "name": "Corpse Explosion",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
     "dc": 13,
-    "description": "With a clench of your fist, you cause a non-animated corpse to explode. All creatures within close of the corpse take 5d6 piercing damage.\n\nImage: Corpse Explosion",
+    "description": "With a clench of your fist, you cause a non-animated corpse to explode. All creatures within close of the corpse take 5d6 piercing damage.",
     "damage": "5d6",
     "damageType": "piercing"
   },
   {
     "name": "Coven",
     "tier": 3,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Instant",
     "dc": 13,
@@ -552,7 +543,7 @@ const spells = [
   {
     "name": "Create Corpse",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 12,
@@ -561,7 +552,7 @@ const spells = [
   {
     "name": "Create Tree",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 day",
     "dc": 11,
@@ -570,7 +561,7 @@ const spells = [
   {
     "name": "Create Undead",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "1 day",
     "dc": 15,
@@ -579,7 +570,7 @@ const spells = [
   {
     "name": "Cure Wounds",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "spellType": "Healing",
     "range": "Close",
     "duration": "Instant",
@@ -592,7 +583,7 @@ const spells = [
   {
     "name": "Curse",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Permanent",
     "dc": 14,
@@ -601,7 +592,7 @@ const spells = [
   {
     "name": "Dance of the Drum",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -610,7 +601,7 @@ const spells = [
   {
     "name": "Dark Step",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Instant",
     "dc": 12,
@@ -619,7 +610,7 @@ const spells = [
   {
     "name": "Darkness",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 12,
@@ -628,7 +619,7 @@ const spells = [
   {
     "name": "Deadlight",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "1 hour real time",
     "dc": 11,
@@ -637,7 +628,7 @@ const spells = [
   {
     "name": "Deafen",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -646,16 +637,16 @@ const spells = [
   {
     "name": "Deathward Circle",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Focus",
     "dc": 13,
-    "description": "You conjure a circle of bones and necrotic energy out to near-sized cube centered on yourself. For the spell's duration, undead creatures LV 9 or less cannot attack or cast a hostile spell on anyone inside the circle.\nThe undead also can't possess, compel, or beguile anyone inside the circle.\n\nImage: Death Ward Circle"
+    "description": "You conjure a circle of bones and necrotic energy out to near-sized cube centered on yourself. For the spell's duration, undead creatures LV 9 or less cannot attack or cast a hostile spell on anyone inside the circle.\nThe undead also can't possess, compel, or beguile anyone inside the circle."
   },
   {
     "name": "Demonic Possession",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 14,
@@ -667,7 +658,7 @@ const spells = [
   {
     "name": "Detect Magic",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -676,7 +667,7 @@ const spells = [
   {
     "name": "Detect Thoughts",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -688,7 +679,7 @@ const spells = [
   {
     "name": "Dimension Door",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Instant",
     "dc": 14,
@@ -697,7 +688,7 @@ const spells = [
   {
     "name": "Disintegrate",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -709,7 +700,7 @@ const spells = [
   {
     "name": "Dispel Magic",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Instant",
     "dc": 13,
@@ -718,7 +709,7 @@ const spells = [
   {
     "name": "Divination",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Instant",
     "dc": 14,
@@ -727,7 +718,7 @@ const spells = [
   {
     "name": "Divine Intervention",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -736,7 +727,7 @@ const spells = [
   {
     "name": "Divine Vengeance",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Self",
     "duration": "10 rounds",
     "dc": 15,
@@ -745,7 +736,7 @@ const spells = [
   {
     "name": "Domain of Fatigue",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Focus",
     "dc": 14,
@@ -757,7 +748,7 @@ const spells = [
   {
     "name": "Dominion",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 15,
@@ -766,7 +757,7 @@ const spells = [
   {
     "name": "Drainblade",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Focus",
     "dc": 14,
@@ -775,7 +766,7 @@ const spells = [
   {
     "name": "Dreamwalk",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -784,7 +775,7 @@ const spells = [
   {
     "name": "Enfeeble",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Instant",
     "dc": 15,
@@ -793,7 +784,7 @@ const spells = [
   {
     "name": "Enlarge Animal",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Focus",
     "dc": 14,
@@ -802,7 +793,7 @@ const spells = [
   {
     "name": "Evoke Rage",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Close",
     "duration": "1d4 rounds",
     "dc": 11,
@@ -811,7 +802,7 @@ const spells = [
   {
     "name": "Eyebite",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
@@ -823,7 +814,7 @@ const spells = [
   {
     "name": "Fabricate",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 13,
@@ -832,7 +823,7 @@ const spells = [
   {
     "name": "Fate",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
@@ -844,7 +835,7 @@ const spells = [
   {
     "name": "Feather Fall",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "Instant",
     "dc": 11,
@@ -853,7 +844,7 @@ const spells = [
   {
     "name": "Finger of Death",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Instant",
     "dc": 15,
@@ -862,7 +853,7 @@ const spells = [
   {
     "name": "Fireball",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -874,16 +865,16 @@ const spells = [
   {
     "name": "Fireskull Familiar",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 hour real time",
     "dc": 12,
-    "description": "You animate a single skull as your familiar from a corpse or skull you touch. The skull is bathed in blue flames and gifted with levitation-based flight.\nIt projects light in a near distance, it can speak and understand, retrieve small items, perform a minor bite attack, and deliver messages.\nOn your turn you can move it a near distance. See NPC entry for stats. Only one instance of this spell may be active at a time.\n\nImage: Fire Skull Familiar"
+    "description": "You animate a single skull as your familiar from a corpse or skull you touch. The skull is bathed in blue flames and gifted with levitation-based flight.\nIt projects light in a near distance, it can speak and understand, retrieve small items, perform a minor bite attack, and deliver messages.\nOn your turn you can move it a near distance. See NPC entry for stats. Only one instance of this spell may be active at a time."
   },
   {
     "name": "Fixed Object",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 12,
@@ -892,7 +883,7 @@ const spells = [
   {
     "name": "Flame Strike",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -904,7 +895,7 @@ const spells = [
   {
     "name": "Floating Disk",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 11,
@@ -913,7 +904,7 @@ const spells = [
   {
     "name": "Flora's Embrace",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 11,
@@ -922,7 +913,7 @@ const spells = [
   {
     "name": "Fly",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "5 rounds",
     "dc": 13,
@@ -931,7 +922,7 @@ const spells = [
   {
     "name": "Fog",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Close",
     "duration": "Focus",
     "dc": 11,
@@ -940,7 +931,7 @@ const spells = [
   {
     "name": "Foresee Good",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 12,
@@ -949,7 +940,7 @@ const spells = [
   {
     "name": "Forest Altar",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -958,7 +949,7 @@ const spells = [
   {
     "name": "Forest Blend",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Focus",
     "dc": 14,
@@ -967,7 +958,7 @@ const spells = [
   {
     "name": "Forest of Treants",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 15,
@@ -976,7 +967,7 @@ const spells = [
   {
     "name": "Fossilize",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Permanent",
     "dc": 13,
@@ -985,7 +976,7 @@ const spells = [
   {
     "name": "Freya's Omen",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Self",
     "duration": "1d6 rounds",
     "dc": 14,
@@ -994,7 +985,7 @@ const spells = [
   {
     "name": "Frog Rain",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -1006,7 +997,7 @@ const spells = [
   {
     "name": "Fungal Cloud",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 11,
@@ -1018,7 +1009,7 @@ const spells = [
   {
     "name": "Fury of the Spirits",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
@@ -1027,16 +1018,16 @@ const spells = [
   {
     "name": "Gaseous Form",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "10 rounds",
     "dc": 13,
-    "description": "You and your gear turn into a cloud of smoke for the spell's duration. You can fly and pass through any gap that smoke could. You can sense the terrain and any movement around you out to a near distance. You can't cast spells while in this form.\n\nImage: Gaseous Form"
+    "description": "You and your gear turn into a cloud of smoke for the spell's duration. You can fly and pass through any gap that smoke could. You can sense the terrain and any movement around you out to a near distance. You can't cast spells while in this form."
   },
   {
     "name": "Ghost Shift",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Focus",
     "dc": 15,
@@ -1045,7 +1036,7 @@ const spells = [
   {
     "name": "Ghoulish Claws",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "5 rounds",
@@ -1060,28 +1051,28 @@ const spells = [
   {
     "name": "Giant Antapult",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "Focus",
     "dc": 15,
-    "description": "You wring your hands, conjuring a group of giant ants that form into a makeshift catapult capable of launching magical boulders at a single visible target within far. Make a ranged attack that deals 8d6 blunt damage on a successful hit.\n\nImage: Giant Antapult",
+    "description": "You wring your hands, conjuring a group of giant ants that form into a makeshift catapult capable of launching magical boulders at a single visible target within far. Make a ranged attack that deals 8d6 blunt damage on a successful hit.",
     "damage": "8d6",
     "damageType": "blunt"
   },
   {
     "name": "Gift of Air",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
-    "description": "Allies in a near area sprout majestic eagle wings, gifting them with flight. Allies can fly a near distance on their turn.\nYou have ADV on maintenance checks for this chant.\n\nImage: Gift of Air"
+    "description": "Allies in a near area sprout majestic eagle wings, gifting them with flight. Allies can fly a near distance on their turn.\nYou have ADV on maintenance checks for this chant."
   },
   {
     "name": "Gift of Earth",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -1090,7 +1081,7 @@ const spells = [
   {
     "name": "Gift of Fire",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Focus",
@@ -1102,7 +1093,7 @@ const spells = [
   {
     "name": "Gift of Water",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -1111,7 +1102,7 @@ const spells = [
   {
     "name": "Glassbones",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Focus",
     "dc": 14,
@@ -1120,7 +1111,7 @@ const spells = [
   {
     "name": "Grace of the Gazelle",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -1129,7 +1120,7 @@ const spells = [
   {
     "name": "Grasp from the Grave",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Focus",
@@ -1141,7 +1132,7 @@ const spells = [
   {
     "name": "Grub Geyser",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "5 rounds",
@@ -1153,7 +1144,7 @@ const spells = [
   {
     "name": "Hallucinate",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -1162,7 +1153,7 @@ const spells = [
   {
     "name": "Heal",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -1171,7 +1162,7 @@ const spells = [
   {
     "name": "Healing Feast",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 15,
@@ -1180,7 +1171,7 @@ const spells = [
   {
     "name": "Healing Sprout",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 12,
@@ -1189,7 +1180,7 @@ const spells = [
   {
     "name": "Heart of the Lion",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -1198,7 +1189,7 @@ const spells = [
   {
     "name": "Hiss of the Viper",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -1207,7 +1198,7 @@ const spells = [
   {
     "name": "Hold Monster",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
@@ -1219,7 +1210,7 @@ const spells = [
   {
     "name": "Hold Person",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
@@ -1228,7 +1219,7 @@ const spells = [
   {
     "name": "Hold Portal",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 11,
@@ -1240,7 +1231,7 @@ const spells = [
   {
     "name": "Holy Weapon",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 11,
@@ -1249,7 +1240,7 @@ const spells = [
   {
     "name": "Howl",
     "tier": 3,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "Instant",
     "dc": 13,
@@ -1258,7 +1249,7 @@ const spells = [
   {
     "name": "Hypnotize",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -1270,7 +1261,7 @@ const spells = [
   {
     "name": "Illusion",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Far",
     "duration": "Focus",
     "dc": 13,
@@ -1282,7 +1273,7 @@ const spells = [
   {
     "name": "Invisibility",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Close",
     "duration": "10 rounds",
     "dc": 12,
@@ -1291,7 +1282,7 @@ const spells = [
   {
     "name": "Judgment",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 15,
@@ -1300,11 +1291,11 @@ const spells = [
   {
     "name": "Killing Shriek",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 15,
-    "description": "You let out a mind-shattering scream that instantly slays any living beings who hear it. Living beings within near range of you must make a CON check vs. your spellcasting check or die. Creatures above LV 9 are immune.\n\nImage: Killing Shriek",
+    "description": "You let out a mind-shattering scream that instantly slays any living beings who hear it. Living beings within near range of you must make a CON check vs. your spellcasting check or die. Creatures above LV 9 are immune.",
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "con"
@@ -1312,7 +1303,7 @@ const spells = [
   {
     "name": "Knock",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Instant",
     "dc": 12,
@@ -1321,7 +1312,7 @@ const spells = [
   {
     "name": "Know Intention",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 11,
@@ -1330,7 +1321,7 @@ const spells = [
   {
     "name": "Lay to Rest",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["Cleric"],
     "range": "Close",
     "duration": "Instant",
     "dc": 13,
@@ -1339,7 +1330,7 @@ const spells = [
   {
     "name": "Leaves in the Breeze",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -1348,7 +1339,7 @@ const spells = [
   {
     "name": "Levitate",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "Focus",
     "dc": 12,
@@ -1357,34 +1348,25 @@ const spells = [
   {
     "name": "Life Wolf",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Until allies are stable",
     "dc": 14,
-    "description": "You summon a celestial life wolf (see NPC record) that acts on your turn. It spends its movement and actions to save your dying and unconscious allies, using one action to magically heal them to 1 HP.\nOnce no more allies are dying, the wolf vanishes.\nIf you drop to 0 HP while the life wolf is active, it will turn its attention to you, and vanish after saving you, even if others still require aid.\n\nImage: Life Wolf"
+    "description": "You summon a celestial life wolf (see NPC record) that acts on your turn. It spends its movement and actions to save your dying and unconscious allies, using one action to magically heal them to 1 HP.\nOnce no more allies are dying, the wolf vanishes.\nIf you drop to 0 HP while the life wolf is active, it will turn its attention to you, and vanish after saving you, even if others still require aid."
   },
   {
     "name": "Lifeward Circle",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
     "description": "You conjure a circle of bones and necrotic energy out to nearsized cube centered on yourself.\nFor the spell's duration, enemy living creatures LV 9 or below cannot attack or cast a hostile spell on anyone inside the circle."
   },
   {
-    "name": "Light (Priest)",
+    "name": "Light",
     "tier": 1,
-    "castingAttribute": "Wisdom",
-    "range": "Close",
-    "duration": "1 hour real time",
-    "dc": 11,
-    "description": "One object you touch glows with bright, heatless light, illuminating out to a near distance for 1 hour of real time."
-  },
-  {
-    "name": "Light (Wizard)",
-    "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Cleric", "Magic-User"],
     "range": "Close",
     "duration": "1 hour real time",
     "dc": 11,
@@ -1393,19 +1375,19 @@ const spells = [
   {
     "name": "Lightning Bolt",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
     "dc": 13,
-    "description": "You shoot a blue-white ray of lightning from your hands, hitting all creatures in a straight line out to a far distance. Creatures struck by the lightning take 3d6 lightning damage.\n\nImage: Lightning Bolt",
+    "description": "You shoot a blue-white ray of lightning from your hands, hitting all creatures in a straight line out to a far distance. Creatures struck by the lightning take 3d6 lightning damage.",
     "damage": "3d6",
     "damageType": "lightning"
   },
   {
     "name": "Living Revelation",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 15,
@@ -1414,7 +1396,7 @@ const spells = [
   {
     "name": "Locate Corpse",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Instant",
     "dc": 11,
@@ -1423,7 +1405,7 @@ const spells = [
   {
     "name": "Loki's Trickery",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Near",
     "duration": "Instant",
     "dc": 14,
@@ -1435,16 +1417,16 @@ const spells = [
   {
     "name": "Lure of the Piper",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
-    "description": "Your enchanting performance compels enemies in a near distance from you to abandon their actions and follow you obediently wherever you lead.\nBeguiled creatures make a WIS check vs. your last chanting check on their turn to resist.\nIf you stop moving, or if you or your allies actively harm a beguiled creature, the beguilement ends.\n\nImage: Lure of the Piper"
+    "description": "Your enchanting performance compels enemies in a near distance from you to abandon their actions and follow you obediently wherever you lead.\nBeguiled creatures make a WIS check vs. your last chanting check on their turn to resist.\nIf you stop moving, or if you or your allies actively harm a beguiled creature, the beguilement ends."
   },
   {
     "name": "Mage Armor",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "10 rounds",
     "dc": 11,
@@ -1453,7 +1435,7 @@ const spells = [
   {
     "name": "Magic Circle",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -1462,19 +1444,19 @@ const spells = [
   {
     "name": "Magic Missile",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
     "dc": 11,
-    "description": "You have advantage on your check to cast this spell. A glowing bolt of force streaks from your open hand, dealing 1d4 force damage to one target.\n\nImage: Magic Missile",
+    "description": "You have advantage on your check to cast this spell. A glowing bolt of force streaks from your open hand, dealing 1d4 force damage to one target.",
     "damage": "1d4",
     "damageType": "force"
   },
   {
     "name": "Mass Breathe Water",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "1 hour",
     "dc": 14,
@@ -1483,7 +1465,7 @@ const spells = [
   {
     "name": "Mass Cure",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "spellType": "Healing",
     "range": "Near",
     "duration": "Instant",
@@ -1494,7 +1476,7 @@ const spells = [
   {
     "name": "Mirror Image",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "5 rounds",
     "dc": 12,
@@ -1503,7 +1485,7 @@ const spells = [
   {
     "name": "Mistletoe",
     "tier": 3,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "1d8 days",
     "dc": 13,
@@ -1515,7 +1497,7 @@ const spells = [
   {
     "name": "Misty Step",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "Instant",
     "dc": 12,
@@ -1524,7 +1506,7 @@ const spells = [
   {
     "name": "Moonbeam",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -1536,7 +1518,7 @@ const spells = [
   {
     "name": "Mortal Rejuvenation",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 14,
@@ -1545,7 +1527,7 @@ const spells = [
   {
     "name": "Mother of Night",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Instant",
     "dc": 15,
@@ -1554,7 +1536,7 @@ const spells = [
   {
     "name": "Mummify",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Permanent",
     "dc": 15,
@@ -1563,7 +1545,7 @@ const spells = [
   {
     "name": "Nightmare",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "On the same plane",
     "duration": "Focus",
     "dc": 14,
@@ -1572,7 +1554,7 @@ const spells = [
   {
     "name": "Oak, Ash, Thorn",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Focus",
     "dc": 11,
@@ -1581,7 +1563,7 @@ const spells = [
   {
     "name": "Obscuring Spores",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 12,
@@ -1590,7 +1572,7 @@ const spells = [
   {
     "name": "Odin's Wisdom",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Self",
     "duration": "1d6 rounds",
     "dc": 14,
@@ -1599,7 +1581,7 @@ const spells = [
   {
     "name": "Pass Tree",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -1608,7 +1590,7 @@ const spells = [
   {
     "name": "Passwall",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 14,
@@ -1617,7 +1599,7 @@ const spells = [
   {
     "name": "Pillar of Salt",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -1626,7 +1608,7 @@ const spells = [
   {
     "name": "Pin Doll",
     "tier": 3,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "spellType": "Damage",
     "range": "On the same plane",
     "duration": "Focus",
@@ -1636,27 +1618,18 @@ const spells = [
     "damageType": "necrotic"
   },
   {
-    "name": "Plane Shift (Priest)",
+    "name": "Plane Shift",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric", "Magic-User"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
-    "description": "You fold space and time, transporting yourself and all willing creatures within close range to a location on another plane of your choice. Unless you have been to your intended location before, you appear in a random place on the destination plane.\n\nImage: Plane Shift"
-  },
-  {
-    "name": "Plane Shift (Wizard)",
-    "tier": 5,
-    "castingAttribute": "Intelligence",
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 15,
-    "description": "You fold space and time, transporting yourself and all willing creatures within close range to a location on another plane of your choice. Unless you have been to your intended location before, you appear in a random place on the destination plane.\n\nImage: Plane Shift"
+    "description": "You fold space and time, transporting yourself and all willing creatures within close range to a location on another plane of your choice. Unless you have been to your intended location before, you appear in a random place on the destination plane."
   },
   {
     "name": "Plantidote",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
@@ -1668,7 +1641,7 @@ const spells = [
   {
     "name": "Poison",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "spellType": "Damage",
     "range": "Touch",
     "duration": "5 rounds",
@@ -1680,7 +1653,7 @@ const spells = [
   {
     "name": "Polymorph",
     "tier": 4,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "10 rounds",
     "dc": 14,
@@ -1689,16 +1662,16 @@ const spells = [
   {
     "name": "Poseidon's Passage",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 14,
-    "description": "You call on the water spirits to part the sea. You create passages or hold back the tide in a double near cube within the chant's range.\n\nImage: Poseidon's Passage"
+    "description": "You call on the water spirits to part the sea. You create passages or hold back the tide in a double near cube within the chant's range."
   },
   {
     "name": "Potion",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Close",
     "duration": "Instant",
     "dc": 11,
@@ -1707,7 +1680,7 @@ const spells = [
   {
     "name": "Power Word Kill",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Instant",
     "dc": 15,
@@ -1716,7 +1689,7 @@ const spells = [
   {
     "name": "Prevent Decay",
     "tier": 2,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 day",
     "dc": 12,
@@ -1725,16 +1698,16 @@ const spells = [
   {
     "name": "Primal Purge",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
     "description": "You compel your allies within near range from you to expel any curses, enchantments, possessions, poisons, diseases, or parasites."
   },
   {
-    "name": "Prismatic Orb (Cold)",
+    "name": "Prismatic Orb",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -1744,33 +1717,9 @@ const spells = [
     "damageType": "cold"
   },
   {
-    "name": "Prismatic Orb (Electricity)",
-    "tier": 5,
-    "castingAttribute": "Intelligence",
-    "spellType": "Damage",
-    "range": "Far",
-    "duration": "Instant",
-    "dc": 15,
-    "description": "You send a strobing orb of energy streaking toward a target within range. Choose an energy type from fire, cold, or electricity. Adjust the damage type if needed. The orb deals 3d8 lightning damage and delivers a concussive blast of the chosen energy type. If the energy type is anathema to the target's existence (for example, cold energy against a fire elemental), the orb deals double damage to it instead.",
-    "damage": "3d8",
-    "damageType": "lightning"
-  },
-  {
-    "name": "Prismatic Orb (Fire)",
-    "tier": 5,
-    "castingAttribute": "Intelligence",
-    "spellType": "Damage",
-    "range": "Far",
-    "duration": "Instant",
-    "dc": 15,
-    "description": "You send a strobing orb of energy streaking toward a target within range. Choose an energy type from fire, cold, or electricity. Adjust the damage type if needed. The orb deals 3d8 fire damage and delivers a concussive blast of the chosen energy type. If the energy type is anathema to the target's existence (for example, cold energy against a fire elemental), the orb deals double damage to it instead.",
-    "damage": "3d8",
-    "damageType": "fire"
-  },
-  {
     "name": "Prophecy",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Self",
     "duration": "Instant",
     "dc": 15,
@@ -1779,32 +1728,20 @@ const spells = [
   {
     "name": "Protection from Energy",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "Focus",
     "dc": 13,
     "description": "One creature you touch becomes impervious to the wild fury of the elements. Choose fire, cold, or electricity. For the spell's duration, the target is immune to harm from energy of the chosen type."
   },
   {
-    "name": "Protection from Evil (Priest)",
+    "name": "Protection from Evil",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric", "Magic-User"],
     "range": "Close",
     "duration": "Focus",
     "dc": 11,
-    "description": "For the spell's duration, chaotic beings have disadvantage on attack rolls and hostile spellcasting checks against the target. These beings also can't possess, compel, or beguile it. When cast on an already-possessed target, the possessing entity makes a Charisma check vs. the last spellcasting check. On a failure, the entity is expelled. [After applying the effect, target this effect only at Chaotic beings by holding down SHIFT and dragging the effect to those beings.]\n\nImage: Protection from Evil",
-    "opposed": 1,
-    "opposedDc": 0,
-    "opposedAbility": "charisma"
-  },
-  {
-    "name": "Protection from Evil (Wizard)",
-    "tier": 1,
-    "castingAttribute": "Intelligence",
-    "range": "Close",
-    "duration": "Focus",
-    "dc": 11,
-    "description": "For the spell's duration, chaotic beings have disadvantage on attack rolls and hostile spellcasting checks against the target. These beings also can't possess, compel, or beguile it. When cast on an already-possessed target, the possessing entity makes a Charisma check vs. the last spellcasting check. On a failure, the entity is expelled. [After applying the effect, target this effect only at Chaotic beings by holding down SHIFT and dragging the effect to those beings.]\n\nImage: Protection from Evil",
+    "description": "For the spell's duration, chaotic beings have disadvantage on attack rolls and hostile spellcasting checks against the target. These beings also can't possess, compel, or beguile it. When cast on an already-possessed target, the possessing entity makes a Charisma check vs. the last spellcasting check. On a failure, the entity is expelled. [After applying the effect, target this effect only at Chaotic beings by holding down SHIFT and dragging the effect to those beings.]",
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "charisma"
@@ -1812,11 +1749,11 @@ const spells = [
   {
     "name": "Protection from Undead",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 11,
-    "description": "The undead have DISADV on attack rolls against a target you touch. These beings also can't possess, compel, or beguile it.\nWhen cast on an already-possessed target, the possessing entity makes a CHA check vs. the last spellcasting check. On a failure, the entity is expelled.\n\nImage: Protection from Undead",
+    "description": "The undead have DISADV on attack rolls against a target you touch. These beings also can't possess, compel, or beguile it.\nWhen cast on an already-possessed target, the possessing entity makes a CHA check vs. the last spellcasting check. On a failure, the entity is expelled.",
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "cha"
@@ -1824,7 +1761,7 @@ const spells = [
   {
     "name": "Puppet",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Focus",
     "dc": 11,
@@ -1836,7 +1773,7 @@ const spells = [
   {
     "name": "Ragnarok",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Far",
     "duration": "Instant",
     "dc": 15,
@@ -1845,7 +1782,7 @@ const spells = [
   {
     "name": "Raise Dead",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "1 day",
     "dc": 13,
@@ -1854,7 +1791,7 @@ const spells = [
   {
     "name": "Raven",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Unlimited",
     "duration": "Instant",
     "dc": 13,
@@ -1863,16 +1800,16 @@ const spells = [
   {
     "name": "Read the Runes",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Self",
     "duration": "Instant",
     "dc": 12,
-    "description": "You ask the gods a question and cast the runestones, interpreting the meaning of the results. Ask the Game Master one yes or no question. The Game Master truthfully answers \"yes\" or \"no.\"\n\nImage: Read the Runes"
+    "description": "You ask the gods a question and cast the runestones, interpreting the meaning of the results. Ask the Game Master one yes or no question. The Game Master truthfully answers \"yes\" or \"no.\""
   },
   {
     "name": "Rebuke Unholy",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "Instant",
     "dc": 13,
@@ -1884,16 +1821,16 @@ const spells = [
   {
     "name": "Reduce Animal",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 12,
-    "description": "An animal you touch is reduced to a quarter of its normal size and any giant animal is reduced to normal size. If animal is engaged in combat, it makes a morale check.\n\nImage: Reduce Animal"
+    "description": "An animal you touch is reduced to a quarter of its normal size and any giant animal is reduced to normal size. If animal is engaged in combat, it makes a morale check."
   },
   {
     "name": "Regenerate",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "spellType": "Healing",
     "range": "Close",
     "duration": "Focus",
@@ -1904,7 +1841,7 @@ const spells = [
   {
     "name": "Remove Curse",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 14,
@@ -1913,16 +1850,16 @@ const spells = [
   {
     "name": "Resilient Sphere",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "5 rounds",
     "dc": 14,
-    "description": "You conjure a weightless, glassy sphere around you that extends out to close range. For the spell's duration, nothing can pass through or crush the sphere. You can roll the sphere a near distance on your turn.\n\nImage: Resilient Sphere"
+    "description": "You conjure a weightless, glassy sphere around you that extends out to close range. For the spell's duration, nothing can pass through or crush the sphere. You can roll the sphere a near distance on your turn."
   },
   {
     "name": "Restoration",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Close",
     "duration": "Instant",
     "dc": 13,
@@ -1931,7 +1868,7 @@ const spells = [
   {
     "name": "Resurrect Animal",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 14,
@@ -1940,7 +1877,7 @@ const spells = [
   {
     "name": "Rock to Mud",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -1949,7 +1886,7 @@ const spells = [
   {
     "name": "Sacred Bounty",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 11,
@@ -1958,7 +1895,7 @@ const spells = [
   {
     "name": "Sacrifice",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Touch",
     "duration": "Instant",
     "dc": 12,
@@ -1967,7 +1904,7 @@ const spells = [
   {
     "name": "Scrying",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Focus",
     "dc": 15,
@@ -1979,7 +1916,7 @@ const spells = [
   {
     "name": "Sending",
     "tier": 3,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Unlimited",
     "duration": "Instant",
     "dc": 13,
@@ -1988,7 +1925,7 @@ const spells = [
   {
     "name": "Shadowdance",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "3 rounds",
     "dc": 11,
@@ -1997,7 +1934,7 @@ const spells = [
   {
     "name": "Shamanic Purge",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -2006,7 +1943,7 @@ const spells = [
   {
     "name": "Shaman's Shield",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
@@ -2015,7 +1952,7 @@ const spells = [
   {
     "name": "Shapechange",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Focus",
     "dc": 15,
@@ -2024,7 +1961,7 @@ const spells = [
   {
     "name": "Shell of the Turtle",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -2033,7 +1970,7 @@ const spells = [
   {
     "name": "Shield of Faith",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Self",
     "duration": "5 rounds",
     "dc": 11,
@@ -2042,7 +1979,7 @@ const spells = [
   {
     "name": "Silence",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Far",
     "duration": "Focus",
     "dc": 12,
@@ -2051,7 +1988,7 @@ const spells = [
   {
     "name": "Sleep",
     "tier": 1,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Instant",
     "dc": 11,
@@ -2060,7 +1997,7 @@ const spells = [
   {
     "name": "Smite",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
@@ -2072,7 +2009,7 @@ const spells = [
   {
     "name": "Song of Immunity",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -2081,7 +2018,7 @@ const spells = [
   {
     "name": "Song of Resistance",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -2090,7 +2027,7 @@ const spells = [
   {
     "name": "Soul Jar",
     "tier": 5,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Permanent",
     "dc": 15,
@@ -2099,7 +2036,7 @@ const spells = [
   {
     "name": "Soul Reap",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -2108,7 +2045,7 @@ const spells = [
   {
     "name": "Soulbind",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Close",
     "duration": "Focus",
     "dc": 12,
@@ -2117,7 +2054,7 @@ const spells = [
   {
     "name": "Speak with Animals",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "5 rounds",
     "dc": 11,
@@ -2125,47 +2062,29 @@ const spells = [
   },
   {
     "name": "Speak with Dead",
-    "tier": 1,
-    "castingAttribute": "Constitution",
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 11,
-    "description": "A dead body you touch answers your questions. You can ask up to three yes or no questions (one at a time). The corpse truthfully answers \"yes\" or \"no\" to each.\nIf you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure, instead."
-  },
-  {
-    "name": "Speak with Dead (Priest)",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric", "Magic-User"],
     "range": "Close",
     "duration": "Instant",
     "dc": 13,
-    "description": "A dead body you touch answers your questions in a distant, wheezing voice. You can ask the dead body up to three yes or no questions (one at a time). The GM truthfully answers \"yes\" or \"no\" to each. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead.\n\nImage: Speak with Dead"
-  },
-  {
-    "name": "Speak with Dead (Wizard)",
-    "tier": 3,
-    "castingAttribute": "Intelligence",
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 13,
-    "description": "A dead body you touch answers your questions in a distant, wheezing voice. You can ask the dead body up to three yes or no questions (one at a time). The GM truthfully answers \"yes\" or \"no\" to each. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead.\n\nImage: Speak with Dead"
+    "description": "A dead body you touch answers your questions in a distant, wheezing voice. You can ask the dead body up to three yes or no questions (one at a time). The GM truthfully answers \"yes\" or \"no\" to each. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
   },
   {
     "name": "Spectral Drain",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
     "dc": 14,
-    "description": "Partially transparent black tendrils erupt from your hands and engulf an undead creature, dealing 3d6 radiant damage and healing you by the same amount.\n\nImage: Spectral Drain",
+    "description": "Partially transparent black tendrils erupt from your hands and engulf an undead creature, dealing 3d6 radiant damage and healing you by the same amount.",
     "damage": "3d6",
     "damageType": "radiant"
   },
   {
     "name": "Spectral Scythe",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "10 turns",
     "dc": 11,
@@ -2174,7 +2093,7 @@ const spells = [
   {
     "name": "Spidersilk",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Self",
     "duration": "Focus",
     "dc": 12,
@@ -2183,7 +2102,7 @@ const spells = [
   {
     "name": "Stoneskin",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "10 rounds",
     "dc": 14,
@@ -2192,7 +2111,7 @@ const spells = [
   {
     "name": "Summon Animal",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -2201,7 +2120,7 @@ const spells = [
   {
     "name": "Summon Extraplanar",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
@@ -2210,16 +2129,16 @@ const spells = [
   {
     "name": "Summon Giant Animal",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 15,
-    "description": "By invoking the earth spirits, you summon a giant animal of LV 9 or less, arriving in one round. During that round, you don't have to make a focus check. The animal is under your control and acts on your turn.\nIf you lose focus on this spell, you lose control of the animal and it acts instinctually based on the situation. It cannot communicate with you unless you know its language.\n\nImage: Summon Giant Animal"
+    "description": "By invoking the earth spirits, you summon a giant animal of LV 9 or less, arriving in one round. During that round, you don't have to make a focus check. The animal is under your control and acts on your turn.\nIf you lose focus on this spell, you lose control of the animal and it acts instinctually based on the situation. It cannot communicate with you unless you know its language."
   },
   {
     "name": "Summon Mummy",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 14,
@@ -2228,7 +2147,7 @@ const spells = [
   {
     "name": "Summon Wraith",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 13,
@@ -2237,7 +2156,7 @@ const spells = [
   {
     "name": "Swarm",
     "tier": 3,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Focus",
@@ -2249,12 +2168,12 @@ const spells = [
   {
     "name": "Sword of Scorpions",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Close",
     "duration": "Instant",
     "dc": 13,
-    "description": "You clap your hands, conjuring a swarm of scorpions that form into a living scimitar that hits a close opponent, dealing 1d12 slashing damage. Damaged target must make a CON check vs. your spellcasting check or be paralyzed for 1d4 rounds.\n\nImage: Sword of Scorpions",
+    "description": "You clap your hands, conjuring a swarm of scorpions that form into a living scimitar that hits a close opponent, dealing 1d12 slashing damage. Damaged target must make a CON check vs. your spellcasting check or be paralyzed for 1d4 rounds.",
     "damage": "1d12",
     "damageType": "slashing",
     "opposed": 1,
@@ -2264,7 +2183,7 @@ const spells = [
   {
     "name": "Telekinesis",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Far",
     "duration": "Focus",
     "dc": 14,
@@ -2273,7 +2192,7 @@ const spells = [
   {
     "name": "Teleport",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Close",
     "duration": "Instant",
     "dc": 15,
@@ -2282,7 +2201,7 @@ const spells = [
   {
     "name": "The Sky Is Falling",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Focus",
@@ -2294,19 +2213,19 @@ const spells = [
   {
     "name": "Thor's Thunder",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
     "dc": 14,
-    "description": "Thor casts down a bolt of lightning to strike one target. The target takes 3d6 lightning damage.\n\nImage: Thor's Thunder",
+    "description": "Thor casts down a bolt of lightning to strike one target. The target takes 3d6 lightning damage.",
     "damage": "3d6",
     "damageType": "lightning"
   },
   {
     "name": "Thrall Offering",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 11,
@@ -2315,7 +2234,7 @@ const spells = [
   {
     "name": "Timber",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Far",
     "duration": "Instant",
@@ -2327,7 +2246,7 @@ const spells = [
   {
     "name": "Toadstool",
     "tier": 2,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "spellType": "Healing",
     "range": "Self",
     "duration": "Instant",
@@ -2338,7 +2257,7 @@ const spells = [
   {
     "name": "Tomorrow's Vision",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Instant",
     "dc": 14,
@@ -2347,7 +2266,7 @@ const spells = [
   {
     "name": "Torch of Fireflies",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 hour real time",
     "dc": 11,
@@ -2356,7 +2275,7 @@ const spells = [
   {
     "name": "Touch of Fatigue",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 round",
     "dc": 11,
@@ -2365,7 +2284,7 @@ const spells = [
   {
     "name": "Train Animal",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Instant",
     "dc": 13,
@@ -2374,7 +2293,7 @@ const spells = [
   {
     "name": "Trance",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Close",
     "duration": "Instant",
     "dc": 11,
@@ -2383,7 +2302,7 @@ const spells = [
   {
     "name": "Tree Assault",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Focus",
@@ -2395,7 +2314,7 @@ const spells = [
   {
     "name": "Tree Guardian",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 11,
@@ -2404,7 +2323,7 @@ const spells = [
   {
     "name": "Tree Sanctuary",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 rest",
     "dc": 14,
@@ -2413,7 +2332,7 @@ const spells = [
   {
     "name": "Turn Undead",
     "tier": 1,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "Instant",
     "dc": 11,
@@ -2425,7 +2344,7 @@ const spells = [
   {
     "name": "Undeath Blessing",
     "tier": 1,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Healing",
     "range": "Close",
     "duration": "Instant",
@@ -2438,19 +2357,19 @@ const spells = [
   {
     "name": "Undeath to Dust",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
     "dc": 15,
-    "description": "You wave your arm and all undead less than LV 9 in a near area around you instantly turn to dust. Undead LV 9 or above take 4d6 radiant damage.\n\nImage: Undeath to Dust",
+    "description": "You wave your arm and all undead less than LV 9 in a near area around you instantly turn to dust. Undead LV 9 or above take 4d6 radiant damage.",
     "damage": "4d6",
     "damageType": "radiant"
   },
   {
     "name": "Unhallowed Ground",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Permanent",
     "dc": 15,
@@ -2459,16 +2378,16 @@ const spells = [
   {
     "name": "Valkyrie",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Near",
     "duration": "10 rounds",
     "dc": 15,
-    "description": "You summon a valkyrie to your aid. [See NPC record in GM module.] She appears in a location within near and acts of her own free will to help you. She returns to Valhalla when the spell ends. You can't cast this again until you complete penance.\n\nImage: Valkyrie"
+    "description": "You summon a valkyrie to your aid. [See NPC record in GM module.] She appears in a location within near and acts of her own free will to help you. She returns to Valhalla when the spell ends. You can't cast this again until you complete penance."
   },
   {
     "name": "Vault of the Flea",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Focus",
     "dc": 14,
@@ -2477,7 +2396,7 @@ const spells = [
   {
     "name": "Veil of Life",
     "tier": 5,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "1 Day",
     "dc": 15,
@@ -2486,16 +2405,16 @@ const spells = [
   {
     "name": "Vicious Bite",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Close",
     "duration": "Focus",
     "dc": 12,
-    "description": "The teeth on an animal you touch elongates and sharpens.\nThe animal gains an extra die of damage on any bite attack.\nThis spell can be applied to Beastmasters.\n\nImage: Vicious Bite"
+    "description": "The teeth on an animal you touch elongates and sharpens.\nThe animal gains an extra die of damage on any bite attack.\nThis spell can be applied to Beastmasters."
   },
   {
     "name": "Voice of Verity",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Far",
     "duration": "Focus",
     "dc": 12,
@@ -2504,7 +2423,7 @@ const spells = [
   {
     "name": "Void Stare",
     "tier": 3,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Far",
     "duration": "Focus",
     "dc": 13,
@@ -2513,19 +2432,19 @@ const spells = [
   {
     "name": "Wall of Bones",
     "tier": 4,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "5 rounds",
     "dc": 14,
-    "description": "You summon a wall of writhing bones to rise from the ground.\nThe 1-foot thick wall must be contiguous and can cover a near-sized area in length and 10 feet tall or less.\nFoes close to the wall automatically take 2d4 slashing damage per round from the grasping and clawing bony hands and claws. Each close-sized section of the wall has 12 AC and 15 HP.\n\nImage: Wall of Bones",
+    "description": "You summon a wall of writhing bones to rise from the ground.\nThe 1-foot thick wall must be contiguous and can cover a near-sized area in length and 10 feet tall or less.\nFoes close to the wall automatically take 2d4 slashing damage per round from the grasping and clawing bony hands and claws. Each close-sized section of the wall has 12 AC and 15 HP.",
     "damage": "2d4",
     "damageType": "slashing"
   },
   {
     "name": "Wall of Force",
     "tier": 4,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Near",
     "duration": "5 rounds",
     "dc": 14,
@@ -2534,11 +2453,11 @@ const spells = [
   {
     "name": "Web",
     "tier": 2,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Far",
     "duration": "5 rounds",
     "dc": 12,
-    "description": "You create a near-sized cube of sticky, dense spider web within the spell's range. A creature stuck in the web can't move and must succeed on a strength check vs. your spellcasting check to free itself.\n\nImage: Web",
+    "description": "You create a near-sized cube of sticky, dense spider web within the spell's range. A creature stuck in the web can't move and must succeed on a strength check vs. your spellcasting check to free itself.",
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "strength"
@@ -2546,7 +2465,7 @@ const spells = [
   {
     "name": "Whip of Fire Ants",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "spellType": "Damage",
     "range": "Near",
     "duration": "Instant",
@@ -2558,7 +2477,7 @@ const spells = [
   {
     "name": "Whisper",
     "tier": 3,
-    "castingAttribute": "Charisma",
+   "castingAttribute": ["Witch"],
     "range": "Touch",
     "duration": "Instant",
     "dc": 13,
@@ -2567,7 +2486,7 @@ const spells = [
   {
     "name": "Willowman",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "Instant",
     "dc": 11,
@@ -2576,7 +2495,7 @@ const spells = [
   {
     "name": "Wish",
     "tier": 5,
-    "castingAttribute": "Intelligence",
+    "castingAttribute": ["Magic-User"],
     "range": "Self",
     "duration": "Instant",
     "dc": 15,
@@ -2585,7 +2504,7 @@ const spells = [
   {
     "name": "Witchlight",
     "tier": 1,
-    "castingAttribute": "Charisma",
+    "castingAttribute": ["Witch"],
     "range": "Near",
     "duration": "Focus",
     "dc": 11,
@@ -2594,7 +2513,7 @@ const spells = [
   {
     "name": "Wither",
     "tier": 3,
-    "castingAttribute": "Constitution",
+    "castingAttribute": ["UNUSED"],
     "range": "Near",
     "duration": "Instant",
     "dc": 13,
@@ -2603,7 +2522,7 @@ const spells = [
   {
     "name": "Wolfshape",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Self",
     "duration": "Focus",
     "dc": 13,
@@ -2612,7 +2531,7 @@ const spells = [
   {
     "name": "World Serpent",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Touch",
     "duration": "Focus",
     "dc": 15,
@@ -2621,7 +2540,7 @@ const spells = [
   {
     "name": "World Tree",
     "tier": 5,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Seer"],
     "range": "Touch",
     "duration": "Focus",
     "dc": 15,
@@ -2630,7 +2549,7 @@ const spells = [
   {
     "name": "Wrath",
     "tier": 4,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Self",
     "duration": "10 rounds",
     "dc": 14,
@@ -2639,7 +2558,7 @@ const spells = [
   {
     "name": "Yesterday's Vision",
     "tier": 3,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["UNUSED"],
     "range": "Self",
     "duration": "Instant",
     "dc": 13,
@@ -2648,11 +2567,337 @@ const spells = [
   {
     "name": "Zone of Truth",
     "tier": 2,
-    "castingAttribute": "Wisdom",
+    "castingAttribute": ["Cleric"],
     "range": "Near",
     "duration": "Focus",
     "dc": 12,
     "description": "You compel a creature you can see to speak truth. It can't utter a deliberate lie while within range."
+  },
+  {
+    "name": "Breath",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 11,
+    "description": "You can hold your breath for the spell's duration."
+  },
+  {
+    "name": "Instill",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "One weapon you wield is imbued with life force. It becomes a +1 weapon for the spell's duration. If the weapon is a staff, it deals d6 damage instead of d4."
+  },
+  {
+    "name": "Oxidize",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "One inanimate object you touch the size of a door or less ages d100 years."
+  },
+  {
+    "name": "Whisperwind",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Far",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "You send a brief, whispered message that reaches any creature in range."
+  },
+  {
+    "name": "Barkskin",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Self",
+    "duration": "1 day",
+    "dc": 12,
+    "description": "Your skin hardens into tough tree bark. Your AC becomes 15 (18 on a critical spellcasting check) for the spell's duration. You take double damage from fire while you are under the spell's effects."
+  },
+  {
+    "name": "Befriend",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "A tiny natural creature you touch regards you as a friend for the spell's duration. You may give the creature one command, which it tries to complete to the best of its ability and intelligence even after the spell ends. If the command would directly harm the creature, it abandons the task."
+  },
+  {
+    "name": "Magnetize",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "One object you touch up to the size of a horse becomes powerfully magnetized. It attracts all smaller magnetic objects within near. If it can move, it is pulled toward larger magnetic objects within near. A metal creature must pass a STR check equal to your spellcasting check to resist."
+  },
+  {
+    "name": "Truespeech",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "A natural creature you touch understands and can communicate with you in the true language of all animals. You can ask the creature one yes or no question. If you cast this spell more than once on the same creature in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
+    "name": "Alchemy",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "One inanimate object of human size or less you touch turns into another material of equal or lesser value."
+  },
+  {
+    "name": "Anima",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "Focus",
+    "dc": 13,
+    "description": "You animate the life force of one natural object you touch the size of a horse or less. The object becomes a loyal creature for the spell's duration using the below stats. Its level is equal to yours. The creature acts on your turn. You may use your action to command it, which it obeys. Otherwise, it does not act. AC 10 + LV, HP 4.5 x LV, ATK 2 bash +7 (1d12), MV near, S +4, D +0, C +0, I -4, W +0, Ch +0, AL N, LV *."
+  },
+  {
+    "name": "Locusts",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "spellType": "Damage",
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 13,
+    "description": "A disorienting cloud of angry, biting locusts fills an area around you out to near. The cloud moves with you as you move, and you are not affected by it. Creatures in the area of effect take 1d10 damage per round at the start of their turn. They must pass a CON check equal to your last spellcasting check or be unable to move on their turn.",
+    "damage": "1d10",
+    "damageType": "piercing"
+  },
+  {
+    "name": "Treeshape",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 13,
+    "description": "You and your gear turn into a treant with the below stats for the spell's duration. You do not have the treant's Animate Tree talent. You cannot cast spells while under the effect of this spell. You retain your INT, WIS, and CHA stats. AC 14, HP 38, ATK 2 slam +8 (1d12) or 1 rock (far) +8 (2d6), MV near, S +4, D -1, C +2, I *, W *, Ch *, AL N, LV 8."
+  },
+  {
+    "name": "Mycelium",
+    "tier": 4,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Self",
+    "duration": "Instant",
+    "dc": 14,
+    "description": "You connect your mind with the earth's vast fungi network. Ask the GM one question of up to 15 words. The GM answers truthfully using up to 15 words. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
+    "name": "Summon Storm",
+    "tier": 4,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "1 mile",
+    "duration": "10 rounds",
+    "dc": 14,
+    "description": "You summon a violent storm that affects an area around you out to one mile for the duration. The storm brings darkened skies, severe wind, and driving rain. For the duration of the spell, you can cast control water even if you do not know the spell. For the duration of the spell, you can cast lightning bolt even if you do not know the spell."
+  },
+  {
+    "name": "Earthquake",
+    "tier": 5,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "spellType": "Damage",
+    "range": "Double near",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "The earth shakes violently and splits open, swallowing creatures down to their doom. All creatures standing on the ground within double near of you take 4d6 damage. Each affected creature of LV 9 or less must pass a DEX check equal to the damage they took or else be swallowed by the earth, never to be seen again.",
+    "damage": "4d6",
+    "damageType": "blunt"
+  },
+  {
+    "name": "Naming",
+    "tier": 5,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Lawful", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You learn the True Name of one creature you touch. If the creature is willing, you may give it a new True Name. A creature may only change its True Name once in its lifetime. If it does so, its alignment changes to your alignment."
+  },
+  {
+    "name": "Cleanse",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "You expunge natural toxins from one creature you touch. End the effects of one poison currently affecting the target."
+  },
+  {
+    "name": "Flare",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Near",
+    "duration": "1 round",
+    "dc": 11,
+    "description": "A flash of blinding, white light bursts from you. All enemies in range who see it are blinded for the spell's duration."
+  },
+  {
+    "name": "Reveal",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "End all invisibility effects out to a near distance from you. You also become aware of the location of any hiding creatures within range."
+  },
+  {
+    "name": "Ward",
+    "tier": 1,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 11,
+    "description": "You ward yourself with a magical charm against ambush. For the spell's duration, you can't be surprised."
+  },
+  {
+    "name": "Absorb",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "You create an absorptive barrier of force around you. Halve all damage you take for the spell's duration (round down)."
+  },
+  {
+    "name": "Meld",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "You merge slightly with the ethereal plane, freeing yourself from physical hindrances. You may ignore any effect that would impact your movement for the spell's duration."
+  },
+  {
+    "name": "Pacify",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "Choose one creature within range of LV 3 or less. It must make a morale check (creatures immune to morale checks are not affected by this spell)."
+  },
+  {
+    "name": "Push/Pull",
+    "tier": 2,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "You move one human-sized object or a creature of LV 4 or less a near distance. If the target is anchored in a way that prevents free movement, the DC to cast this spell is 18."
+  },
+  {
+    "name": "Banish",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "With a word of power, you send one extraplanar creature of LV 6 or less who hears you back to its dimension of origin."
+  },
+  {
+    "name": "Forbid",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 13,
+    "description": "Creatures cannot teleport into, out of, or within an area of effect extending out to double near from you. This area of effect moves with you."
+  },
+  {
+    "name": "Identify",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Touch",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "You learn all the magical properties of one item you touch. You cannot cast this spell again until you complete a rest."
+  },
+  {
+    "name": "Speak With Object",
+    "tier": 3,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "An object you touch mentally answers your questions. The object's wit matches the rarity of its primary materials. You can ask the object up to three yes or no questions (one at a time). If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
+    "name": "Glyph",
+    "tier": 4,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Close",
+    "duration": "1 week",
+    "dc": 14,
+    "description": "You draw an arcane symbol on an object that imparts one of the following effects: Bind (a reader of LV 6 or less is paralyzed for 1 hour), Harm (the reader takes 3d6 damage), Message (the reader hears a brief mental message), or Teleportation Sigil (treat the object as a teleportation sigil per the teleport spell). The glyph disappears once activated."
+  },
+  {
+    "name": "Stasis",
+    "tier": 4,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Close",
+    "duration": "Indefinite",
+    "dc": 14,
+    "description": "A willing creature you touch becomes suspended in time. If the target is unwilling, it must be of LV 5 or less. The target becomes unconscious and does not age; its bodily functions cease, though it remains alive. You may end the spell at any time or when a predefined condition you chose while casting the spell is met."
+  },
+  {
+    "name": "Abjure",
+    "tier": 5,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You and one creature you touch both die."
+  },
+  {
+    "name": "Permanence",
+    "tier": 5,
+    "castingAttribute": ["Magic-User"],
+    "prohibitedAlignments": ["Neutral", "Chaotic"],
+    "range": "Close",
+    "duration": "1 year",
+    "dc": 15,
+    "description": "Sprinkle a powdered diamond on the target to cast this spell. Choose one object in range that is currently under the effects of a spell you have cast. The duration of that spell becomes 1 year. You cannot alter the original spell's effects after casting permanence; for instance, you can no longer move an object under the effects of telekinesis."
   }
 ];
 
