@@ -52,7 +52,7 @@ final case class Character(
   goldPieces: Int = 0,
   silverPieces: Int = 0,
   copperPieces: Int = 0,
-  freeToCarry: Option[Int] = None,
+  freeToCarry: List[String] = List.empty,
 )
 
 object Character {

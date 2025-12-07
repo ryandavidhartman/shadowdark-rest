@@ -15,6 +15,7 @@ final case class CharacterServer(
   personalityServer: PersonalityServer,
   backgroundServer: BackgroundServer,
   characterClassServer: CharacterClassServer,
+  itemServer: ItemServer,
 ) {
 
   private val alignments  = List("Lawful", "Neutral", "Chaotic")
@@ -172,6 +173,7 @@ final case class CharacterServer(
       classes       <- ensureClasses
       backgrounds   <- backgroundServer.getBackgrounds
       personalities <- personalityServer.getPersonalities
+      items         <- itemServer.getItems
       randomRace    <- pickWeightedRace(races).flatMap {
                          case some @ Some(_) => ZIO.succeed(some)
                          case None           => pickOne(races)
@@ -189,7 +191,6 @@ final case class CharacterServer(
       pickedAlign   <- pickOne(alignments)
       pickedBg      <- pickWeightedBackground(backgrounds)
       pickedDeity   <- pickOne(deities)
-      gearPicked    <- pickSome(gearChoices, 3)
       gold          <- ZIO.succeed(rng.nextInt(0, 21))
       silver        <- ZIO.succeed(rng.nextInt(0, 51))
       copper        <- ZIO.succeed(rng.nextInt(0, 101))
@@ -232,6 +233,18 @@ final case class CharacterServer(
                          List(strScore, dexScore, conScore, intScore, wisScore, chaScore),
                          pickedClass,
                        )
+      hasHauler      = pickedClass.exists(_.features.exists(f => f.name.equalsIgnoreCase("Hauler")))
+      gearLoadout    = util.GearUtilities.selectStartingGear(
+                         items,
+                         allowedWeapons = pickedClass.map(_.weapons).getOrElse(List.empty),
+                         allowedArmor = pickedClass.map(_.armor).getOrElse(List.empty),
+                         conMod = if (hasHauler) abilities.constitution.modifier else 0,
+                         strengthScore = abilities.strength.score,
+                         dexMod = abilities.dexterity.modifier,
+                         strMod = abilities.strength.modifier,
+                         baseArmorClass = 10 + abilities.dexterity.modifier,
+                         rng = rng,
+                       )
       allowedPersonalityAlignments = pickedAlign
         .map(_.toLowerCase match {
           case "lawful"  => Set("lawful", "neutral")
@@ -249,8 +262,11 @@ final case class CharacterServer(
       hpSides        = pickedClass.map(hitDieSides).getOrElse(8)
       hpRoll         = rng.nextInt(1, hpSides + 1)
       hitPoints      = Math.max(1, hpRoll + conMod)
-      armorClass     = 10 + abilities.dexterity.modifier
-      attacks        = List(s"Weapon attack ${formatMod(abilities.strength.modifier)} (1d6)")
+      armorClass     = gearLoadout.armorClass
+      attacks        = if (gearLoadout.attacks.nonEmpty)
+                         gearLoadout.attacks
+                       else
+                         List(s"Weapon attack ${formatMod(abilities.strength.modifier)} (1d6)")
       level          = 1
       talentRolls    = (level + 1) / 2
       classTalents   <- pickedClass
@@ -291,14 +307,14 @@ final case class CharacterServer(
       talents = classTalents,
       spells = classSpells,
       attacks = attacks,
-      gear = gearPicked,
+      gear = if (gearLoadout.gear.nonEmpty) gearLoadout.gear else gearChoices,
       languages = languages,
       personalities = pickedPersonalities,
       gender = randomGender,
       goldPieces = gold,
       silverPieces = silver,
       copperPieces = copper,
-      freeToCarry = Some(abilities.strength.score * 10),
+      freeToCarry = gearLoadout.freeGear,
     )
 
   def randomCharacter: Task[Character] =
@@ -316,7 +332,8 @@ object CharacterServer {
       with RaceServer
       with PersonalityServer
       with BackgroundServer
-      with CharacterClassServer,
+      with CharacterClassServer
+      with ItemServer,
     Nothing,
     CharacterServer,
   ] =

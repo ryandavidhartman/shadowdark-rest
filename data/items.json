@@ -868,14 +868,6 @@
     "magical": true
   },
   {
-    "name": "Iron Spike",
-    "itemType": "Equipment",
-    "description": "Strong spike. Each has a hole for threading rope. Can be hammered in with weapons or other iron spikes.",
-    "cost": "1 sp",
-    "slots": 0.1,
-    "magical": false
-  },
-  {
     "name": "Iron Spikes (10)",
     "itemType": "Equipment",
     "description": "Strong spike. Each has a hole for threading rope. Can be hammered in with weapons or other iron spikes.",
