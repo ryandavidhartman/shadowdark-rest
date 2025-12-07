@@ -50,10 +50,17 @@ object GearUtilities {
       Set("Flask", "Flask or Bottle", "Empty Bottle", "Bottle", "Flask, Leather", "Flask, Metal")
     )
 
-    def slotsOf(item: Item): Double = item.slots.getOrElse(1.0)
-    def slotCount(item: Item): Int   = math.max(1, math.ceil(slotsOf(item)).toInt)
     def canonicalName(name: String): String =
       gearDedupGroups.find(_.exists(_.equalsIgnoreCase(name))).flatMap(_.headOption).getOrElse(name)
+
+    def ammoCandidates(weaponName: String): List[String] = {
+      val lower = weaponName.toLowerCase
+      if (lower.contains("crossbow")) List("Crossbow Bolts (20)")
+      else if (lower.contains("bow")) List("Arrows (20)")
+      else if (lower.contains("sling")) List("Sling Bullets (20)")
+      else if (lower.contains("blow")) List("Darts (10)")
+      else Nil
+    }
 
     def weaponAllowed(item: Item): Boolean = {
       if (!item.itemType.exists(_.equalsIgnoreCase("Weapon"))) return false
@@ -66,18 +73,18 @@ object GearUtilities {
       val allowedLower = allowedArmor.map(_.toLowerCase)
       allowedLower.exists(_.contains("all armor")) ||
       (item.name.toLowerCase.contains("shield") && allowedLower.exists(_.contains("shields"))) ||
-      allowedLower.exists(a => item.name.toLowerCase == a)
+        allowedLower.contains(item.name.toLowerCase)
     }
 
     val armorCandidates = nonMagical
       .filter(i => i.itemType.exists(_.equalsIgnoreCase("Armor")) && i.ac.isDefined)
       .filter(armorAllowed)
-      .filter(i => slotCount(i) <= remainingSlots)
-      .sortBy(i => (-i.ac.getOrElse(0), slotsOf(i)))
+      .filter(i => i.slots <= remainingSlots)
+      .sortBy(i => (-i.ac.getOrElse(0), i.slots))
 
     val armor = pickOne(armorCandidates, rng)
     armor.foreach { a =>
-      val count = slotCount(a)
+      val count = a.slots
       remainingSlots -= count
       val canon = canonicalName(a.name)
       gearNames = gearNames ++ List.fill(count)(canon)
@@ -87,34 +94,45 @@ object GearUtilities {
     val shieldCandidates = nonMagical
       .filter(i => i.defenseBonus.exists(_ > 0))
       .filter(armorAllowed)
-      .filter(i => slotCount(i) <= remainingSlots)
+      .filter(i => i.slots <= remainingSlots)
       .filterNot(i => usedNames.exists(n => n.toLowerCase.contains("shield") || n.toLowerCase.contains("buckler")))
 
     def firstThatFits(cands: List[Item]): Option[Item] =
       random
         .shuffle(cands)
-        .find(i => slotCount(i) <= remainingSlots)
+        .find(i => i.slots <= remainingSlots)
 
     val rangedWeapons = nonMagical
       .filter(weaponAllowed)
-      .filter(_.attackType.exists(_.toLowerCase.contains("ranged")))
-      .filter(i => slotCount(i) <= remainingSlots)
+      .filter(_.attackType.exists(_.toLowerCase.equals("ranged")))
+      .filter(i => i.slots <= remainingSlots)
     val ranged = firstThatFits(rangedWeapons)
     ranged.foreach { r =>
-      val count = slotCount(r)
+      val count = r.slots
       remainingSlots -= count
       val canon = canonicalName(r.name)
       gearNames = gearNames ++ List.fill(count)(canon)
       usedNames = usedNames + canon
+      val ammoOpts = ammoCandidates(r.name).map(canonicalName).filterNot(usedNames.contains)
+      val ammoItem = ammoOpts
+        .flatMap(name => nonMagical.find(i => canonicalName(i.name) == name))
+        .find(i => i.slots <= remainingSlots)
+      ammoItem.foreach { ammo =>
+        val ammoCount = ammo.slots
+        remainingSlots -= ammoCount
+        val ammoCanon = canonicalName(ammo.name)
+        gearNames = gearNames ++ List.fill(ammoCount)(ammoCanon)
+        usedNames = usedNames + ammoCanon
+      }
     }
 
     val meleeWeapons = nonMagical
       .filter(weaponAllowed)
       .filter(_.attackType.exists(_.toLowerCase.contains("melee")))
-      .filter(i => slotCount(i) <= remainingSlots)
+      .filter(i => i.slots <= remainingSlots)
     val melee = firstThatFits(meleeWeapons)
     melee.foreach { m =>
-      val count = slotCount(m)
+      val count = m.slots
       remainingSlots -= count
       val canon = canonicalName(m.name)
       gearNames = gearNames ++ List.fill(count)(canon)
@@ -126,7 +144,7 @@ object GearUtilities {
       if (twoHandedMelee) None
       else firstThatFits(shieldCandidates)
     shield.foreach { s =>
-      val count = slotCount(s)
+      val count = s.slots
       remainingSlots -= count
       val canon = canonicalName(s.name)
       gearNames = gearNames ++ List.fill(count)(canon)
@@ -136,12 +154,12 @@ object GearUtilities {
     val fillerGear = random.shuffle(
       nonMagical
         .filter(i => i.itemType.exists(t => t.equalsIgnoreCase("Equipment") || t.equalsIgnoreCase("Gear")))
-        .filter(i => slotsOf(i) > 0 && slotsOf(i) <= remainingSlots)
-        .sortBy(slotsOf),
+        .filter(i => i.slots > 0 && i.slots <= remainingSlots)
+        .sortBy(i => i.slots),
     )
 
     fillerGear.take(3).foreach { g =>
-      val count = slotCount(g)
+      val count = g.slots
       val canon = canonicalName(g.name)
       if (count <= remainingSlots && !usedNames.contains(canon)) {
         remainingSlots -= count
@@ -152,7 +170,7 @@ object GearUtilities {
 
     val zeroSlotGear = random.shuffle(
       nonMagical
-        .filter(i => slotsOf(i) <= 0)
+        .filter(i => i.slots <= 0)
         .filter(i => i.itemType.exists(t => t.equalsIgnoreCase("Equipment") || t.equalsIgnoreCase("Gear"))),
     )
 

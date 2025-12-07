@@ -10,7 +10,7 @@ final case class Item(
   description: Option[String] = None,
   cost: Option[String] = None,
   nonidentified: Option[String] = None,
-  slots: Option[Double] = None,
+  slots: Int = 1,
   magical: Option[Boolean] = None,
   ac: Option[Int] = None,
   count: Option[Int] = None,
