@@ -10,7 +10,8 @@ final case class Item(
   description: Option[String] = None,
   cost: Option[String] = None,
   nonidentified: Option[String] = None,
-  weight: Option[Double] = None,
+  slots: Option[Double] = None,
+  magical: Option[Boolean] = None,
   ac: Option[Int] = None,
   count: Option[Int] = None,
   nodex: Option[Int] = None,
@@ -19,13 +20,14 @@ final case class Item(
   damageType: Option[String] = None,
   finesse: Option[Boolean] = None,
   itemAttackBonus: Option[Int] = None,
+  defenseBonus: Option[Int] = None,
   loading: Option[Boolean] = None,
+  loadingFullRound: Option[Boolean] = None,
   range: Option[String] = None,
   thrown: Option[Boolean] = None,
   twoHanded: Option[Boolean] = None,
   versatile: Option[Boolean] = None,
   versatileDamage: Option[String] = None,
-  picture: Option[String] = None,
 )
 
 object Item {

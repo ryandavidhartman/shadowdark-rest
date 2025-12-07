@@ -3,6 +3,7 @@ import routes.{
   BackgroundRoute,
   CharacterClassRoute,
   CharacterRoute,
+  ItemRoute,
   NameRoute,
   PersonalityRoute,
   RaceRoute,
@@ -12,6 +13,7 @@ import repositories.{
   BackgroundRepositoryLive,
   CharacterClassRepositoryLive,
   CharacterRepositoryLive,
+  ItemRepositoryLive,
   NameRepositoryLive,
   PersonalityRepositoryLive,
   RaceRepositoryLive,
@@ -21,6 +23,7 @@ import servers.{
   BackgroundServer,
   CharacterClassServer,
   CharacterServer,
+  ItemServer,
   NameServer,
   PersonalityServer,
   RaceServer,
@@ -50,8 +53,9 @@ object Main extends ZIOAppDefault {
           backgroundRoutes  <- ZIO.serviceWith[BackgroundRoute](_.routes)
           classRoutes       <- ZIO.serviceWith[CharacterClassRoute](_.routes)
           spellRoutes       <- ZIO.serviceWith[SpellRoute](_.routes)
+          itemRoutes        <- ZIO.serviceWith[ItemRoute](_.routes)
           _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes,
+                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes,
                                )
         } yield ()
 
@@ -64,12 +68,14 @@ object Main extends ZIOAppDefault {
           PersonalityRepositoryLive.layer,
           BackgroundRepositoryLive.layer,
           SpellRepositoryLive.layer,
+          ItemRepositoryLive.layer,
           NameServer.live,
           RaceServer.live,
           PersonalityServer.live,
           BackgroundServer.live,
           CharacterClassServer.live,
           SpellServer.live,
+          ItemServer.live,
           CharacterServer.live,
           CharacterRoute.live,
           NameRoute.live,
@@ -78,6 +84,7 @@ object Main extends ZIOAppDefault {
           BackgroundRoute.live,
           CharacterClassRoute.live,
           SpellRoute.live,
+          ItemRoute.live,
         )
       }
       .orDie
