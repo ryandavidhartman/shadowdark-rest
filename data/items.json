@@ -1,0 +1,2322 @@
+[
+  {
+    "name": "Alabaster Destrier",
+    "itemType": "Misc. Magic",
+    "description": "A smooth, pearly statuette of a running horse.\nBenefit. Once per day, the wielder can speak the command word to turn the statuette into a pegasus that accepts neutral or lawful riders. The statuette remains in this form for 1 hour.",
+    "weight": 1
+  },
+  {
+    "name": "Aminiita root",
+    "itemType": "Equipment",
+    "description": "Rarity: Common; Use: Eat; Effect: DC 12 CON or 3d6 damage",
+    "weight": 1
+  },
+  {
+    "name": "Amulet of Secrecy",
+    "itemType": "Jewelry",
+    "description": "A heavy, flat pendant carved with a lidded eye.\nBenefit. You can't be detected by divination magic such as the scrying spell or a Crystal Ball while wearing this amulet.\nCurse. You constantly have the sensation of being watched.",
+    "weight": 1
+  },
+  {
+    "name": "Amulet of the Banshee",
+    "itemType": "Jewelry",
+    "description": "Carved amber amulet inscribed with a mysterious black rune.\nBenefit When activated, you scream, all living creatures LV  or less within near make DC 9 CON or be stunned for 2 rounds.\nCurse Each use of the amulet triggers a DC 9 CON check or your voice is lost until next rest.",
+    "weight": 1
+  },
+  {
+    "name": "Amulet of Vitality",
+    "itemType": "Jewelry",
+    "description": "A gold amulet with a red ruby teardrop at its center.\nBenefit. Your Constitution stat becomes 18 (+4) while wearing this amulet.",
+    "weight": 1
+  },
+  {
+    "name": "Armor of Saint Terragnis",
+    "itemType": "Armor",
+    "description": "Cannot swim; Disadvantage on stealth checks.\nGolden plate mail carved from head to toe with warrior angels.\nBonus. +3 plate mail. Only a lawful worshipper of Saint Terragnis can wear this armor.\nBenefit. Hostile spells that target you are DC 18 to cast. Once per month, you can summon an Avatar of Saint Terragnis (treat as an archangel) to fight by your side for 10 rounds.",
+    "weight": 3,
+    "ac": 18,
+    "count": 1,
+    "nodex": 1
+  },
+  {
+    "name": "Armor of the Oni",
+    "itemType": "Armor",
+    "description": "Cannot swim; Disadvantage on stealth checks.\nBlack plate mail of lacquered, ironwood panels. The helm's visor is the face of a snarling oni.\nBonus. +1 plate mail.\nBenefit. You can speak and understand Diabolic. Your melee weapon attacks deal +1 damage.\nCurse. You have disadvantage on attacks and spellcasting checks against demons.",
+    "weight": 3,
+    "ac": 16,
+    "count": 1,
+    "nodex": 1
+  },
+  {
+    "name": "Arrow",
+    "itemType": "Ammunition",
+    "description": "Ammunition for shortbows or longbows.",
+    "cost": "5 cp",
+    "weight": 0.05
+  },
+  {
+    "name": "Arrows (20)",
+    "itemType": "Ammunition",
+    "description": "Ammunition for shortbows or longbows.",
+    "cost": "1 gp",
+    "weight": 1
+  },
+  {
+    "name": "Axe of Nine Eyes",
+    "itemType": "Weapon",
+    "description": "A silvery, +1 greataxe with nine open eyes engraved on its blade. Its wielder can learn the True Name of up to 9 creatures total. An eye closes each time this is used.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8+1",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10+1"
+  },
+  {
+    "name": "Backpack",
+    "itemType": "Equipment",
+    "description": "Holds all the gear you can carry. Don't lose it.",
+    "cost": "2 gp",
+    "weight": 0
+  },
+  {
+    "name": "Bag of Badgers",
+    "itemType": "Misc. Magic",
+    "description": "A gray, fraying sack matted with white, bristly hair.\nBenefit. Once per day, you can reach inside the bag and pull out an angry badger. You can throw the badger up to a near distance. The badger attacks the nearest creature for 3 rounds before waddling away.",
+    "weight": 1
+  },
+  {
+    "name": "Bag of Devouring",
+    "itemType": "Misc. Magic",
+    "description": "A worn, leather pouch with tight drawstrings.\nCurse. This bag devours and destroys anything placed inside it in 1d6 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Bag of Holding",
+    "itemType": "Misc. Magic",
+    "description": "A worn, leather pouch with tight drawstrings.\nBenefit. This bag has an inter-dimensional space inside that can hold up to 10 gear slots.\nCurse. Placing this item inside another Bag of Holding or a Portable Hole destroys both items and all held inside them.",
+    "weight": 1
+  },
+  {
+    "name": "Bag of Teeth",
+    "itemType": "Misc. Magic",
+    "description": "Object cannot be crushed by anything.",
+    "weight": 1
+  },
+  {
+    "name": "Bastard Sword",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10"
+  },
+  {
+    "name": "Bead of Force",
+    "itemType": "Misc. Magic",
+    "description": "A marble with a blue ring of light glowing softly inside it.\nBenefit. You can throw this bead at one target up to a near distance. If you hit, the target becomes caught in a resilient sphere spell.",
+    "weight": 1
+  },
+  {
+    "name": "Bear Claw of the Beastmaster",
+    "itemType": "Misc. Magic",
+    "description": "A large, pearly bear claw enchanted by a Beastmaster.\nBenefit You gain +1 to damage if affixed to a melee weapon. You gain ADV on strength checks if worn as jewelry. Gain +1 to AC when attached to armor, shield, or musical instrument.",
+    "weight": 1
+  },
+  {
+    "name": "Black Candle",
+    "itemType": "Misc. Magic",
+    "description": "Causes pain and disgust in fey creatures.",
+    "weight": 1
+  },
+  {
+    "name": "Blade of Vengeance",
+    "itemType": "Weapon",
+    "description": "A gray blade with a diamond-cut ruby in the pommel. It whistles sharply with each slice.\nBonus. +2 bastard sword. Cannot be wielded by undead.\nBenefit. You have advantage on attacks against undead creatures with this sword. You can use the sword to cast turn undead once per day (+4 bonus).\nPersonality. Lawful. Grim, suspicious. Forged as a fail-safe against the Witch-Kings if they should fall to darkness, which they did. Demands they be slain.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8+2",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10+2"
+  },
+  {
+    "name": "Blowgun",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 gp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Bluewort paste",
+    "itemType": "Equipment",
+    "description": "Rarity: Common; Use: Injure; Effect: DC 12 CON or paralyzed 1d4 rds",
+    "weight": 1
+  },
+  {
+    "name": "Bolas",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "2 gp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "-",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Boots of Dancing",
+    "itemType": "Clothing",
+    "description": "Fine, supple boots of sheepskin.\nCurse. As soon as you don these boots, you begin cavorting and dancing uncontrollably. You move randomly each turn and must pass a DC 15 Dexterity check to remove the boots.",
+    "weight": 1
+  },
+  {
+    "name": "Boots of Hovering",
+    "itemType": "Clothing",
+    "description": "Brown, sturdy boots polished to a sheen. Small, silver wings adorn the heels.\nBenefit. You can walk on an insubstantial surface for 1 turn at a time. You fall through the surface if you end your turn on it.",
+    "weight": 1
+  },
+  {
+    "name": "Boots of the Cat",
+    "itemType": "Clothing",
+    "description": "Gray, doeskin boots as thin and soft as slippers.\nBenefit. You can jump up to a near distance from a standstill. Your checks to move silently are always easy (DC 9).",
+    "weight": 1
+  },
+  {
+    "name": "Bottle",
+    "itemType": "Equipment",
+    "description": "Glass containers that hold one draught of liquid.",
+    "cost": "3 sp",
+    "weight": 1
+  },
+  {
+    "name": "Bracers of Archery",
+    "itemType": "Armor",
+    "description": "Leather bracers embossed with soaring hawks.\nBenefit. You deal +1 damage with ranged weapons.",
+    "weight": 1
+  },
+  {
+    "name": "Bracers of Defense",
+    "itemType": "Armor",
+    "description": "Steel bracers traced with dwarvish runes of protection.\nBenefit. You get a +1 bonus to your armor class.",
+    "weight": 1
+  },
+  {
+    "name": "Bracers of the Werewolf",
+    "itemType": "Armor",
+    "description": "Rugged steel bracers inlaid with the claws and fangs of a werewolf.\nBenefit When activated, you gain double near movement and 18 strength for 5 rounds.\nCurse After use, exhausted. Attacks and STR checks at DISADV until you consume fresh, bloody meat.",
+    "weight": 1
+  },
+  {
+    "name": "Brain in a Jar",
+    "itemType": "Misc. Magic",
+    "description": "Causes doubt and hesitation in demons.",
+    "weight": 1
+  },
+  {
+    "name": "Brak's Book of Misspells",
+    "itemType": "Tome",
+    "description": "A tome bound in ratskin that bears a jagged, glowing rune.\nCurse. This spellbook contains one scroll each of acid arrow, fireball, and sleep. When a wizard tries to cast or learn a spell from these scrolls, the spell targets the caster on a success.",
+    "weight": 1
+  },
+  {
+    "name": "Brak's Cube of Perfection",
+    "itemType": "Misc. Magic",
+    "description": "A tiny cube with paintings of goblins on each face, each one depicting transcendence in a physical or mental trait.\nBenefit. Roll the cube by rolling a d6. Your corresponding stat permanently increases to 18 (+4). 1. Strength. 2. Dexterity. 3. Constitution. 4. Intelligence. 5. Wisdom. 6. Charisma. After being rolled, Brak's Cube of Perfection teleports to a random location in the multiverse.",
+    "weight": 1
+  },
+  {
+    "name": "Broken Club",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "1 cp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d2",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Bundle of Sage",
+    "itemType": "Misc. Magic",
+    "description": "A creature holding it can't knowingly lie.",
+    "weight": 1
+  },
+  {
+    "name": "Caltrops",
+    "itemType": "Equipment",
+    "description": "Tiny, triangle-shaped iron spikes. Living creatures who step on caltrops take 1 damage and can only move at half speed for 10 rounds.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Caltrops",
+    "itemType": "Equipment",
+    "description": "Tiny, triangle-shaped iron spikes. Living creatures who step on caltrops take 1 damage and can only move at half speed for 10 rounds.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Carved Bone",
+    "itemType": "Misc. Magic",
+    "description": "Ignites in flames once/day for 1d4 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Censer Flail",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "20 gp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6",
+    "damageType": "blunt",
+    "finesse": true,
+    "loading": true,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Chainmail",
+    "itemType": "Armor",
+    "description": "Disadvantage on stealth checks and swim checks.",
+    "cost": "60 gp",
+    "weight": 2,
+    "ac": 13,
+    "count": 1
+  },
+  {
+    "name": "Circlet of Wisdom",
+    "itemType": "Jewelry",
+    "description": "A thin, silver circlet set with a shimmering, blue pearl.\nBenefit. Your Wisdom stat becomes 18 (+4) while wearing this circlet.",
+    "weight": 1
+  },
+  {
+    "name": "Cloak of Elvenkind",
+    "itemType": "Clothing",
+    "description": "A hooded, billowing cloak that shifts colors to match its surroundings.\nBenefit. Your checks to hide are always easy (DC 9). Once per day, you can become invisible for 5 rounds. The invisibility ends if you attack or cast a spell.",
+    "weight": 1
+  },
+  {
+    "name": "Cloak of the Bat",
+    "itemType": "Clothing",
+    "description": "A leathery, black cloak that has a ragged hem and a hood with pointed ears.\nBenefit. You can fly a near distance as your movement while in a shadowy area.\nCurse. Each time you use the cloak to fly, roll a d20. On a result of 1, you and your gear turn into a small bat for 3 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Cloven Heart",
+    "itemType": "Misc. Magic",
+    "description": "A heart-shaped, glittering ruby with crack down center. Grants owner immunity to fire, +2 STR, +2 CHA, and the enmity of the dralech, Tzakoru, who wants it back.",
+    "weight": 1
+  },
+  {
+    "name": "Club",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 cp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Codex of Hear No Evil",
+    "itemType": "Tome",
+    "description": "A tome with lavish ink drawings. It also contains the spell Protection from Evil.",
+    "weight": 1
+  },
+  {
+    "name": "Coin",
+    "itemType": "Treasure",
+    "description": "One gold piece (gp) is worth 10 silver pieces (sp) and 100 copper pieces (cp).",
+    "cost": "Varies",
+    "weight": 0.01
+  },
+  {
+    "name": "Cold Iron Spike",
+    "itemType": "Misc. Magic",
+    "description": "You can smell if something is poisonous.",
+    "weight": 1
+  },
+  {
+    "name": "Cracked Mirror",
+    "itemType": "Misc. Magic",
+    "description": "Sings a haunting lullaby when rattled.",
+    "weight": 1
+  },
+  {
+    "name": "Crossbow",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "8 gp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d6",
+    "damageType": "piercing",
+    "finesse": false,
+    "loading": true,
+    "range": "Far",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Crossbow Bolt",
+    "itemType": "Ammunition",
+    "description": "Ammunition for crossbows.",
+    "cost": "5 cp",
+    "weight": 0.05
+  },
+  {
+    "name": "Crossbow Bolts (20)",
+    "itemType": "Ammunition",
+    "description": "Ammunition for crossbows.",
+    "cost": "1 gp",
+    "weight": 1
+  },
+  {
+    "name": "Crowbar",
+    "itemType": "Equipment",
+    "description": "Grants advantage on checks to pry open stuck objects.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Crypt Keeper's Key",
+    "itemType": "Misc. Magic",
+    "description": "Old bone key with a silver inlay.\nBenefit Touch the key to any animated undead up to LV 9 to release the imprisoned soul and dissolve into grave dust.\nCurse If used to release soul from an animated undead LV 6 or above, key explodes, destroying it and causing 1d6.",
+    "weight": 1
+  },
+  {
+    "name": "Crystal Ball",
+    "itemType": "Misc. Magic",
+    "description": "A flawless glass orb with roiling images swirling inside it.\nBenefit. Only wizards can use a Crystal Ball. You can use it to cast the scrying spell. If you fail the spellcasting check to cast scrying, the Crystal Ball ceases to function for a day.",
+    "weight": 1
+  },
+  {
+    "name": "Dagger",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "1 gp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4",
+    "damageType": "piercing",
+    "finesse": true,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Dagger of the Goblin Hero",
+    "itemType": "Weapon",
+    "description": "A curved dagger with a half-moon notch at the blade's base.\nBonus. +1 dagger.\nBenefit. You can speak Goblin. All goblinoid creatures react to you with a friendly attitude.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4+1",
+    "damageType": "piercing, magic",
+    "finesse": true,
+    "itemAttackBonus": 1,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Dart",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "2 sp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d2",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Dominus' Weapon of Power",
+    "itemType": "Weapon",
+    "description": "Initially appears as a pure black sword.\nBonus Magical +2 weapon\nBenefit When you first touch this item, it instantly morphs into your most-used melee weapon, appearing as an inky void in time and space.\nBenefit You can see lawful beings with a halo of light around them -- even in total darkness.\nCurse From darkness, if you do not attack lawful beings, you take 1d4 HP of damage for every round you remain in darkness.\nCurse If you drop this weapon, you lose half of your hit points every round until you reach 1, at which point you cannot be healed until you regain possession of the weapon, or until someone else picks it up, at which point you are cleared of your curse and can be healed as normal.\nDominus suggests that you convert your allies to chaotic followers of his divine self, effectively ridding yourself of the need to kill them!",
+    "weight": 1
+  },
+  {
+    "name": "Dread Hook Wand",
+    "itemType": "Wand",
+    "description": "Pearly, smooth bone wand.\nBenefit Summons an enraged dread hook within near that arrives immediately and acts after your turn.\nCurse You have no control over this beast.",
+    "weight": 1
+  },
+  {
+    "name": "Dried Rose",
+    "itemType": "Misc. Magic",
+    "description": "Turns toward due north when untouched.",
+    "weight": 1
+  },
+  {
+    "name": "Drowsy dust",
+    "itemType": "Equipment",
+    "description": "Rarity: Uncommon; Use: Touch (eyes); Effect: DC 12 CON or deep sleep for 1d4 hours",
+    "weight": 1
+  },
+  {
+    "name": "Drum of the Spirit Walker",
+    "itemType": "Misc. Magic",
+    "description": "A timeworn shaman's drum, stretched with a mosaic of exotic animal skins.\nBenefit When used by a shaman, it doubles healing circle benefits, granting an extra die of healing and allowing spellcasters and herbalists to recover 2 spells or elixers.",
+    "weight": 1
+  },
+  {
+    "name": "Eagle Feather of the Beastmaster",
+    "itemType": "Misc. Magic",
+    "description": "A pristine eagle feather.\nBenefit You get +1 to hit if affixed to a ranged weapon.\nBenefit You cannot be surprised if worn as jewelry.\nBenefit 1/Day, if affixed to armor, shield, or instrument, you gain the ability to instantly cast feather fall as the wizard spell.",
+    "weight": 1
+  },
+  {
+    "name": "Egg of the Cockatrice",
+    "itemType": "Misc. Magic",
+    "description": "A blue, hard egg as big as a coconut and heavy as a stone.\nBenefit. Once per week, you can speak a command word that causes a cockatrice to hatch and follow your commands for 5 rounds before flying away. The egg repairs itself over one week.",
+    "weight": 1
+  },
+  {
+    "name": "Emerald Blade",
+    "itemType": "Weapon",
+    "description": "A +2 bastard sword that allows its wielder to speak to wild animals.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8+2",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10+2"
+  },
+  {
+    "name": "Empty Bottle",
+    "itemType": "Equipment",
+    "description": "There used to be something in this.",
+    "cost": "1 sp",
+    "weight": 0.33
+  },
+  {
+    "name": "Error: Unknown item QQQ",
+    "itemType": null,
+    "description": "Please report errors so that they can be fixed.",
+    "weight": 0
+  },
+  {
+    "name": "Ether of Idos",
+    "itemType": "Equipment",
+    "description": "Rarity: Uncommon; Use: Inhale; Effect: DC 12 CON or vivid, waking nightmares 1d4 rds",
+    "weight": 1
+  },
+  {
+    "name": "Eyeball",
+    "itemType": "Misc. Magic",
+    "description": "Repels insects and spiders to arm's length.",
+    "weight": 1
+  },
+  {
+    "name": "Faded Locket",
+    "itemType": "Misc. Magic",
+    "description": "Once/day, briefly read one creature's mind.",
+    "weight": 1
+  },
+  {
+    "name": "Flask",
+    "itemType": "Equipment",
+    "description": "Glass containers that hold one draught of liquid.",
+    "cost": "3 sp",
+    "weight": 1
+  },
+  {
+    "name": "Flask or Bottle",
+    "itemType": "Equipment",
+    "description": "Glass containers that hold one draught of liquid.",
+    "cost": "3 sp",
+    "weight": 1
+  },
+  {
+    "name": "Flint and Steel",
+    "itemType": "Equipment",
+    "description": "--",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Flying Carpet",
+    "itemType": "Misc. Magic",
+    "description": "A richly woven, red carpet with gold tassels.\nBenefit. The carpet fits two riders (one is the driver). It can fly double near on the driver's turn.\nPersonality. Neutral. Playful, mischievous. Enjoys visiting new places and gets restless without a frequent change in location.",
+    "weight": 1
+  },
+  {
+    "name": "Gauntlets of Might",
+    "itemType": "Armor",
+    "description": "Heavy, bronze gauntlets with engravings of Herculean giants.\nBenefit. Your Strength stat becomes 18 (+4) while wearing these gauntlets.",
+    "weight": 1
+  },
+  {
+    "name": "Gem",
+    "itemType": "Treasure",
+    "description": "Gems come in numerous varieties and are very valuable.",
+    "cost": "Varies",
+    "weight": 0.1
+  },
+  {
+    "name": "Genie Lamp",
+    "itemType": "Misc. Magic",
+    "description": "A tarnished, brass oil lamp.\nBenefit. Rubbing the lamp causes its resident djinni (50% chance) or efreeti (50% chance) to emerge. A djinni grants its summoner one wish spell before disappearing. An efreeti does the same, but only after being defeated in combat.",
+    "weight": 1
+  },
+  {
+    "name": "Gloves of Agility",
+    "itemType": "Clothing",
+    "description": "Thin, leather gloves that seem to meld with the wearer's hands.\nBenefit. Your Dexterity stat becomes 18 (+4) while wearing these gloves.",
+    "weight": 1
+  },
+  {
+    "name": "Goblin Bomb",
+    "itemType": "Misc. Magic",
+    "description": "A preserved rat stuffed with an explosive charge and a fuse.\nBenefit. You can light the bomb's fuse and throw it a near distance. It explodes in 1d4 rounds, dealing 2d8 damage to everything in near range.",
+    "weight": 1
+  },
+  {
+    "name": "Grappling Hook",
+    "itemType": "Equipment",
+    "description": "A rope anchor with three, curved tines.",
+    "cost": "1 gp",
+    "weight": 1
+  },
+  {
+    "name": "Gravestone Shield",
+    "itemType": "Shield",
+    "description": "Occupies one hand.\nA heavy shield carved from a tombstone.\nBonus +1 magical shield. +2 vs. attacks from undead.\nBenefit Provides ADV on checks from undead abilities.\nCurse A STR of 17 or greater is required to use the shield.",
+    "weight": 1,
+    "ac": 3,
+    "count": 1
+  },
+  {
+    "name": "Greataxe",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10"
+  },
+  {
+    "name": "Greataxe of the Horde",
+    "itemType": "Weapon",
+    "description": "A jagged greataxe carved from a weighty dragon bone.\nBonus. +2 greataxe.\nBenefit. Once per day, you can turn a regular hit with this weapon into a critical hit.\nCurse. Each time you go below half your hit points, make a DC 12 Charisma check. On a failure, you enter a battle rage for 1d4 rounds and must attack the nearest creature.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8+2",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10+2"
+  },
+  {
+    "name": "Greatsword",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "12 gp",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d12",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Guildmaster's Echelon Elixir",
+    "itemType": "Potion",
+    "description": "Rich, shimmering blue liquid in a crystal vial with a silver stopper.\nBenefit For two days your social status is elevated, granting you invites to meetings within influential circles. Gain ADV on negotiation and influence-based checks during this span.",
+    "weight": 1
+  },
+  {
+    "name": "Handaxe",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "2 gp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6",
+    "damageType": "slashing",
+    "finesse": true,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Hat of Intellect",
+    "itemType": "Clothing",
+    "description": "A floppy, pointed hat with a wide brim.\nBenefit. Your Intelligence stat becomes 18 (+4) while wearing this hat.",
+    "weight": 1
+  },
+  {
+    "name": "Hat of the Hound",
+    "itemType": "Clothing",
+    "description": "A rounded, jaunty bowler hat.\nBenefit. You can transform into a mastiff each day for up to 10 rounds total. Your clothing and possessions transform with you.",
+    "weight": 1
+  },
+  {
+    "name": "Health Tonic",
+    "itemType": "Potion",
+    "description": "Brown herbal elixir with floating chunks of pure bitterness that tastes even worse than it smells.\nBenefit You heal 1 HP through non-magical means. Can be used to stabilize and revive a downed ally.",
+    "weight": 1
+  },
+  {
+    "name": "Helm of Mind Reading",
+    "itemType": "Armor",
+    "description": "A helm carved with brain ridges, a spinal neck-guard, and octopus-like tentacles.\nBenefit. You can cast the detect thoughts spell three times per day (+4 bonus).",
+    "weight": 1
+  },
+  {
+    "name": "Herbalist's Secret Serum",
+    "itemType": "Potion",
+    "description": "Yellowish red liquid that smells of the spiky snake fruit, salak.\nBenefit When you use as a primary ingredient in an elixir or remedy, you gain advantage on any elixir checks. Enough for 5 uses.",
+    "weight": 1
+  },
+  {
+    "name": "Horned Helm of Ramlaat",
+    "itemType": "Armor",
+    "description": "A bloodstained helm made of a ram's skull.\nBenefit. This helm grants you a +1 bonus to your armor class. You have advantage on any check you make to knock down creatures or objects.\nCurse. You feel compelled to headbutt delicate objects.",
+    "weight": 1
+  },
+  {
+    "name": "Hourglass of the Black Sands",
+    "itemType": "Misc. Magic",
+    "description": "An ancient hourglass running with obsidian sand.\nBenefit. Once per day, you can turn the hourglass when you cast a spell. The spell's effects last 1d4 rounds longer.",
+    "weight": 1
+  },
+  {
+    "name": "Hunting Knife",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "2 sp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4",
+    "damageType": "slashing",
+    "finesse": true,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Illuminous Tome",
+    "itemType": "Tome",
+    "description": "A tome with lavish ink drawings. It also contains the spell Light.",
+    "weight": 1
+  },
+  {
+    "name": "Immovable Rod",
+    "itemType": "Misc. Magic",
+    "description": "A short, iron rod with a button on one end.\nBenefit. When you click the button, the rod becomes fixed in space (holds 5,000 lbs). Clicking the button again ends the effect.",
+    "weight": 1
+  },
+  {
+    "name": "Iron Spike",
+    "itemType": "Equipment",
+    "description": "Strong spike. Each has a hole for threading rope. Can be hammered in with weapons or other iron spikes.",
+    "cost": "1 sp",
+    "weight": 0.1
+  },
+  {
+    "name": "Iron Spikes (10)",
+    "itemType": "Equipment",
+    "description": "Strong spike. Each has a hole for threading rope. Can be hammered in with weapons or other iron spikes.",
+    "cost": "1 gp",
+    "weight": 1
+  },
+  {
+    "name": "Javelin",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 sp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Close/Far",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Jewel of Barbalt",
+    "itemType": "Misc. Magic",
+    "description": "A coconut-sized ruby cut with a thousand facets.\nBenefit. You roll a critical success on an 18-20.\nCurse. You roll a critical failure on a 1-3.",
+    "weight": 1
+  },
+  {
+    "name": "Jotunblad",
+    "itemType": "Weapon",
+    "description": "Jotunblad is a green-hued, +2 greatsword. A human killed by it rises as a draugr in 1d4 days.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d12+2",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Kingslayer oil",
+    "itemType": "Equipment",
+    "description": "Rarity: Uncommon; Use: Eat; Effect: DC 18 CON or delayed onset (1 hour) go to 0 HP",
+    "weight": 1
+  },
+  {
+    "name": "Krulmara's Ghost Scepter",
+    "itemType": "Misc. Magic",
+    "description": "An incorporeal scepter wrapped with twisting spikes.\nBonus Can be used as a +1 club.\nBenefit When you are granted this item, it is solid for you, but remains incorporeal for everyone else.\nCurse No one else can pick it up.",
+    "weight": 1
+  },
+  {
+    "name": "Krulmara's Silver Scepter",
+    "itemType": "Misc. Magic",
+    "description": "A silver scepter wrapped with twisting spikes.\nBenefit None. If bearer of the ghost scepter acquires the silver scepter, the two merge, retaining the ghost scepter's qualities and gaining the ability to magically open a mundane lock once per day.",
+    "weight": 1
+  },
+  {
+    "name": "Kytherian Cog",
+    "itemType": "Misc. Magic",
+    "description": "A coin-sized, toothed wheel buffed to a silvery shine.\nBenefit. You start every session with a luck token.",
+    "weight": 1
+  },
+  {
+    "name": "Lantern",
+    "itemType": "Equipment",
+    "description": "Casts light up to a double near distance. Requires oil. Has a shutter to hide the light.",
+    "cost": "5 gp",
+    "weight": 1
+  },
+  {
+    "name": "Leather Armor",
+    "itemType": "Armor",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 1,
+    "ac": 11,
+    "count": 1
+  },
+  {
+    "name": "Longbow",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "8 gp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d8",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Far",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Longbow of the Elven Kings",
+    "itemType": "Weapon",
+    "description": "A deeply curved longbow with deer antler reinforcements.\nBonus. +1 longbow.\nBenefit. You have advantage on attacks with this bow against unnatural creatures and outsiders.\nPersonality. Neutral. Proud, timeless. Believes protecting the natural order is the highest calling. Demands all unnatural creatures be found and slain.",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d8+1",
+    "damageType": "piercing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Far",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Longsword",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "9 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d8",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Mace",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Magic Preserving Herbs",
+    "itemType": "Misc. Magic",
+    "description": "Bright colored dried leaves, berries, and seeds.\nBenefit When you use as a primary ingredient in an elixir or remedy, it gives that concoction an infinite shelf-life. Enough for 10 uses.",
+    "weight": 1
+  },
+  {
+    "name": "Mask of the Hunt",
+    "itemType": "Misc. Magic",
+    "description": "A mask with the lifelike shape and coloration of a snarling tiger.\nBenefit Wearing the mask heightens your senses, granting ADV on related checks, including tracking and mimicking wildlife calls. The mask's appearance can shift to match any predator type you desire.",
+    "weight": 1
+  },
+  {
+    "name": "Memnon's Blazing Javelin",
+    "itemType": "Weapon",
+    "description": "This golden javelin occasionally blinks and wavers, briefly turning into a bolt of lightning.\nBonus. +1 javelin. Can only be wielded by a chaotic being. If you also wield Memnon's Discordant Blade and Memnon's Entropic Armor, it becomes a +3 javelin.\nBenefit. The javelin always returns to your hand after being thrown. Once per day, when you throw this javelin, you can turn it into lightning as per the lightning bolt spell (no spellcasting check).",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4+1",
+    "damageType": "piercing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close/Far",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Memnon's Discordant Blade",
+    "itemType": "Weapon",
+    "description": "This barbed greatsword's red blade trails a shower of sparks when swung to strike.\nBonus. +1 greatsword. Can only be wielded by a chaotic being. If you also wield Memnon's Entropic Armor and Memnon's Blazing Javelin, it becomes a +3 greatsword.\nBenefit. Once per day, you can utterly annihilate one creature of level 9 or less that you damage with this blade. The creature can pass a DC 18 Constitution check to take 3d8 damage instead.\nCurse. You cannot relinquish ownership of this blade unless it is taken from you by a creature that defeats you in combat. For each day you do not slay a LV 2 or greater creature with this sword, you lose 1d6 hit points. These are restored only when you kill a LV 2 or greater creature with the sword.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d12+1",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Memnon's Entropic Armor",
+    "itemType": "Armor",
+    "description": "Cannot swim; Disadvantage on stealth checks.\nDeep blue plate mail traced with gold lightning motifs and red gems arrayed into the shape of flames.\nBonus. +1 plate mail. Can only be worn by a chaotic being. If you also wield Memnon's Discordant Blade and Memnon's Blazing Javelin, it becomes +3 plate mail.\nBenefit. Once per day, you can speak the armor's command word. Until your next turn, all non-magical weapons that strike you are instantly unmade, shattering into dust. You take no damage from them.",
+    "weight": 3,
+    "ac": 16,
+    "count": 1,
+    "nodex": 1
+  },
+  {
+    "name": "Mirror",
+    "itemType": "Equipment",
+    "description": "A small, polished mirror.",
+    "cost": "10 gp",
+    "weight": 1
+  },
+  {
+    "name": "Mirror of Mischief",
+    "itemType": "Misc. Magic",
+    "description": "A full-length mirror polished to a gleaming shine. Grinning, silver demons grasp the mirror, their claws forming its frame.\nCurse. The first time a humanoid creature looks into this mirror, the mirror creates an evil and malicious duplicate of them. The duplicate can step from the mirror and is an exact copy of the subject (except for magical gear, which looks identical but is mundane in nature). The evil duplicate can live indefinitely outside the mirror. It attempts to sow chaos in the life of the creature it duplicated.",
+    "weight": 1
+  },
+  {
+    "name": "Mithral Chainmail",
+    "itemType": "Armor",
+    "description": "--",
+    "cost": "240 gp",
+    "weight": 1,
+    "ac": 13,
+    "count": 1
+  },
+  {
+    "name": "Mithral Plate Mail",
+    "itemType": "Armor",
+    "description": "--",
+    "cost": "520 gp",
+    "weight": 2,
+    "ac": 15,
+    "count": 1,
+    "nodex": 1
+  },
+  {
+    "name": "Mithral Shield",
+    "itemType": "Shield",
+    "description": "Occupies one hand.",
+    "cost": "40 gp",
+    "weight": 0,
+    "ac": 2,
+    "count": 1
+  },
+  {
+    "name": "Moldy Scroll",
+    "itemType": "Scroll",
+    "description": "Scroll of Charm Person",
+    "weight": 1
+  },
+  {
+    "name": "Molten Ankh",
+    "itemType": "Misc. Magic",
+    "description": "A scarlet ankh pendant featuring an obsidian gem.\nBenefit You are immune to mundane fire damage and take half damage from magical flame. Once per day, you can activate it to extend protection in a near area, shielding all living creatures for 5 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Moonwrought Chainmail",
+    "itemType": "Armor",
+    "description": "A luminous jacket of chainmail as lightweight as a silk shirt.\nBonus. +1 mithral chainmail.\nBenefit. Once per day, you can speak the armor's command word. You gain a +1 bonus to your next spellcasting check or ranged attack.",
+    "weight": 1,
+    "ac": 14,
+    "count": 1
+  },
+  {
+    "name": "Morningstar",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d8"
+  },
+  {
+    "name": "Necklace of Charm",
+    "itemType": "Jewelry",
+    "description": "A gold, fishbone chain that shimmers with subtle beauty.\nBenefit. Your Charisma stat becomes 18 (+4) while wearing this necklace.",
+    "weight": 1
+  },
+  {
+    "name": "Necrotic Mace of Withering",
+    "itemType": "Weapon",
+    "description": "A wrought iron mace tipped with a heavy, screaming skull. Black ichor runs from the skull's eyes when the mace is used to channel necrotic energy.\nBonus. +1 mace. Can only be wielded by a chaotic priest.\nBenefit. While holding the mace, you can turn cure wounds spells you cast into harmful magic that instead inflicts the same amount of damage it would heal.\nCurse. If you use the mace to cast an inverted cure wounds spell, you are haunted by nightmares that night. You must pass a DC 12 Wisdom check during your next rest or gain no benefit from resting.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6+1",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Needle Whip",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4",
+    "damageType": "piericing",
+    "finesse": true,
+    "loading": true,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Nuzule oil",
+    "itemType": "Equipment",
+    "description": "Rarity: Rare; Use: Injure; Effect: DC 15 CON or unconscious 3 rds",
+    "weight": 1
+  },
+  {
+    "name": "Obsidian Witchknife",
+    "itemType": "Weapon",
+    "description": "A glinting, obsidian blade that trails black smoke in thin curls.\nBonus. +2 dagger. Cannot be wielded by a lawful being.\nBenefit. When you cast a spell while holding this dagger, you may wound yourself with it. Add the amount of damage you take to your spellcasting check.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4+2",
+    "damageType": "piercing, magic",
+    "finesse": true,
+    "itemAttackBonus": 2,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Oil Flask",
+    "itemType": "Equipment",
+    "description": "Fuels a lantern for one hour of real time. One flask covers a close area and burns for 4 rounds, dealing 1d4 damage each round.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Onyx Destrier",
+    "itemType": "Misc. Magic",
+    "description": "A polished, ebony statuette of a running horse.\nBenefit. Once per day, the wielder can speak the command word to turn the statuette into a nightmare that accepts neutral or chaotic riders. The statuette remains in this form for 1 hour.",
+    "weight": 1
+  },
+  {
+    "name": "Ophidian Armor",
+    "itemType": "Armor",
+    "description": "Glistening, smooth leather of dappled emerald scales.\nBonus. +1 leather armor.\nBenefit. You have advantage on checks to avoid the effects of poison.",
+    "weight": 1,
+    "ac": 12,
+    "count": 1
+  },
+  {
+    "name": "Ossian Etcher",
+    "itemType": "Misc. Magic",
+    "description": "A finely detailed silver chisel adorned with precious gemstones.\nBenefit You can heal the undead with a single touch, mending 1d6 HP. You can also craft magical +1 bone-tipped arrows if you have the bone material and 10 minutes to carve each one.",
+    "weight": 1
+  },
+  {
+    "name": "Pan Pipe",
+    "itemType": "Misc. Magic",
+    "description": "As heavy as an anvil when not carried.",
+    "weight": 1
+  },
+  {
+    "name": "Pearl of Power",
+    "itemType": "Misc. Magic",
+    "description": "A fat, opalescent pearl glowing with an inner radiance.\nBenefit. Once per day, you may regain the ability to cast a spell you have lost. This cannot restore a spell lost due to a critical spellcasting failure.",
+    "weight": 1
+  },
+  {
+    "name": "Phantom Cloak",
+    "itemType": "Clothing",
+    "description": "An inconspicuous tattered cloak with a torn hood.\nBenefit When you pull the hood over your head, you and your equipment become incorporeal. You can move through solid objects and cannot attack with or be struck by physical weapons. You may cast spells and hostile spells can affect you.\nCurse For every round you are incorporeal, roll 1d6. On the result of a 1, a specter sees you from the spirit world, comes to your plane of existence, and attacks you.",
+    "weight": 1
+  },
+  {
+    "name": "Pickled Imp",
+    "itemType": "Misc. Magic",
+    "description": "Attracts demonic creatures to its location.",
+    "weight": 1
+  },
+  {
+    "name": "Pike",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d10",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "2x Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Pipe of the Rolling Hills",
+    "itemType": "Misc. Magic",
+    "description": "A long, curved pipe that smells of cloves and resin.\nBenefit. Up to three times per day, regain 1d4 hit points when you smoke this pipe.",
+    "weight": 1
+  },
+  {
+    "name": "Pipes of the Sewers",
+    "itemType": "Misc. Magic",
+    "description": "A set of tarnished, brass pan pipes with seven cylinders.\nBenefit. Once per day, you can play these pipes to summon 2d6 giant rats. The rats obey you for d6 rounds, and then they scatter and flee.\nCurse. If you stop playing while the rats are present, they turn on you and attack.",
+    "weight": 1
+  },
+  {
+    "name": "Plate Mail",
+    "itemType": "Armor",
+    "description": "Cannot swim; Disadvantage on stealth checks.",
+    "cost": "130 gp",
+    "weight": 3,
+    "ac": 15,
+    "count": 1,
+    "nodex": 1
+  },
+  {
+    "name": "Pole",
+    "itemType": "Equipment",
+    "description": "Wooden, 10' long.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Portable Hole",
+    "itemType": "Misc. Magic",
+    "description": "A black, velvet square of cloth that unfolds into a wide circle.\nBenefit. The Portable Hole folds open on a flat surface into a 6-foot wide, 6-foot deep hole. It has 20 gear slots of storage. The hole closes when you fold the cloth into a small square.\nCurse. Placing this item inside a Bag of Holding or another Portable Hole destroys both items and all held inside them.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Arcane Clarity",
+    "itemType": "Potion",
+    "description": "A mostly clear liquid with occasional passing clouds of bubbles, tasting like a crisp breath of cool air.\nBenefit When consumed before spellcasting, any spell you choose cannot be lost for the day unless you critically fail. On a critical failure, you instead choose a different spell on your list to be lost for the day. Remains active for one day.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Boulders",
+    "itemType": "Potion",
+    "description": "A surprisingly heavy grey liquid that tastes like iron.\nBenefit Your jaw unhinges and grotesquely widens, large enough to spew 2 magic boulders from your throat, one per round. They do 5d6 damage to a single target within near.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Control Giant Insect",
+    "itemType": "Potion",
+    "description": "Amber elixir in a brass-accented vial, exuding a forest scent.\nBenefit You can control one giant insect within near for 10 rounds. It acts on your turn.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Extirpation",
+    "itemType": "Potion",
+    "description": "An acrid, tarry substance in an iron flask with a lead stopper.\nBenefit. You can pour the potion on one object or creature filling up to a close area. The target is utterly removed from reality and cannot be returned by anything short of a wish spell.\nPersonality. Chaotic. Protests loudly while being used and never agrees that the target is the right choice for extirpation.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Fel Curse",
+    "itemType": "Potion",
+    "description": "Bone-colored liquid in an etched glass vial, decorated with leaves.\nCurse Anyone who quaffs this potion takes on the Fel Curse (See Fel Curse entry).",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Flying",
+    "itemType": "Potion",
+    "description": "A sunny liquid with bubbles that flash and pop like tiny stars.\nBenefit. You can fly a near distance for 10 rounds when you drink this potion.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Forgetfulness",
+    "itemType": "Potion",
+    "description": "A pink draught that swirls with a counter-clockwise current.\nBenefit. If you serve this potion to an intelligent being and that being drinks it, the imbiber permanently forgets one memory of your choosing.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Giant Strength",
+    "itemType": "Potion",
+    "description": "A clay jar holding a stew of green, leafy sludge.\nBenefit. Your Strength becomes 18 (+4) and you deal x2 damage on melee attacks for 10 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Healing",
+    "itemType": "Potion",
+    "description": "A glass bottle with a fizzy, lemon-vanilla liquid inside.\nBenefit. The imbiber of this potion regains hit points based on its level. LV 0-3: 1d6 hit points. LV 4-6: 2d8 hit points. LV 7-9: 3d10 hit points. LV 10+: 4d12 hit points.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Invisibility",
+    "itemType": "Potion",
+    "description": "This glass vial appears to be empty, but a liquid audibly splashes around inside it.\nBenefit. When you drink this potion, you become invisible for 10 rounds or until you attack or cast a spell.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Legendary Deeds",
+    "itemType": "Potion",
+    "description": "A golden elixir that resonates with a faint, angelic chord.\nBenefit. When you drink this potion, you gain one level and your XP total resets to zero.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Mycelium",
+    "itemType": "Potion",
+    "description": "Clear liquid with multi-colored particles constantly moving.\nBenefit You can speak to and understand all plants within close range for 5 rounds. You can also telepathically communicate with myconids.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Polymorph",
+    "itemType": "Potion",
+    "description": "A pickled newt floats in this lavender flask of clear liquid.\nBenefit. When you drink this potion, it casts the polymorph spell on you with a duration of 1 hour instead of 10 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Speak with Animals",
+    "itemType": "Potion",
+    "description": "Thick, fur-brown elixir in a slender vial, emitting the scent of fresh rain.\nBenefit You can speak to and understand all animals within near range for 5 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Super Nova",
+    "itemType": "Potion",
+    "description": "Always warm, red liquid that packs a spicy punch.\nBenefit You detonate yourself as a superheated explosion in a near area around you, dealing 5d12 damage to all creatures.\nCurse Any objects within close and all of your possessions are destroyed. You are reduced to 0 hit points.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of the Stars",
+    "itemType": "Potion",
+    "description": "Ink-black liquid with suspended, twinkling white particles.\nBenefit You gain a luck token and can see the stars for accurate navigation, even in dungeons, sunny days, or cloudy night skies for one hour of real time.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Undeath",
+    "itemType": "Potion",
+    "description": "Burgundy beverage that tastes like blood.\nCurse Some of your skin melts off your body, you die, and you rise again as a zombie. You are now a risen. Your ancestry bonus is lost, but you gain the risen ancestry bonus.",
+    "weight": 1
+  },
+  {
+    "name": "Potion of Vitality",
+    "itemType": "Potion",
+    "description": "A crimson elixir that gently thumps with a heartbeat.\nBenefit. When you drink this potion, roll your class's hit points die. You permanently gain that many HP.\nCurse. If you drink more than one Potion of Vitality in your lifetime, you must pass a DC 18 Constitution check each time or die instantly.",
+    "weight": 1
+  },
+  {
+    "name": "Prowler's Pelt",
+    "itemType": "Misc. Magic",
+    "description": "An opulent fur cloak that shimmers in the moonlight.\nBenefit If positive, add your CON bonus to your AC.\nCurse Benefit only granted when worn without armor or over leather.",
+    "weight": 1
+  },
+  {
+    "name": "Rapier",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "8 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "piercing",
+    "finesse": true,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Ration",
+    "itemType": "Food",
+    "description": "One day of food and water supply for one person.",
+    "cost": "17 cp",
+    "weight": 0.33
+  },
+  {
+    "name": "Rations (3)",
+    "itemType": "Food",
+    "description": "One day of food and water supply for one person.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Razor chain",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "12 gp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6",
+    "damageType": "slashing",
+    "finesse": true,
+    "loading": true,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Ring of Daisies",
+    "itemType": "Misc. Magic",
+    "description": "Allows you to hold your breath for an hour.",
+    "weight": 1
+  },
+  {
+    "name": "Ring of Feather Falling",
+    "itemType": "Ring",
+    "description": "A pearly ring carved in the likeness of an owl feather.\nBenefit. Once per day, the ring can cast feather fall on you when you fall.\nPersonality. Neutral. Fearful of heights. Mentally hoots in an owl-like voice to stay away from the edge of cliffs and pits.",
+    "weight": 1
+  },
+  {
+    "name": "Ring of Fireballs",
+    "itemType": "Ring",
+    "description": "A bronze loop with claws holding a red marble. A fiery miasma swirls inside the glass.\nBenefit. You can pluck the glass marble from the ring and throw it up to a far distance, causing a fireball spell to bloom at the site of impact. The glass marble regrows after you successfully complete a rest.",
+    "weight": 1
+  },
+  {
+    "name": "Ring of Invisibility",
+    "itemType": "Ring",
+    "description": "A simple, gold band polished to a warm shine.\nBenefit. Once per day, the ring can cast the invisibility spell on you.\nCurse. There is a cumulative 1% chance each time you rest that your sleep is ruined by apocalyptic nightmares, and you gain no benefit from resting. This resets to a 1% chance each time it triggers.",
+    "weight": 1
+  },
+  {
+    "name": "Ring of Ramlaat",
+    "itemType": "Ring",
+    "description": "A bone-carved ring with a ram skull. Its horns twist forward and red lights glow in its eye sockets.\nBenefit. Once per day, you can enter a rage where you deal double damage for 5 rounds. During the rage, you can't cast spells and enemies have advantage on melee attacks against you.\nPersonality. Chaotic. Aggressive, overconfident. Seeks to provoke you and your enemies into battle.",
+    "weight": 1
+  },
+  {
+    "name": "Robe of the Archmage",
+    "itemType": "Clothing",
+    "description": "A red silk robe with a wide, gold-hemmed mantle. Golden eyes and moons dust its sleeves.\nBenefit. Only a wizard with the Archmage title can wear this robe. Your unarmored AC becomes 15 plus your Dexterity modifier.\nBenefit. Choose three spells you know. Their spellcasting DC is always 11.\nBenefit. You have advantage on casting the disintegrate spell.",
+    "weight": 1
+  },
+  {
+    "name": "Robe of the Druid",
+    "itemType": "Clothing",
+    "description": "A green velvet robe with a deep hood and hems embroidered with silver leaves and vines.\nBenefit. Only a wizard with the Druid title can wear this robe. Your unarmored AC becomes 15 plus your Dexterity modifier.\nBenefit. Twice per day, you can regain the ability to cast one lost spell.\nBenefit. You have advantage on casting the shapechange spell. When you cast it, its duration is 1 hour instead of focus.",
+    "weight": 1
+  },
+  {
+    "name": "Robe of the Sorcerer",
+    "itemType": "Clothing",
+    "description": "A black leather robe with a shadowed cowl and clawed clasps on thin, mithral chains.\nBenefit. Only a wizard with the Sorcerer title can wear this robe. Your unarmored AC becomes 15 plus your Dexterity modifier.\nBenefit. When you cast a spell that deals damage, add your Intelligence modifier to the total.\nBenefit. You have advantage on casting the power word kill spell.",
+    "weight": 1
+  },
+  {
+    "name": "Rope, 60'",
+    "itemType": "Equipment",
+    "description": "Hemp, 60' long.",
+    "cost": "1 gp",
+    "weight": 1
+  },
+  {
+    "name": "Rot Ruin",
+    "itemType": "Weapon",
+    "description": "A +1 longsword named Rot Ruin that can rust one door-sized piece of metal it touches into powder once a day.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d8+1",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Round shield",
+    "itemType": "Shield",
+    "description": "Occupies one hand, sundering.",
+    "cost": "15 gp",
+    "weight": 1,
+    "ac": 2,
+    "count": 1
+  },
+  {
+    "name": "Rusty Axe",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "1 gp",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d4",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d6"
+  },
+  {
+    "name": "Rusty Dagger",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "1 sp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d2",
+    "damageType": "piercing",
+    "finesse": true,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Rusty Key",
+    "itemType": "Misc. Magic",
+    "description": "Once/day, fire immunity 1d4 rounds.",
+    "weight": 1
+  },
+  {
+    "name": "Rusty Shield",
+    "itemType": "Shield",
+    "description": "Occupies one hand.",
+    "cost": "10 gp",
+    "weight": 1,
+    "ac": 1,
+    "count": 1
+  },
+  {
+    "name": "Scarab of Protection",
+    "itemType": "Jewelry",
+    "description": "A brooch made from a horned scarab beetle dipped in gold.\nBenefit. If you die, make a DC 18 Constitution check. If you succeed, you are unconscious instead of dead.",
+    "weight": 1
+  },
+  {
+    "name": "Scimitar",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "8 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "slashing",
+    "finesse": true,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Scimitar of the Ash Moon",
+    "itemType": "Weapon",
+    "description": "This wide, curved blade has a snarling efreeti head on the bronze pommel.\nBonus. +3 greatsword.\nBenefit. If you roll a critical hit with this weapon, the target is beheaded. It dies instantly if decapitation would kill it.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d12+3",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 3,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Screamer",
+    "itemType": "Weapon",
+    "description": "This black iron +1 spear is called Screamer. It shrieks hideously when thrown.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6+1",
+    "damageType": "piercing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Scroll of Detect Magic",
+    "itemType": "Scroll",
+    "description": "DC 11 INT to cast Detect Magic, lasts 1 hour.",
+    "weight": 1
+  },
+  {
+    "name": "Scythe",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "2 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Scythe of Corpse Call",
+    "itemType": "Weapon",
+    "description": "A black-bladed scythe with a bone hilt and skull motifs.\nBenefit You instantly summon a fresh humanoid corpse a close distance from you. Recharges in 3 rounds.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6+0",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 0,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Serpent's Eye",
+    "itemType": "Misc. Magic",
+    "description": "A gemstone that eerily looks like the living eye of a snake.\nBenefit When you gaze into it, you gain the ability to see through the eyes of an animal within a far range for 3 rounds.\nCurse If you use this more than once per day, your next rest will be interrupted by nightmares of the wild, resulting in no HP recovery.",
+    "weight": 1
+  },
+  {
+    "name": "Severed Finger",
+    "itemType": "Misc. Magic",
+    "description": "Belongs to a witch who wants it back.",
+    "weight": 1
+  },
+  {
+    "name": "Severed Hand of a Lich Lord",
+    "itemType": "Misc. Magic",
+    "description": "A preserved and animated lich's hand.\nBenefit When activated, partially transparent black tendrils erupt from the hand and engulf an undead creature, dealing 2d6 damage and healing you by the same amount.\nCurse Any undead within near will attack and fight you to the death.",
+    "weight": 1
+  },
+  {
+    "name": "Shield",
+    "itemType": "Shield",
+    "description": "Occupies one hand.",
+    "cost": "10 gp",
+    "weight": 1,
+    "ac": 2,
+    "count": 1
+  },
+  {
+    "name": "Shield of the Crusader",
+    "itemType": "Shield",
+    "description": "Occupies one hand.\nA weighty kite shield painted with a faded, crimson cross.\nBonus. +1 shield. Can only be wielded by a lawful being.\nBenefit. Once per day, you can speak a prayer to wreathe the shield in holy flames, granting +2 to your AC for 3 rounds.",
+    "weight": 1,
+    "ac": 3,
+    "count": 1
+  },
+  {
+    "name": "Shield of the Lion",
+    "itemType": "Shield",
+    "description": "Occupies one hand.\nThis shield is carved as a roaring lion's face with a flowing mane.\nBonus. +1 shield.\nBenefit. Once per day, you can command the lion to animate and bellow a ferocious roar. All hostile creatures within near range must immediately make a morale check.",
+    "weight": 1,
+    "ac": 3,
+    "count": 1
+  },
+  {
+    "name": "Shield of the Witch-King",
+    "itemType": "Shield",
+    "description": "Occupies one hand.\nA jagged triangle of black steel with spiny, armored plates.\nBonus. +2 shield. Can only be wielded by a chaotic being.\nBenefit. You take half damage from undead creatures.\nCurse. If you go to 0 HP, the spirit of Ix-Natheer tries to steal your body. He blocks healing magic from affecting you. If you die, Ix-Natheer possesses you.\nPersonality. Chaotic. The spirit of the witch-king Ix-Natheer animates this shield. He pounces on opportunities to betray his wielder so he can try to take over their body and return to unlife.",
+    "weight": 1,
+    "ac": 4,
+    "count": 1
+  },
+  {
+    "name": "Shortbow",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "6 gp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d4",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Far",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Shortsword",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "7 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "slashing",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Shortsword of Fel Slaying",
+    "itemType": "Weapon",
+    "description": "+1 shortsword, +3 versus Fel creatures.\nAdd the folowing effect to the CT:\nIFT: CUSTOM(Fel); ATK: 2; DMG: 2\n[When attacking a Fel creature, first confirm with the GM that the target has \"Fel\" listed in its effects on the CT.]",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6+1",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Shortsword of the Thief",
+    "itemType": "Weapon",
+    "description": "A stubby, gray blade riddled with notches and scars.\nBonus. +1 shortsword. +2 if wielded by a halfling or thief.\nBenefit. Once per day, regain a luck token you just spent.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6+1",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Shrunken Head",
+    "itemType": "Misc. Magic",
+    "description": "Can open a one-way gate to hell once.",
+    "weight": 1
+  },
+  {
+    "name": "Shuriken",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "1 gp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d4",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Silver Mace of Wrath",
+    "itemType": "Weapon",
+    "description": "A tarnished, silver mace with seven flanges in the shape of crescent moons.\nBonus. +1 mace.\nBenefit. This weapon deals double damage against creatures with lycanthropy.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6+1",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Silvered Dagger",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4",
+    "damageType": "piercing, silvered",
+    "finesse": true,
+    "range": "Close",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Skinlasher",
+    "itemType": "Weapon",
+    "description": "A +2 razor chain called Skinlasher whose wielder is immune to poison.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6+2",
+    "damageType": "slashing, magic",
+    "finesse": true,
+    "itemAttackBonus": 2,
+    "loading": true,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Slime Sling",
+    "itemType": "Weapon",
+    "description": "A sling that appears to be made of rubbery, congealed green goo.\nBenefit You shoot magical bullets of goo that dissolve armor on impact, dealing standard sling bullet damage.\nCurse The sling holds 10 bullets that cannot be recovered once fired. To resupply, you must defeat a slime, ooze, royal jelly, or gelatinous cube and allow the sling to drink the goo. Slimefolk cannot recharge.",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d4+0",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 0,
+    "range": "Far",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Sling",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 sp",
+    "weight": 1,
+    "attackType": "Ranged",
+    "damage": "1d4",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Far",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Snake Oil",
+    "itemType": "Potion",
+    "description": "A thick green oil preserved in a snake skin canteen.\nBenefit With your soothing tone, you pacify hostile living creatures within near. Their total LV cannot exceed 2X your own. Creatures over 10 WIS attempt a DC 12 WIS check to resist. Calmed creatures see you as a friend but remain independent.",
+    "weight": 1
+  },
+  {
+    "name": "Spear",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 sp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6",
+    "damageType": "piercing",
+    "finesse": false,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Spear of Channeling",
+    "itemType": "Weapon",
+    "description": "Ornate spear with wizard runes carved into the shaft.\nBenefit Allied spellcasters can cast spells through the spear as a conduit. Throw it at a spot in the ground to cast area of effect spells, or strike an opponent for touch.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6+0",
+    "damageType": "piercing, magic",
+    "finesse": false,
+    "itemAttackBonus": 0,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Spear of Savage Hunting",
+    "itemType": "Weapon",
+    "description": "Girthy haft with an obsidian spearhead.\nBonus +1 Spear\nBenefit You gain ADV when attacking any giant animals or giant insects.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6+1",
+    "damageType": "piercing, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Sphere of Annihilation",
+    "itemType": "Misc. Magic",
+    "description": "A three-foot, spherical void of pure darkness that hovers above the ground.\nBenefit. This sphere utterly destroys all matter it touches.\nBenefit. Intelligent beings can move the flying sphere a near distance by passing a DC 18 Intelligence check. If multiple creatures vie for control of the sphere, it is a contested Intelligence check instead. Wizards have advantage on this check. The winner moves the sphere a near distance. If the sphere moves into a space occupied by a creature, the being controlling the sphere makes an attack roll against that creature with a +7 bonus. On a hit, the creature is obliterated.",
+    "weight": 1
+  },
+  {
+    "name": "Spyglass of True Sight",
+    "itemType": "Misc. Magic",
+    "description": "A brass, telescoping lens with magical runes carved on it.\nBenefit. When you look through the spyglass, you can see invisible creatures and objects.\nCurse. The wielder feels a compulsion to look at everything through the spyglass.",
+    "weight": 1
+  },
+  {
+    "name": "Staff",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 sp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Staff of Healing",
+    "itemType": "Weapon",
+    "description": "A knotted, oak stave with a heavy knurl on one end.\nBonus. +1 staff.\nBenefit. Once per day, you can touch a creature with the staff to heal it for 1d6 hit points.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4+1",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Staff of Ord",
+    "itemType": "Weapon",
+    "description": "A tapered, mithral staff that resonates with arcane power. The tip features an upward-looking eye in a circle of runes.\nBonus. +3 staff. Can only be wielded by a wizard.\nBenefit. Functions as a wand of dimension door, fireball, sending, and telekinesis. Unlike a wand, the staff remains intact if you roll a 1 on your spellcasting checks.\nBenefit. Hostile spells targeting you are DC 18 to cast.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4+3",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 3,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Staff of the Cobra",
+    "itemType": "Weapon",
+    "description": "A curved scepter tipped with a ruby-eyed, flaring cobra head.\nBonus. +1 staff.\nBenefit. All snakes regard you with a friendly attitude unless you do something to upset them.\nBenefit. Once per day, you can throw the staff to the ground. It becomes a giant snake for 5 rounds that obeys your mental commands. If the giant snake goes to 0 HP, it reverts into a staff.\nCurse. You have disadvantage on attacks and casting hostile spells targeting snakes.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4+1",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Stave",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "2 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "-",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Stiletto",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "5 sp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4",
+    "damageType": "slashing",
+    "finesse": true,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Sunscorch",
+    "itemType": "Weapon",
+    "description": "This +1 scimitar is named Sunscorch. Once per day, it can emit a flash of white-hot light that blinds all who see it for 1 round.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d6+1",
+    "damageType": "slashing, magic",
+    "finesse": true,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Swarmtide Crown",
+    "itemType": "Jewelry",
+    "description": "Woven from stingers, legs, abdomens, and wings, the crown wriggles with life.\nBenefit You can summon a giant insect once per day. It acts on your turn and obeys your commands. It cannot speak to you unless you know its language. It serves you for 1 day. Determine what is summoned with the Swarmtide Crown Summoned Creature table.\nCurse You are driven to take over the world using giant insects, replacing any previous personal objectives. You do not want to remove crown.\nSwarmtide Crown Summoned Creature",
+    "weight": 1
+  },
+  {
+    "name": "Sword of Shadows",
+    "itemType": "Weapon",
+    "description": "Incorporeal sword that looks like a shadow projected on a surface.\nBonus +3 Bastard Sword\nBenefit Drains 1 CHA with every successful hit. Enemies reduced to 0 CHA die.\nBenefit Can be thrown. Returns after being thrown.\nCurse Can only be picked up by incorporeal or undead creatures, including the risen ancestry.",
+    "weight": 2,
+    "attackType": "Melee",
+    "damage": "1d8+3",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 3,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": true,
+    "versatileDamage": "1d10+3"
+  },
+  {
+    "name": "Sword of the Ancients",
+    "itemType": "Weapon",
+    "description": "A chipped and rusting blade with an oiled leather grip.\nBonus. +2 longsword.\nBenefit. The sword is unbreakable and can carve through any material.\nBenefit. The owner can summon the sword to their hand if it's on the same plane.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d8+2",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Talisman of Concentration",
+    "itemType": "Jewelry",
+    "description": "Onyx disc etched with an intricate maze design.\nBenefit Any focus or chanting maintenance checks while wearing the talisman are performed at ADV.\nCurse Any non-spell checks are performed at DISADV.\nCurse Because it loves to be worn, it takes an action to remove the talisman.",
+    "weight": 1
+  },
+  {
+    "name": "Taming Trap",
+    "itemType": "Misc. Magic",
+    "description": "A small magical trap that appears as a pile of food.\nBenefit You can set it overnight in an area with LV 0 or LV 1 animals. In the morning, an animal of the GM's choosing will be trapped. It needs only 10 minutes for an ovate to train it for companionship.",
+    "weight": 1
+  },
+  {
+    "name": "The Kytherian Mechanism",
+    "itemType": "Misc. Magic",
+    "description": "A towering, brass platform mounted with countless cogs and gears speckled in blue-green rust.\nBenefit. A handle turns The Kytherian Mechanism's mighty wheels, but it doesn't function until its seven missing Kytherian Cogs are replaced. Once functional, activating the mechanism allows the operator to undo one event of their choosing from history. Then, the seven Kytherian Cogs magically scatter to far-flung locations.",
+    "weight": 1
+  },
+  {
+    "name": "The Malediction Infernal",
+    "itemType": "Misc. Magic",
+    "description": "A black, leather-bound tome with a grinning demon face embossed on the cover.\nBenefit. A chaotic being who reads this tome gains a level and learns the Diabolic language. A non-chaotic being who reads this book must pass a DC 18 Wisdom check or lose one level. After being read, the tome teleports to a far-flung location.",
+    "weight": 1
+  },
+  {
+    "name": "Thorgol the Anvil",
+    "itemType": "Weapon",
+    "description": "This +2 warhammer is made from heavy, black iron with triangular knots on each face. It can instantly fuse together two metal objects it strikes at the same time, if its wielder chooses.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d10+2",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Thrice-Blessed Sword",
+    "itemType": "Weapon",
+    "description": "A lustrous, golden-handled blade anointed with blessed tears, incense, and prayers.\nBonus. +3 longsword. Only a lawful priest who has achieved the Templar title or higher can wield this sword.\nBenefit. You deal double damage against demons, devils, and undead.\nPersonality. Lawful. Virtuous, naive. Refuses to be wielded against worshippers of lawful gods, especially self-proclaimed converts. Demands each foe be given the chance to convert before being slain.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d8+3",
+    "damageType": "slashing, magic",
+    "finesse": false,
+    "itemAttackBonus": 3,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Tome Mordanticus",
+    "itemType": "Tome",
+    "description": "A hand-drawn bestiary of the multiverse's most notable creatures and people.\nBenefit. When you read the tome, you learn three True Names of three beings you choose.\nBenefit. Your True Name also appears in the book after reading it.\nPersonality. Neutral. Pedantic, fussy. The book constantly tries to escape its owner and can telepathically reach out a near distance to any creature.",
+    "weight": 1
+  },
+  {
+    "name": "Tome of Gehemna",
+    "itemType": "Tome",
+    "description": "A sturdy, russet volume held by metal clasps. A golden eye in a circle adorns the cover.\nBenefit. Each day, a random wizard spell scroll appears inside the tome, replacing the spell scroll from the prior day.\nPersonality. Neutral. Instructive, technical. Drones on about the obscure points of spellcasting and has an opinion on every wizard's technique.",
+    "weight": 1
+  },
+  {
+    "name": "Tome of Hadebe",
+    "itemType": "Tome",
+    "description": "A brass-plated book with pages of etched copper leaf.\nBenefit. The tome contains one each of the following scrolls: burning hands , fireball , and prismatic orb.",
+    "weight": 1
+  },
+  {
+    "name": "Tongue of the Beast",
+    "itemType": "Misc. Magic",
+    "description": "Intricately carved life-size wooden tongue.\nBenefit When you place this tongue in your mouth, it comes to life. You must spend one round to attune to speak any animal language you choose.",
+    "weight": 1
+  },
+  {
+    "name": "Torch",
+    "itemType": "Equipment",
+    "description": "Sheds light to a near distance. Burns for one hour of real time.",
+    "cost": "5 sp",
+    "weight": 1
+  },
+  {
+    "name": "Totem Staff",
+    "itemType": "Staff",
+    "description": "Oak pole adorned with carved wild animal faces.\nBenefit When activated, a willing animal you touch is transformed into a face on your totem staff. You can return it to natural form at any time. Up to 5 animals can be stored in the staff.",
+    "weight": 1
+  },
+  {
+    "name": "Trident of the Seas",
+    "itemType": "Weapon",
+    "description": "A three-pronged, mithral harpoon studded with pearls.\nBonus. +2 spear.\nBenefit. You can breathe underwater, as well as speak to and understand wild sea creatures.\nBenefit. Once per day, you can cast control water with a +4 bonus.",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d6+2",
+    "damageType": "piercing, magic",
+    "finesse": false,
+    "itemAttackBonus": 2,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "True Name",
+    "itemType": "Misc. Magic",
+    "description": "The secret, unique name borne by a creature and documented in The Covenant. Few creatures know their own True Names.\nBenefit. You have advantage on attack rolls and spellcasting checks targeting a creature whose True Name you utter.",
+    "weight": 1
+  },
+  {
+    "name": "Trumpet of the Ghoul",
+    "itemType": "Misc. Magic",
+    "description": "Tarnished trumpet with engravings of skeletal figures. It produces a bone-rattling sound when blown.\nBenefit When blown, you summon an undead creature up to the same LV as yours, exact type is up to the GM. It is under your control and acts on your turn for 5 rounds before disappearing. Only one can appear at a time.\nCurse If the battle is over before the 5 rounds are up, the undead attacks you before disappearing as originally scheduled.",
+    "weight": 1
+  },
+  {
+    "name": "Truth-speak oil",
+    "itemType": "Equipment",
+    "description": "Rarity: Rare; Use: Touch; Effect: DC 18 CON or gibber truths 1 hr",
+    "weight": 1
+  },
+  {
+    "name": "Unholy Symbol",
+    "itemType": "Misc. Magic",
+    "description": "A demon owes the item's owner a favor.",
+    "weight": 1
+  },
+  {
+    "name": "Used Piece of Cloth",
+    "itemType": "Equipment",
+    "description": "It is a big piece.",
+    "cost": "1 sp",
+    "weight": 0.5
+  },
+  {
+    "name": "Used Torch",
+    "itemType": "Equipment",
+    "description": "Sheds light to a near distance. Burns for 15 minutes of real time.",
+    "cost": "1 sp",
+    "weight": 1
+  },
+  {
+    "name": "Vaelthar's Longbow",
+    "itemType": "Weapon",
+    "description": "An elegant longbow, its shape carved from the spine of a felwraack.\nBenefit Fires arrows that do an extra die of damage when hitting living targets.\nCurse Any living target immediately acquires the Fel curse. (See pg. 92)",
+    "weight": 1
+  },
+  {
+    "name": "Vapor of Leng",
+    "itemType": "Equipment",
+    "description": "Rarity: Rare; Use: Inhale; Effect: DC 15 CON or INT stat becomes 3 for 1d4 hours",
+    "weight": 1
+  },
+  {
+    "name": "Vial of Blood",
+    "itemType": "Misc. Magic",
+    "description": "Slowly rolls away on its own if released.",
+    "weight": 1
+  },
+  {
+    "name": "Viper Fang of the Beastmaster",
+    "itemType": "Misc. Magic",
+    "description": "A sharp, gleaming viper fang enchanted by a Beastmaster.\nBenefit Your target must make a DC 12 CON check or be paralyzed for 1d4 rounds when fastened to a melee weapon.\nBenefit You gain poison immunity when worn as jewelry.\nBenefit You receive +1 to DEX stat when bound to armor, shield or instrument.",
+    "weight": 1
+  },
+  {
+    "name": "Voidguard Armor",
+    "itemType": "Armor",
+    "description": "Disadvantage on stealth checks and swim checks.\nChainmail armor that exudes a transluscent bluish radiance.\nBonus +1 Chain Mail Armor.\nBenefit Immune to stat or life draining attacks.",
+    "weight": 2,
+    "ac": 14,
+    "count": 1
+  },
+  {
+    "name": "Wand of Magic Missiles",
+    "itemType": "Wand",
+    "description": "A thin, straight, black and silver wand with the words \"pew pew\" etched on it in runes. Casts the wizard spell Magic Missile.",
+    "weight": 1
+  },
+  {
+    "name": "Wand of the Moonbeam",
+    "itemType": "Wand",
+    "description": "Any spellcaster can wield this wand to cast Moonbeam with a DC 14 Charisma check.\nThe wand begins twitching whenever a lycanthrope is within near distance of it.",
+    "weight": 1
+  },
+  {
+    "name": "Wand of Unlife",
+    "itemType": "Wand",
+    "description": "The knobby finger-bone of a swamp troll steeped in acrid embalming fluid.\nBenefit. This wand contains the spells animate dead and create undead.\nCurse. Each time you use the wand to cast a spell, you take 1d4 points of Constitution damage. If you reach 0 Constitution from this effect, you die and turn into a zombie.",
+    "weight": 1
+  },
+  {
+    "name": "Wand of Warding",
+    "itemType": "Wand",
+    "description": "A thin, weighty rod of dark iron inscribed with spiraling runes.\nBenefit. This wand contains the spells dispel magic and protection from energy.\nCurse. Each time you fail a spellcasting check with this wand, you also lose the ability to cast a random spell you know until you complete a rest.",
+    "weight": 1
+  },
+  {
+    "name": "Wand of Wisdom",
+    "itemType": "Wand",
+    "description": "A gnarled stick dipped in gold with the word \"wisdom\" etched on it in runes. Seers can wield it. Contains the seer spell Trance.",
+    "weight": 1
+  },
+  {
+    "name": "War Horn of the Angels",
+    "itemType": "Misc. Magic",
+    "description": "An opalescent ox horn capped with a golden mouthpiece.\nBenefit. Only a lawful being can wield the horn. Once per day, you can blow the horn to cast rebuke unholy with a +4 bonus.\nA demon or devil who hears the horn has disadvantage on its Charisma check vs. your rebuke unholy spellcasting check.",
+    "weight": 1
+  },
+  {
+    "name": "Warhammer",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d10",
+    "damageType": "blunt",
+    "finesse": false,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Warhammer of the Dwarf Lords",
+    "itemType": "Weapon",
+    "description": "A boxy hammer with a stout handle and leather throwing strap. It hums with a baritone resonance when spun.\nBonus. +1 warhammer. +2 if wielded by a dwarf.\nBenefit. This weapon has the thrown property to a near distance. It always returns to your hand after being thrown.\nBenefit. Your attacks with this weapon deal double damage against giants.",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d10+1",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  },
+  {
+    "name": "Warped Skull",
+    "itemType": "Misc. Magic",
+    "description": "Drips blood in the presence of undead.",
+    "weight": 1
+  },
+  {
+    "name": "Well of Many Worlds",
+    "itemType": "Misc. Magic",
+    "description": "A dark circle of cloth that seems to create a tunnel through the surface it lies upon.\nBenefit. The Well of Many Worlds folds open on a flat surface into a 6-foot wide hole. Creatures can jump into the hole once per day each to be transported to a random plane of existence.",
+    "weight": 1
+  },
+  {
+    "name": "Whip",
+    "itemType": "Weapon",
+    "description": "--",
+    "cost": "10 gp",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4",
+    "damageType": "slashing",
+    "finesse": true,
+    "loading": true,
+    "range": "Near",
+    "thrown": false,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Wolf Idol",
+    "itemType": "Misc. Magic",
+    "description": "Floats in the air wherever it's placed.",
+    "weight": 1
+  },
+  {
+    "name": "Wolf Tooth of the Beastmaster",
+    "itemType": "Misc. Magic",
+    "description": "A glowing, primal wolf fang enchanted by a Beastmaster.\nBenefit You gain +1 to hit if affixed to a melee weapon.\nBenefit You receive +1 to all skill checks when worn as jewelry. You receive +1 to AC if attached to armor, shield or instrument.",
+    "weight": 1
+  },
+  {
+    "name": "Wraith Chain",
+    "itemType": "Armor",
+    "description": "A chainmail shirt of black, mithral links that trails a long cloak of writhing shadows.\nBonus. +1 mithral chainmail.\nBenefit. Once per day, you may cause an attack that hits you to miss instead.",
+    "weight": 1,
+    "ac": 14,
+    "count": 1
+  },
+  {
+    "name": "Wrath Bolt",
+    "itemType": "Weapon",
+    "description": "A +1 dagger that deals 1d100 damage to anyone who tries to take it from previous possessor (dead or alive).",
+    "weight": 1,
+    "attackType": "Melee/Ranged",
+    "damage": "1d4+1",
+    "damageType": "piercing, magic",
+    "finesse": true,
+    "itemAttackBonus": 1,
+    "range": "Close/Near",
+    "thrown": true,
+    "twoHanded": false,
+    "versatile": false
+  },
+  {
+    "name": "Ynnith",
+    "itemType": "Weapon",
+    "description": "A +1 staff of knotted oak called Ynnith. Once a day, the wielder can summon an obedient giant owl for 5 rounds.\nOwl, Giant",
+    "weight": 1,
+    "attackType": "Melee",
+    "damage": "1d4+1",
+    "damageType": "blunt, magic",
+    "finesse": false,
+    "itemAttackBonus": 1,
+    "range": "Close",
+    "thrown": false,
+    "twoHanded": true,
+    "versatile": false
+  }
+]

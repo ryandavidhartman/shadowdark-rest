@@ -1,5 +1,5 @@
-// Seed the Classes collection with core class data.
-// Run with: mongosh --file data/seed-classes.js "mongodb://localhost:27017/shadowdark"
+// Seed the Items collection with parsed item data.
+// Run with: mongosh --file data/seed-items.js "mongodb://localhost:27017/shadowdark"
 
 /* global Mongo, ObjectId */
 const fs = require('fs');
@@ -16,9 +16,12 @@ const dbName =
   (dbArg && dbArg.split('=')[1]) ||
   process.env.MONGO_DB ||
   (parsed.pathname && parsed.pathname !== '/' ? parsed.pathname.slice(1) : 'shadowdark');
-const collectionName = (collectionArg && collectionArg.split('=')[1]) || process.env.MONGO_COLLECTION || 'Classes';
+const collectionName =
+  (collectionArg && collectionArg.split('=')[1]) ||
+  process.env.MONGO_COLLECTION ||
+  'Items';
 
-const classes = JSON.parse(fs.readFileSync('data/classes.json', 'utf8'));
+const items = JSON.parse(fs.readFileSync('data/items.json', 'utf8'));
 
 const conn = new Mongo(uri);
 const db = conn.getDB(dbName);
@@ -26,11 +29,6 @@ const collection = db.getCollection(collectionName);
 
 print(`Seeding ${collectionName} in ${dbName} at ${uri}`);
 collection.deleteMany({});
-collection.insertMany(
-  classes.map(cls => {
-    const { _id, ...rest } = cls;
-    return { _id: _id ? new ObjectId(_id) : new ObjectId(), ...rest };
-  }),
-);
+collection.insertMany(items.map(item => ({ _id: new ObjectId(), ...item })));
 
 print('Done.');

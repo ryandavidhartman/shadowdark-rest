@@ -1,0 +1,730 @@
+[
+  {
+    "_id": "000000000000000000000001",
+    "name": "Cleric",
+    "weapons": [
+      "Club",
+      "Crossbow",
+      "Dagger",
+      "Mace",
+      "Longsword",
+      "Staff",
+      "Warhammer"
+    ],
+    "armor": [
+      "All armor",
+      "Shields"
+    ],
+    "hitPointsPerLevel": "1d6",
+    "languages": {
+      "choices": [
+        "Celestial",
+        "Diabolic",
+        "Primordial"
+      ],
+      "choose": 1,
+      "extraCommon": 0,
+      "extraRare": 0,
+      "notes": "Choose one divine language."
+    },
+    "abilityPriority": [
+      "Wisdom",
+      "Constitution",
+      "Strength",
+      "Dexterity",
+      "Charisma",
+      "Intelligence"
+    ],
+    "features": [
+      {
+        "name": "Turn Undead",
+        "description": "You know the turn undead spell; it does not count against spells known."
+      },
+      {
+        "name": "Deity",
+        "description": "Serve a god matching your alignment; you carry a holy symbol that uses no gear slot."
+      },
+      {
+        "name": "Spellcasting",
+        "description": "Cast cleric spells you know."
+      }
+    ],
+    "spellcasting": {
+      "spellList": "cleric",
+      "initialKnown": {
+        "1": 2
+      },
+      "progression": [
+        {
+          "level": 1,
+          "tiers": {
+            "tier1": 2,
+            "tier2": 0,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 2,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 0,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 3,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 1,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 4,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 2,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 5,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 2,
+            "tier3": 1,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 6,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 2,
+            "tier3": 2,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 7,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 3,
+            "tier3": 2,
+            "tier4": 1,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 8,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 3,
+            "tier3": 2,
+            "tier4": 2,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 9,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 3,
+            "tier3": 2,
+            "tier4": 2,
+            "tier5": 1
+          }
+        },
+        {
+          "level": 10,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 3,
+            "tier3": 3,
+            "tier4": 2,
+            "tier5": 2
+          }
+        }
+      ],
+      "notes": [
+        "Choose cleric spells as you level according to the spells known table.",
+        "Initial spells known: two tier 1 cleric spells of your choice."
+      ]
+    },
+    "talents": [
+      {
+        "range": {
+          "min": 2,
+          "max": 2
+        },
+        "effect": "Gain advantage on casting one spell you know"
+      },
+      {
+        "range": {
+          "min": 3,
+          "max": 6
+        },
+        "effect": "+1 to melee or ranged attacks"
+      },
+      {
+        "range": {
+          "min": 7,
+          "max": 9
+        },
+        "effect": "+1 to cleric spellcasting checks"
+      },
+      {
+        "range": {
+          "min": 10,
+          "max": 11
+        },
+        "effect": "+2 to Strength or Wisdom"
+      },
+      {
+        "range": {
+          "min": 12,
+          "max": 12
+        },
+        "effect": "Choose a talent or +2 points to distribute to stats"
+      }
+    ],
+    "titles": [
+      {
+        "levels": {
+          "min": 1,
+          "max": 2
+        },
+        "lawful": "Acolyte",
+        "chaotic": "Initiate",
+        "neutral": "Seeker"
+      },
+      {
+        "levels": {
+          "min": 3,
+          "max": 4
+        },
+        "lawful": "Crusader",
+        "chaotic": "Zealot",
+        "neutral": "Invoker"
+      },
+      {
+        "levels": {
+          "min": 5,
+          "max": 6
+        },
+        "lawful": "Templar",
+        "chaotic": "Cultist",
+        "neutral": "Haruspex"
+      },
+      {
+        "levels": {
+          "min": 7,
+          "max": 8
+        },
+        "lawful": "Champion",
+        "chaotic": "Scourge",
+        "neutral": "Mystic"
+      },
+      {
+        "levels": {
+          "min": 9,
+          "max": 10
+        },
+        "lawful": "Paladin",
+        "chaotic": "Chaos Knight",
+        "neutral": "Oracle"
+      }
+    ]
+  },
+  {
+    "_id": "000000000000000000000002",
+    "name": "Fighter",
+    "weapons": [
+      "All weapons"
+    ],
+    "armor": [
+      "All armor",
+      "Shields"
+    ],
+    "hitPointsPerLevel": "1d8 (plus Con mod)",
+    "languages": null,
+    "abilityPriority": [
+      "Strength",
+      "Constitution",
+      "Dexterity",
+      "Wisdom",
+      "Charisma",
+      "Intelligence"
+    ],
+    "features": [
+      {
+        "name": "Hauler",
+        "description": "Add your Constitution modifier, if positive, to your gear slots."
+      },
+      {
+        "name": "Weapon Mastery",
+        "description": "Choose one weapon type; gain +1 to attack and damage with it and add half your level (round down) to rolls."
+      },
+      {
+        "name": "Grit",
+        "description": "Choose Strength or Dexterity; you have advantage on checks of that type to overcome opposing forces."
+      }
+    ],
+    "spellcasting": null,
+    "talents": [
+      {
+        "range": {
+          "min": 2,
+          "max": 2
+        },
+        "effect": "Gain Weapon Mastery with one additional weapon type"
+      },
+      {
+        "range": {
+          "min": 3,
+          "max": 6
+        },
+        "effect": "+1 to melee and ranged attacks"
+      },
+      {
+        "range": {
+          "min": 7,
+          "max": 9
+        },
+        "effect": "+2 to Strength, Dexterity, or Constitution"
+      },
+      {
+        "range": {
+          "min": 10,
+          "max": 11
+        },
+        "effect": "Choose one kind of armor; you get +1 AC while wearing that armor"
+      },
+      {
+        "range": {
+          "min": 12,
+          "max": 12
+        },
+        "effect": "Choose a talent or +2 points to distribute to stats"
+      }
+    ],
+    "titles": [
+      {
+        "levels": {
+          "min": 1,
+          "max": 2
+        },
+        "lawful": "Squire",
+        "chaotic": "Knave",
+        "neutral": "Warrior"
+      },
+      {
+        "levels": {
+          "min": 3,
+          "max": 4
+        },
+        "lawful": "Cavalier",
+        "chaotic": "Bandit",
+        "neutral": "Barbarian"
+      },
+      {
+        "levels": {
+          "min": 5,
+          "max": 6
+        },
+        "lawful": "Knight",
+        "chaotic": "Slayer",
+        "neutral": "Battlerager"
+      },
+      {
+        "levels": {
+          "min": 7,
+          "max": 8
+        },
+        "lawful": "Thane",
+        "chaotic": "Reaver",
+        "neutral": "Warchief"
+      },
+      {
+        "levels": {
+          "min": 9,
+          "max": 10
+        },
+        "lawful": "Lord/Lady",
+        "chaotic": "Warlord",
+        "neutral": "Chieftain"
+      }
+    ]
+  },
+  {
+    "_id": "000000000000000000000003",
+    "name": "Magic-User",
+    "weapons": [
+      "Dagger",
+      "Staff"
+    ],
+    "armor": [
+      "None"
+    ],
+    "hitPointsPerLevel": "1d4",
+    "languages": {
+      "choices": [],
+      "choose": 0,
+      "extraCommon": 2,
+      "extraRare": 2,
+      "notes": "Learn two additional common languages and two rare languages."
+    },
+    "abilityPriority": [
+      "Intelligence",
+      "Dexterity",
+      "Constitution",
+      "Wisdom",
+      "Charisma",
+      "Strength"
+    ],
+    "features": [
+      {
+        "name": "Learning Spells",
+        "description": "Learn a spell from a spell scroll with a day of study and a DC 15 Intelligence check; the scroll is consumed."
+      },
+      {
+        "name": "Spellcasting",
+        "description": "Cast magic-user spells you know."
+      }
+    ],
+    "spellcasting": {
+      "spellList": "magic-user",
+      "initialKnown": {
+        "1": 3
+      },
+      "progression": [
+        {
+          "level": 1,
+          "tiers": {
+            "tier1": 3,
+            "tier2": 0,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 2,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 0,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 3,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 1,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 4,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 2,
+            "tier3": 0,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 5,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 2,
+            "tier3": 1,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 6,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 3,
+            "tier3": 2,
+            "tier4": 0,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 7,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 3,
+            "tier3": 2,
+            "tier4": 1,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 8,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 4,
+            "tier3": 2,
+            "tier4": 2,
+            "tier5": 0
+          }
+        },
+        {
+          "level": 9,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 4,
+            "tier3": 3,
+            "tier4": 2,
+            "tier5": 1
+          }
+        },
+        {
+          "level": 10,
+          "tiers": {
+            "tier1": 4,
+            "tier2": 4,
+            "tier3": 4,
+            "tier4": 2,
+            "tier5": 2
+          }
+        }
+      ],
+      "notes": [
+        "Initial spells known: three tier 1 magic-user spells of your choice.",
+        "Choose new magic-user spells to learn as you level according to the spells known table."
+      ]
+    },
+    "talents": [
+      {
+        "range": {
+          "min": 2,
+          "max": 2
+        },
+        "effect": "Make one random magic item of a type you choose"
+      },
+      {
+        "range": {
+          "min": 3,
+          "max": 7
+        },
+        "effect": "+2 to Intelligence or +1 to wizard spellcasting checks"
+      },
+      {
+        "range": {
+          "min": 8,
+          "max": 9
+        },
+        "effect": "Gain advantage on casting one spell you know"
+      },
+      {
+        "range": {
+          "min": 10,
+          "max": 11
+        },
+        "effect": "Learn one additional wizard spell of any tier you know"
+      },
+      {
+        "range": {
+          "min": 12,
+          "max": 12
+        },
+        "effect": "Choose a talent or +2 points to distribute to stats"
+      }
+    ],
+    "titles": [
+      {
+        "levels": {
+          "min": 1,
+          "max": 2
+        },
+        "lawful": "Apprentice",
+        "chaotic": "Adept",
+        "neutral": "Shaman"
+      },
+      {
+        "levels": {
+          "min": 3,
+          "max": 4
+        },
+        "lawful": "Conjurer",
+        "chaotic": "Channeler",
+        "neutral": "Seer"
+      },
+      {
+        "levels": {
+          "min": 5,
+          "max": 6
+        },
+        "lawful": "Arcanist",
+        "chaotic": "Witch/Warlock",
+        "neutral": "Warden"
+      },
+      {
+        "levels": {
+          "min": 7,
+          "max": 8
+        },
+        "lawful": "Mage",
+        "chaotic": "Diabolist",
+        "neutral": "Sage"
+      },
+      {
+        "levels": {
+          "min": 9,
+          "max": 10
+        },
+        "lawful": "Archmage",
+        "chaotic": "Sorcerer",
+        "neutral": "Druid"
+      }
+    ]
+  },
+  {
+    "_id": "000000000000000000000004",
+    "name": "Thief",
+    "weapons": [
+      "Club",
+      "Crossbow",
+      "Dagger",
+      "Shortbow",
+      "Shortsword"
+    ],
+    "armor": [
+      "Leather armor",
+      "Mithral chainmail"
+    ],
+    "hitPointsPerLevel": "1d4",
+    "languages": {
+      "choices": [
+        "Thieves' Cant"
+      ],
+      "choose": 1,
+      "extraCommon": 0,
+      "extraRare": 0,
+      "notes": "Thieves always know Thieves’ Cant."
+    },
+    "abilityPriority": [
+      "Dexterity",
+      "Constitution",
+      "Strength",
+      "Intelligence",
+      "Wisdom",
+      "Charisma"
+    ],
+    "features": [
+      {
+        "name": "Backstab",
+        "description": "If you hit a creature unaware of your attack, deal an extra weapon die plus half your level (round down)."
+      },
+      {
+        "name": "Thievery",
+        "description": "Advantage on climbing, sneaking, disguises, trap work, and delicate tasks like picking pockets or locks."
+      }
+    ],
+    "spellcasting": null,
+    "talents": [
+      {
+        "range": {
+          "min": 2,
+          "max": 2
+        },
+        "effect": "Gain advantage on initiative rolls (reroll if duplicate)"
+      },
+      {
+        "range": {
+          "min": 3,
+          "max": 5
+        },
+        "effect": "Backstab deals +1 die of damage"
+      },
+      {
+        "range": {
+          "min": 6,
+          "max": 9
+        },
+        "effect": "+2 to Strength, Dexterity, or Charisma"
+      },
+      {
+        "range": {
+          "min": 10,
+          "max": 11
+        },
+        "effect": "+1 to melee and ranged attacks"
+      },
+      {
+        "range": {
+          "min": 12,
+          "max": 12
+        },
+        "effect": "Choose a talent or +2 points to distribute to stats"
+      }
+    ],
+    "titles": [
+      {
+        "levels": {
+          "min": 1,
+          "max": 2
+        },
+        "lawful": "Footpad",
+        "chaotic": "Thug",
+        "neutral": "Robber"
+      },
+      {
+        "levels": {
+          "min": 3,
+          "max": 4
+        },
+        "lawful": "Burglar",
+        "chaotic": "Cutthroat",
+        "neutral": "Outlaw"
+      },
+      {
+        "levels": {
+          "min": 5,
+          "max": 6
+        },
+        "lawful": "Rook",
+        "chaotic": "Shadow",
+        "neutral": "Rogue"
+      },
+      {
+        "levels": {
+          "min": 7,
+          "max": 8
+        },
+        "lawful": "Underboss",
+        "chaotic": "Assassin",
+        "neutral": "Renegade"
+      },
+      {
+        "levels": {
+          "min": 9,
+          "max": 10
+        },
+        "lawful": "Boss",
+        "chaotic": "Wraith",
+        "neutral": "Bandit King/Queen"
+      }
+    ]
+  }
+]
