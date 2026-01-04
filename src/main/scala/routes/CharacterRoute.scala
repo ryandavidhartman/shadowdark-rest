@@ -7,6 +7,9 @@ import org.apache.pdfbox.pdmodel.PDResources
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.font.{PDType1Font, Standard14Fonts}
 import org.apache.pdfbox.pdmodel.interactive.form.PDField
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm
+import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText
+import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.cos.COSName
 import servers.CharacterServer
 import zio._
@@ -14,6 +17,7 @@ import zio.http._
 import zio.json._
 
 import java.io.{ByteArrayOutputStream, InputStream}
+import scala.jdk.CollectionConverters._
 
 final case class CharacterRoute(server: CharacterServer) {
   val routes: Routes[Any, Response] =
@@ -62,6 +66,8 @@ final case class CharacterRoute(server: CharacterServer) {
         form.setDefaultResources(defaultResources)
         form.setDefaultAppearance("/Helv 10 Tf 0 g")
         form.setNeedAppearances(true)
+        adjustGearTenField(form)
+        setGearFieldFont(form, 9)
 
         def field(name: String): PDField =
           Option(form.getField(name)).getOrElse(throw new IllegalArgumentException(s"Missing field '$name' in PDF"))
@@ -148,6 +154,31 @@ final case class CharacterRoute(server: CharacterServer) {
 
   private def stripGearSlotLabel(value: String): String =
     value.replaceFirst("^Slot\\s+\\d+:\\s*", "")
+
+  private def adjustGearTenField(form: PDAcroForm): Unit =
+    Option(form.getField("Gear 10")).foreach { field =>
+      field.getWidgets.asScala.foreach { widget =>
+        val rect = widget.getRectangle
+        if (rect != null) {
+          val shifted = new PDRectangle(rect.getLowerLeftX, rect.getLowerLeftY, rect.getWidth, rect.getHeight)
+          val shift   = 3.2f
+          shifted.setLowerLeftX(rect.getLowerLeftX - shift)
+          shifted.setUpperRightX(rect.getUpperRightX - shift)
+          widget.setRectangle(shifted)
+        }
+      }
+    }
+
+  private def setGearFieldFont(form: PDAcroForm, size: Int): Unit = {
+    val appearance = s"/Helv $size Tf 0 g"
+    val gearFields = (1 to 20).map(i => s"Gear $i") :+ "Free To Carry"
+    gearFields.foreach { name =>
+      Option(form.getField(name)).foreach {
+        case vt: PDVariableText => vt.setDefaultAppearance(appearance)
+        case _                  => ()
+      }
+    }
+  }
 }
 
 object CharacterRoute {
