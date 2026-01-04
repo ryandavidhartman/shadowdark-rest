@@ -16,6 +16,7 @@ final case class CharacterServer(
   backgroundServer: BackgroundServer,
   characterClassServer: CharacterClassServer,
   itemServer: ItemServer,
+  titleServer: TitleServer,
 ) {
 
   private val alignments  = List("Lawful", "Neutral", "Chaotic")
@@ -88,6 +89,23 @@ final case class CharacterServer(
 
   private def matchesGender(name: Name, gender: Option[String]): Boolean =
     gender.forall(g => name.gender.exists(_.equalsIgnoreCase(g)))
+
+  private def pickTitle(
+    titles: List[Title],
+    className: Option[String],
+    alignment: Option[String],
+    level: Int,
+  ): Option[String] =
+    for {
+      cls <- className
+      aln <- alignment
+      title <- titles.find { t =>
+        t.characterClass.equalsIgnoreCase(cls) &&
+        t.alignment.equalsIgnoreCase(aln) &&
+        level >= t.minLevel &&
+        level <= t.maxLevel
+      }
+    } yield title.title
 
   private def randomFullName(names: List[Name], race: Option[String], gender: Option[String]): UIO[String] = {
     val firstNames =
@@ -172,6 +190,7 @@ final case class CharacterServer(
       races         <- raceServer.getRaces
       classes       <- ensureClasses
       backgrounds   <- backgroundServer.getBackgrounds
+      titles        <- titleServer.getTitles
       personalities <- personalityServer.getPersonalities
       items         <- itemServer.getItems
       randomRace    <- pickWeightedRace(races).flatMap {
@@ -268,6 +287,7 @@ final case class CharacterServer(
                        else
                          List(s"Weapon attack ${formatMod(abilities.strength.modifier)} (1d6)")
       level          = 1
+      pickedTitle    = pickTitle(titles, pickedClass.map(_.name), pickedAlign, level)
       talentRolls    = (level + 1) / 2
       classTalents   <- pickedClass
                           .map { cls =>
@@ -296,7 +316,7 @@ final case class CharacterServer(
       characterClass = pickedClass.map(_.name),
       level = Some(level),
       xp = Some(0),
-      title = None,
+      title = pickedTitle,
       alignment = pickedAlign,
       background = pickedBg.map(_.name),
       deity = pickedDeity,
@@ -333,7 +353,8 @@ object CharacterServer {
       with PersonalityServer
       with BackgroundServer
       with CharacterClassServer
-      with ItemServer,
+      with ItemServer
+      with TitleServer,
     Nothing,
     CharacterServer,
   ] =
