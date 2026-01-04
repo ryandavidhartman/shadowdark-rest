@@ -1,8 +1,13 @@
 package routes
 
 import models.{AbilityScore, Character}
+import org.apache.pdfbox.Loader
+import org.apache.pdfbox.io.RandomAccessReadBuffer
+import org.apache.pdfbox.pdmodel.PDResources
 import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.font.{PDType1Font, Standard14Fonts}
 import org.apache.pdfbox.pdmodel.interactive.form.PDField
+import org.apache.pdfbox.cos.COSName
 import servers.CharacterServer
 import zio._
 import zio.http._
@@ -43,11 +48,19 @@ final case class CharacterRoute(server: CharacterServer) {
         Option(getClass.getResourceAsStream(templatePath))
           .getOrElse(throw new IllegalStateException(s"Missing template at $templatePath"))
 
-      val document = PDDocument.load(templateStream)
+      val randomAccess = new RandomAccessReadBuffer(templateStream)
+      val document     = Loader.loadPDF(randomAccess)
       try {
         val form =
           Option(document.getDocumentCatalog.getAcroForm)
             .getOrElse(throw new IllegalStateException("Template does not contain an AcroForm"))
+        val defaultResources = Option(form.getDefaultResources).getOrElse(new PDResources())
+        val defaultFontName  = COSName.getPDFName("Helv")
+        if (defaultResources.getFont(defaultFontName) == null) {
+          defaultResources.put(defaultFontName, new PDType1Font(Standard14Fonts.FontName.HELVETICA))
+        }
+        form.setDefaultResources(defaultResources)
+        form.setDefaultAppearance("/Helv 10 Tf 0 g")
         form.setNeedAppearances(true)
 
         def field(name: String): PDField =
@@ -102,7 +115,7 @@ final case class CharacterRoute(server: CharacterServer) {
         setField("Silver Pieces", character.silverPieces.toString)
         setField("Copper Pieces", character.copperPieces.toString)
 
-        val gearLines        = character.gear
+        val gearLines        = character.gear.map(stripGearSlotLabel)
         val gearFieldCount   = 20
         val (primaryGear, extraGear) = gearLines.splitAt(gearFieldCount)
         primaryGear.zipWithIndex.foreach { case (item, idx) =>
@@ -125,12 +138,16 @@ final case class CharacterRoute(server: CharacterServer) {
         } finally output.close()
       } finally {
         document.close()
+        randomAccess.close()
         templateStream.close()
       }
     }
 
   private def formatMod(mod: Int): String =
     if (mod >= 0) s"+$mod" else s"$mod"
+
+  private def stripGearSlotLabel(value: String): String =
+    value.replaceFirst("^Slot\\s+\\d+:\\s*", "")
 }
 
 object CharacterRoute {
