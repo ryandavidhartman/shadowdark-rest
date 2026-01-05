@@ -1,0 +1,17 @@
+[
+  {"name":"Common","speakers":"Most humanoids","rarity":"common"},
+  {"name":"Dwarvish","speakers":"Dwarves","rarity":"common"},
+  {"name":"Elvish","speakers":"Elves","rarity":"common"},
+  {"name":"Giant","speakers":"Giants, ogres, trolls","rarity":"common"},
+  {"name":"Gnomish","speakers":"Gnomes","rarity":"common"},
+  {"name":"Goblin","speakers":"Bugbears, goblins, hobgoblins","rarity":"common"},
+  {"name":"Merran","speakers":"Merfolk, sahuagin, sirens","rarity":"common"},
+  {"name":"Orcish","speakers":"Orcs","rarity":"common"},
+  {"name":"Reptilian","speakers":"Lizardfolk, viperians","rarity":"common"},
+  {"name":"Sylvan","speakers":"Centaurs, dryads, faeries","rarity":"common"},
+  {"name":"Thanian","speakers":"Minotaurs, beastmen, manticores","rarity":"common"},
+  {"name":"Celestial","speakers":"Angels","rarity":"rare"},
+  {"name":"Diabolic","speakers":"Demons, devils","rarity":"rare"},
+  {"name":"Draconic","speakers":"Dragons","rarity":"rare"},
+  {"name":"Primordial","speakers":"Elder things, elementals","rarity":"rare"}
+]
