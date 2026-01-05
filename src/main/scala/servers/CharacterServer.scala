@@ -17,10 +17,10 @@ final case class CharacterServer(
   characterClassServer: CharacterClassServer,
   itemServer: ItemServer,
   titleServer: TitleServer,
+  deityServer: DeityServer,
 ) {
 
   private val alignments  = List("Lawful", "Neutral", "Chaotic")
-  private val deities     = List("Arden", "Gloom", "Ithis", "Lunara", "Shadow")
   private val baseLanguages = Language.default
   private val gearChoices = List(
     "Backpack",
@@ -192,6 +192,7 @@ final case class CharacterServer(
       backgrounds   <- backgroundServer.getBackgrounds
       titles        <- titleServer.getTitles
       personalities <- personalityServer.getPersonalities
+      deities       <- deityServer.getDeities
       items         <- itemServer.getItems
       randomRace    <- pickWeightedRace(races).flatMap {
                          case some @ Some(_) => ZIO.succeed(some)
@@ -209,7 +210,13 @@ final case class CharacterServer(
       pickedClass   <- pickOne(classes)
       pickedAlign   <- pickOne(alignments)
       pickedBg      <- pickWeightedBackground(backgrounds)
-      pickedDeity   <- pickOne(deities)
+      pickedDeity   <- {
+                          val aligned = pickedAlign
+                            .map(aln => deities.filter(_.alignment.equalsIgnoreCase(aln)))
+                            .getOrElse(deities)
+                          val pool = if (aligned.nonEmpty) aligned else deities
+                          pickOne(pool).map(_.map(_.name))
+                        }
       gold          <- ZIO.succeed(rng.nextInt(0, 21))
       silver        <- ZIO.succeed(rng.nextInt(0, 51))
       copper        <- ZIO.succeed(rng.nextInt(0, 101))
@@ -354,7 +361,8 @@ object CharacterServer {
       with BackgroundServer
       with CharacterClassServer
       with ItemServer
-      with TitleServer,
+      with TitleServer
+      with DeityServer,
     Nothing,
     CharacterServer,
   ] =

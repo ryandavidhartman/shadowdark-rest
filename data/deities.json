@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Saint Terragnis",
+    "alignment": "Lawful",
+    "description": "A legendary knight who is the patron of most lawful humans. She ascended to godhood long ago and is the embodiment of righteousness and justice."
+  },
+  {
+    "name": "Gede",
+    "alignment": "Neutral",
+    "description": "The god of feasts, mirth, and the wilds. Gede is usually peaceful, but primal storms rage when her anger rises. Many elves and halflings worship her."
+  },
+  {
+    "name": "Madeera the Covenant",
+    "alignment": "Lawful",
+    "description": "Madeera was the first manifestation of Law. She carries every law of reality, a dictate called the Covenant, written on her skin in precise symbols."
+  },
+  {
+    "name": "Ord",
+    "alignment": "Neutral",
+    "description": "Ord the Unbending, the Wise, the Secret-Keeper. He is the god of magic, knowledge, secrets, and equilibrium."
+  },
+  {
+    "name": "Memnon",
+    "alignment": "Chaotic",
+    "description": "Memnon was the first manifestation of Chaos. He is Madeera's twin, a red-maned, leonine being whose ultimate ambition is to rend the cosmic laws of the Covenant from his sister's skin."
+  },
+  {
+    "name": "Ramlaat",
+    "alignment": "Chaotic",
+    "description": "Ramlaat is the Pillager, the Barbaric, the Horde. Many orcs worship him and live by the Blood Rite, a prophecy that says only the strongest will survive a coming doom."
+  },
+  {
+    "name": "Shune the Vile",
+    "alignment": "Chaotic",
+    "description": "Shune whispers arcane secrets to sorcerers and witches who call to her in the dark hours. She schemes to displace Ord so she can control the"
+  }
+]

@@ -3,6 +3,7 @@ import routes.{
   BackgroundRoute,
   CharacterClassRoute,
   CharacterRoute,
+  DeityRoute,
   ItemRoute,
   NameRoute,
   PersonalityRoute,
@@ -14,6 +15,7 @@ import repositories.{
   BackgroundRepositoryLive,
   CharacterClassRepositoryLive,
   CharacterRepositoryLive,
+  DeityRepositoryLive,
   ItemRepositoryLive,
   NameRepositoryLive,
   PersonalityRepositoryLive,
@@ -25,6 +27,7 @@ import servers.{
   BackgroundServer,
   CharacterClassServer,
   CharacterServer,
+  DeityServer,
   ItemServer,
   NameServer,
   PersonalityServer,
@@ -58,8 +61,9 @@ object Main extends ZIOAppDefault {
           spellRoutes       <- ZIO.serviceWith[SpellRoute](_.routes)
           itemRoutes        <- ZIO.serviceWith[ItemRoute](_.routes)
           titleRoutes       <- ZIO.serviceWith[TitleRoute](_.routes)
+          deityRoutes       <- ZIO.serviceWith[DeityRoute](_.routes)
           _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes,
+                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes,
                                )
         } yield ()
 
@@ -74,6 +78,7 @@ object Main extends ZIOAppDefault {
           SpellRepositoryLive.layer,
           ItemRepositoryLive.layer,
           TitleRepositoryLive.layer,
+          DeityRepositoryLive.layer,
           NameServer.live,
           RaceServer.live,
           PersonalityServer.live,
@@ -82,6 +87,7 @@ object Main extends ZIOAppDefault {
           SpellServer.live,
           ItemServer.live,
           TitleServer.live,
+          DeityServer.live,
           CharacterServer.live,
           CharacterRoute.live,
           NameRoute.live,
@@ -92,6 +98,7 @@ object Main extends ZIOAppDefault {
           SpellRoute.live,
           ItemRoute.live,
           TitleRoute.live,
+          DeityRoute.live,
         )
       }
       .orDie
