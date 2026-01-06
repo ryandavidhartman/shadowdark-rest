@@ -49,7 +49,9 @@
   {
     "name": "Ancestral Guidance",
     "tier": 3,
-    "castingAttribute": [],
+    "castingAttribute": [
+      "UNUSED"
+    ],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -58,7 +60,9 @@
   {
     "name": "Animal Totem",
     "tier": 3,
-    "castingAttribute": [],
+    "castingAttribute": [
+      "UNUSED"
+    ],
     "range": "Close",
     "duration": "1 Day",
     "dc": 13,
