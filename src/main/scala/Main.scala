@@ -6,6 +6,7 @@ import routes.{
   DeityRoute,
   ItemRoute,
   LanguageRoute,
+  MonsterRoute,
   NameRoute,
   PersonalityRoute,
   RaceRoute,
@@ -19,6 +20,7 @@ import repositories.{
   DeityRepositoryLive,
   ItemRepositoryLive,
   LanguageRepositoryLive,
+  MonsterRepositoryLive,
   NameRepositoryLive,
   PersonalityRepositoryLive,
   RaceRepositoryLive,
@@ -32,6 +34,7 @@ import servers.{
   DeityServer,
   ItemServer,
   LanguageServer,
+  MonsterServer,
   NameServer,
   PersonalityServer,
   RaceServer,
@@ -66,8 +69,9 @@ object Main extends ZIOAppDefault {
           titleRoutes       <- ZIO.serviceWith[TitleRoute](_.routes)
           deityRoutes       <- ZIO.serviceWith[DeityRoute](_.routes)
           languageRoutes    <- ZIO.serviceWith[LanguageRoute](_.routes)
+          monsterRoutes     <- ZIO.serviceWith[MonsterRoute](_.routes)
           _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes,
+                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes,
                                )
         } yield ()
 
@@ -84,6 +88,7 @@ object Main extends ZIOAppDefault {
           TitleRepositoryLive.layer,
           DeityRepositoryLive.layer,
           LanguageRepositoryLive.layer,
+          MonsterRepositoryLive.layer,
           NameServer.live,
           RaceServer.live,
           PersonalityServer.live,
@@ -94,6 +99,7 @@ object Main extends ZIOAppDefault {
           TitleServer.live,
           DeityServer.live,
           LanguageServer.live,
+          MonsterServer.live,
           CharacterServer.live,
           CharacterRoute.live,
           NameRoute.live,
@@ -106,6 +112,7 @@ object Main extends ZIOAppDefault {
           TitleRoute.live,
           DeityRoute.live,
           LanguageRoute.live,
+          MonsterRoute.live,
         )
       }
       .orDie
