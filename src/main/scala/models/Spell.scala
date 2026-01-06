@@ -8,7 +8,7 @@ final case class Spell(
   name: String,
   tier: Int,
   castingAttribute: List[String] = List.empty[String],
-  prohibitedAlignments: List[String] = List.empty[String],
+  prohibitedAlignments: Option[List[String]] = None,
   spellType: Option[String] = None,
   range: Option[String] = None,
   duration: Option[String] = None,
