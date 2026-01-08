@@ -24,13 +24,17 @@ final case class CharacterRoute(server: CharacterServer) {
     Routes(
       Method.GET / "random-character" ->
         Handler
-          .fromZIO(server.randomCharacter.map(character => Response.json(character.toJson)))
+          .fromFunctionZIO[Request] { req =>
+            server
+              .randomCharacter(zeroLevel = isZeroLevel(req))
+              .map(character => Response.json(character.toJson))
+          }
           .mapError(err => Response.internalServerError(err.getMessage)),
       Method.GET / "random-character.pdf" ->
         Handler
-          .fromZIO {
+          .fromFunctionZIO[Request] { req =>
             for {
-              character <- server.randomCharacter
+              character <- server.randomCharacter(zeroLevel = isZeroLevel(req))
               pdf       <- renderCharacterPdf(character)
             } yield Response(
               status = Status.Ok,
@@ -45,6 +49,12 @@ final case class CharacterRoute(server: CharacterServer) {
     )
 
   private val templatePath = "/ShadowdarkSheet.pdf"
+
+  private def isZeroLevel(request: Request): Boolean =
+    request.url.queryParams
+      .getAll("zeroLevel")
+      .headOption
+      .exists(value => value.equalsIgnoreCase("true") || value == "1")
 
   private def renderCharacterPdf(character: Character): Task[Array[Byte]] =
     ZIO.attempt {

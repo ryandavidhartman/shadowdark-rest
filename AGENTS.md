@@ -14,6 +14,7 @@
 - Languages seeding: `data/seed-languages.js` inserts languages from `data/languages.json`; run via `mongosh --file data/seed-languages.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
 - Spells seeding: `data/seed-spells.js` inserts spells from `data/spells.json`; run via `mongosh --file data/seed-spells.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
 - Items data/seeding: `data/items.json`/`data/items-merged.json` hold merged SD2FG + BFRPG gear/weapon/armor sets (with slots, versatility, loading, defense bonuses, magic flag, zero-slot gear, deduped names). Seed via `data/seed-items.js` (`mongosh --file data/seed-items.js "$MONGO_URI"`).
+- Zero-level gear list: `src/main/resources/zero-level-gear.json` provides the 0-level gear table for the random character generator.
 
 ## Build, Test, and Development Commands
 - `sbt compile` — compile and fetch deps (Mongo driver 5.6.1, ZIO 2.1.23, zio-http 3.6.0, zio-json 0.7.0, PDFBox 2.0.30).
@@ -43,7 +44,7 @@
 - Scrub sensitive fields before logging; keep logs minimal in production.
 
 ## HTTP & Persistence Notes
-- HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, `/names` (list names), `/races` (list races), `/random-character` (random or stored character), `/random-character.pdf` (fills `src/main/resources/ShadowdarkSheet.pdf` AcroForm with a random character), `/personalities` (list/create), `/backgrounds` (list), `/classes` (list), `/spells` (list), `/items` (list), `/titles` (list), `/deities` (list), `/languages` (list).
+- HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, `/names` (list names), `/races` (list races), `/random-character` (random or stored character; supports `?zeroLevel=true|1` for 0-level), `/random-character.pdf` (fills `src/main/resources/ShadowdarkSheet.pdf` AcroForm with a random character; supports `?zeroLevel=true|1`), `/personalities` (list/create), `/backgrounds` (list), `/classes` (list), `/spells` (list), `/items` (list), `/titles` (list), `/deities` (list), `/languages` (list).
 - Models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, HP/AC, gear, features, talents, spells, languages), `CharacterClass` (+ `ClassFeature`, `Talent`, `Spellcasting`, etc.), `Language`, `LanguageEntry`, `Spell`, `Item`, `Title`, `Deity`; all have zio-json codecs and Mongo ObjectId encode/decode where needed.
 - Persistence: `NameRepository`, `RaceRepository`, `CharacterRepository`, `CharacterClassRepository`, `SpellRepository`, `ItemRepository` with live Mongo implementations using codec registries. Race codec registry must include `RaceAbility`; class registry must include class support types.
 - Characters: `CharacterServer` builds random characters with weighted races, class-driven HP, features, talents (rolled 2d6 per talent level), spell summaries, gear, and language selection (Common + race languages + class-granted picks, resolving “extra” placeholders to actual common/rare languages). Gear slots are filled from Items (class weapon/armor allowances, slots, deduped gear, ammo for ranged, crawling-kit fillers; zero-slot gear goes to `freeToCarry`). `CharacterRoute` renders the random character both as JSON and as a filled PDF using the bundled sheet template.
