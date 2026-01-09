@@ -5,6 +5,7 @@ import org.apache.pdfbox.Loader
 import org.apache.pdfbox.io.RandomAccessReadBuffer
 import org.apache.pdfbox.pdmodel.PDResources
 import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.{PDType1Font, Standard14Fonts}
 import org.apache.pdfbox.pdmodel.interactive.form.PDField
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm
@@ -132,11 +133,17 @@ final case class CharacterRoute(server: CharacterServer) {
         setField("Silver Pieces", character.silverPieces.toString)
         setField("Copper Pieces", character.copperPieces.toString)
 
-        val gearLines        = character.gear.map(stripGearSlotLabel)
+        val gearLinesRaw     = character.gear.map(stripGearSlotLabel)
+        val gearLines        = gearLinesRaw.filterNot(_.equalsIgnoreCase("Empty"))
         val gearFieldCount   = 20
         val (primaryGear, extraGear) = gearLines.splitAt(gearFieldCount)
         primaryGear.zipWithIndex.foreach { case (item, idx) =>
           setField(s"Gear ${idx + 1}", item)
+        }
+        val totalSlots = gearLinesRaw.length
+        if (totalSlots < gearFieldCount) {
+          val unavailable = ((totalSlots + 1) to gearFieldCount).map(i => s"Gear $i").toList
+          drawCrosses(document, form, unavailable)
         }
 
         val freeToCarry = (extraGear ++ character.freeToCarry) match {
@@ -199,6 +206,35 @@ final case class CharacterRoute(server: CharacterServer) {
           vt.setDefaultAppearance(appearance)
           vt.getWidgets.asScala.foreach(_.getCOSObject.setString(COSName.DA, appearance))
         case _                  => ()
+      }
+    }
+  }
+
+  private def drawCrosses(document: PDDocument, form: PDAcroForm, names: List[String]): Unit = {
+    val widgets = names.flatMap { name =>
+      Option(form.getField(name)).toList.flatMap(_.getWidgets.asScala)
+    }
+    val byPage = widgets.groupBy(_.getPage)
+    byPage.foreach { case (page, pageWidgets) =>
+      if (page != null) {
+        val content = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)
+        try {
+          content.setStrokingColor(0f)
+          content.setLineWidth(0.75f)
+          pageWidgets.foreach { widget =>
+            val rect = widget.getRectangle
+            if (rect != null) {
+              val inset = 1.5f
+              val x1 = rect.getLowerLeftX + inset
+              val y1 = rect.getLowerLeftY + inset
+              val x2 = rect.getUpperRightX - inset
+              val y2 = rect.getUpperRightY - inset
+              content.moveTo(x1, y1)
+              content.lineTo(x2, y2)
+              content.stroke()
+            }
+          }
+        } finally content.close()
       }
     }
   }
