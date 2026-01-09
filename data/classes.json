@@ -1,7 +1,7 @@
 [
   {
     "_id": "000000000000000000000001",
-    "name": "Cleric",
+    "name": "Priest",
     "weapons": [
       "Club",
       "Crossbow",
@@ -368,7 +368,7 @@
   },
   {
     "_id": "000000000000000000000003",
-    "name": "Magic-User",
+    "name": "Wizard",
     "weapons": [
       "Dagger",
       "Staff"
@@ -621,7 +621,7 @@
       "choose": 1,
       "extraCommon": 0,
       "extraRare": 0,
-      "notes": "Thieves always know Thieves’ Cant."
+      "notes": "Thieves always know Thieves\u2019 Cant."
     },
     "abilityPriority": [
       "Dexterity",

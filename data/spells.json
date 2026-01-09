@@ -3,7 +3,7 @@
     "name": "Abjure",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -18,7 +18,7 @@
     "name": "Absorb",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -33,7 +33,7 @@
     "name": "Acid Arrow",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -47,7 +47,7 @@
     "name": "Alarm",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Close",
     "duration": "1 day",
@@ -58,7 +58,7 @@
     "name": "Alchemy",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -117,7 +117,7 @@
     "name": "Anima",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -143,7 +143,7 @@
     "name": "Animate Dead",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User",
+      "Wizard",
       "Necromancer"
     ],
     "range": "Close",
@@ -155,7 +155,7 @@
     "name": "Antimagic Shell",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "Focus",
@@ -177,7 +177,7 @@
     "name": "Arcane Eye",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -224,7 +224,7 @@
     "name": "Augury",
     "tier": 2,
     "castingAttribute": [
-      "Cleric",
+      "Priest",
       "Witch"
     ],
     "range": "Self",
@@ -236,7 +236,7 @@
     "name": "Balance",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -265,7 +265,7 @@
     "name": "Banish",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -291,7 +291,7 @@
     "name": "Barkskin",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -306,7 +306,7 @@
     "name": "Bear Shape",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -321,7 +321,7 @@
     "name": "Befriend",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -350,7 +350,7 @@
     "name": "Betrayal",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -390,7 +390,7 @@
     "name": "Bless",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -401,7 +401,7 @@
     "name": "Blight",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -416,7 +416,7 @@
     "name": "Blind",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -438,7 +438,7 @@
     "name": "Blood Rite",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -558,7 +558,7 @@
     "name": "Breath",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -584,7 +584,7 @@
     "name": "Burning Hands",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Close",
@@ -714,7 +714,7 @@
     "name": "Cleanse",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -729,7 +729,7 @@
     "name": "Cleansing Weapon",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "spellType": "Damage",
     "range": "Close",
@@ -754,7 +754,7 @@
     "name": "Cloudkill",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -768,7 +768,7 @@
     "name": "Command",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Far",
     "duration": "Focus",
@@ -793,7 +793,7 @@
     "name": "Commune",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Self",
     "duration": "Instant",
@@ -815,7 +815,7 @@
     "name": "Confusion",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -840,7 +840,7 @@
     "name": "Consecrate",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -855,7 +855,7 @@
     "name": "Contagion",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -870,8 +870,8 @@
     "name": "Control Water",
     "tier": 4,
     "castingAttribute": [
-      "Cleric",
-      "Magic-User"
+      "Priest",
+      "Wizard"
     ],
     "range": "Far",
     "duration": "Focus",
@@ -918,7 +918,7 @@
     "name": "Covenant",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -955,7 +955,7 @@
     "name": "Create Undead",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User",
+      "Wizard",
       "Necromancer"
     ],
     "range": "Close",
@@ -967,7 +967,7 @@
     "name": "Cure Wounds",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "spellType": "Healing",
     "range": "Close",
@@ -993,7 +993,7 @@
     "name": "Damnation",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1052,7 +1052,7 @@
     "name": "Deafen",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -1063,7 +1063,7 @@
     "name": "Death Ward",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -1089,7 +1089,7 @@
     "name": "Defile",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1118,7 +1118,7 @@
     "name": "Detect Magic",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -1129,7 +1129,7 @@
     "name": "Detect Thoughts",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -1154,7 +1154,7 @@
     "name": "Disintegrate",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -1168,7 +1168,7 @@
     "name": "Dismember",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1185,7 +1185,7 @@
     "name": "Dispel Magic",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Instant",
@@ -1218,7 +1218,7 @@
     "name": "Divine Vengeance",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Self",
     "duration": "10 rounds",
@@ -1243,7 +1243,7 @@
     "name": "Dominate",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1258,7 +1258,7 @@
     "name": "Dominion",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "10 rounds",
@@ -1315,7 +1315,7 @@
     "name": "Earthquake",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1355,7 +1355,7 @@
     "name": "Envenom",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1394,7 +1394,7 @@
     "name": "Extract",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1423,7 +1423,7 @@
     "name": "Fabricate",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "10 rounds",
@@ -1448,7 +1448,7 @@
     "name": "Feast",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1463,7 +1463,7 @@
     "name": "Feather Fall",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "Instant",
@@ -1474,7 +1474,7 @@
     "name": "Feeblemind",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -1522,7 +1522,7 @@
     "name": "Fireball",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -1558,7 +1558,7 @@
     "name": "Fixed Object",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Close",
     "duration": "5 rounds",
@@ -1569,7 +1569,7 @@
     "name": "Flame Strike",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -1583,7 +1583,7 @@
     "name": "Flare",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -1598,7 +1598,7 @@
     "name": "Floating Disk",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "10 rounds",
@@ -1620,7 +1620,7 @@
     "name": "Fly",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "5 rounds",
@@ -1642,7 +1642,7 @@
     "name": "Forbid",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -1701,7 +1701,7 @@
     "name": "Fortify",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -1788,7 +1788,7 @@
     "name": "Gaseous Form",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "10 rounds",
@@ -1912,7 +1912,7 @@
     "name": "Glyph",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -1977,7 +1977,7 @@
     "name": "Halo",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -1992,7 +1992,7 @@
     "name": "Harm",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2007,7 +2007,7 @@
     "name": "Heal",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -2062,7 +2062,7 @@
     "name": "Hold Monster",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -2076,7 +2076,7 @@
     "name": "Hold Person",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -2087,7 +2087,7 @@
     "name": "Hold Portal",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "10 rounds",
@@ -2101,7 +2101,7 @@
     "name": "Holy Weapon",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Close",
     "duration": "5 rounds",
@@ -2137,7 +2137,7 @@
     "name": "Identify",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -2152,7 +2152,7 @@
     "name": "Illusion",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Far",
     "duration": "Focus",
@@ -2166,7 +2166,7 @@
     "name": "Inflict Wounds",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2183,7 +2183,7 @@
     "name": "Instill",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2209,7 +2209,7 @@
     "name": "Judgment",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Close",
     "duration": "5 rounds",
@@ -2234,7 +2234,7 @@
     "name": "Knock",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Instant",
@@ -2267,7 +2267,7 @@
     "name": "Lay to Rest",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -2300,7 +2300,7 @@
     "name": "Levitate",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "Focus",
@@ -2333,8 +2333,8 @@
     "name": "Light",
     "tier": 1,
     "castingAttribute": [
-      "Cleric",
-      "Magic-User"
+      "Priest",
+      "Wizard"
     ],
     "range": "Close",
     "duration": "1 hour real time",
@@ -2345,7 +2345,7 @@
     "name": "Lightning Bolt",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -2381,7 +2381,7 @@
     "name": "Locusts",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2424,7 +2424,7 @@
     "name": "Mage Armor",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "10 rounds",
@@ -2435,7 +2435,7 @@
     "name": "Magic Circle",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -2446,7 +2446,7 @@
     "name": "Magic Missile",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -2460,7 +2460,7 @@
     "name": "Magnetize",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2486,7 +2486,7 @@
     "name": "Mass Cure",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "spellType": "Healing",
     "range": "Near",
@@ -2499,7 +2499,7 @@
     "name": "Mazzim's Mesmerism",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2514,7 +2514,7 @@
     "name": "Meld",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -2529,7 +2529,7 @@
     "name": "Mirror Image",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "5 rounds",
@@ -2540,7 +2540,7 @@
     "name": "Mischief",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2569,7 +2569,7 @@
     "name": "Misty Step",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "Instant",
@@ -2627,7 +2627,7 @@
     "name": "Mycelium",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2642,7 +2642,7 @@
     "name": "Naming",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2712,7 +2712,7 @@
     "name": "Oxidize",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2727,7 +2727,7 @@
     "name": "Pacify",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -2753,7 +2753,7 @@
     "name": "Passwall",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Close",
     "duration": "5 rounds",
@@ -2764,7 +2764,7 @@
     "name": "Peace",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -2779,7 +2779,7 @@
     "name": "Permanence",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -2794,7 +2794,7 @@
     "name": "Phantoms",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -2809,7 +2809,7 @@
     "name": "Pillar of Salt",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -2834,8 +2834,8 @@
     "name": "Plane Shift",
     "tier": 5,
     "castingAttribute": [
-      "Cleric",
-      "Magic-User"
+      "Priest",
+      "Wizard"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -2907,7 +2907,7 @@
     "name": "Power Word Kill",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Instant",
@@ -2918,7 +2918,7 @@
     "name": "Prayer",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -2955,7 +2955,7 @@
     "name": "Prismatic Orb",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "spellType": "Damage",
     "range": "Far",
@@ -2969,7 +2969,7 @@
     "name": "Prophecy",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Self",
     "duration": "Instant",
@@ -2980,7 +2980,7 @@
     "name": "Protection from Energy",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Close",
     "duration": "Focus",
@@ -2991,8 +2991,8 @@
     "name": "Protection from Evil",
     "tier": 1,
     "castingAttribute": [
-      "Cleric",
-      "Magic-User"
+      "Priest",
+      "Wizard"
     ],
     "range": "Close",
     "duration": "Focus",
@@ -3017,8 +3017,8 @@
     "name": "Protection From Good",
     "tier": 1,
     "castingAttribute": [
-      "Cleric",
-      "Magic-User"
+      "Priest",
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3061,7 +3061,7 @@
     "name": "Push/Pull",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -3098,7 +3098,7 @@
     "name": "Rapture",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -3157,7 +3157,7 @@
     "name": "Rebuke Unholy",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "Instant",
@@ -3182,7 +3182,7 @@
     "name": "Regenerate",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "spellType": "Healing",
     "range": "Close",
@@ -3195,7 +3195,7 @@
     "name": "Regrowth",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3221,7 +3221,7 @@
     "name": "Rend",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3236,7 +3236,7 @@
     "name": "Resilient Sphere",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Close",
     "duration": "5 rounds",
@@ -3247,7 +3247,7 @@
     "name": "Restoration",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -3269,7 +3269,7 @@
     "name": "Reveal",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -3295,7 +3295,7 @@
     "name": "Revitalize",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -3332,7 +3332,7 @@
     "name": "Root",
     "tier": 5,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3405,7 +3405,7 @@
     "name": "Sending",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Unlimited",
     "duration": "Instant",
@@ -3416,7 +3416,7 @@
     "name": "Serpent",
     "tier": 3,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3486,7 +3486,7 @@
     "name": "Shield of Faith",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Self",
     "duration": "5 rounds",
@@ -3497,7 +3497,7 @@
     "name": "Silence",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Far",
     "duration": "Focus",
@@ -3508,7 +3508,7 @@
     "name": "Siphon",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3523,7 +3523,7 @@
     "name": "Sleep",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Instant",
@@ -3534,7 +3534,7 @@
     "name": "Smite",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "spellType": "Damage",
     "range": "Near",
@@ -3614,8 +3614,8 @@
     "name": "Speak with Dead",
     "tier": 3,
     "castingAttribute": [
-      "Cleric",
-      "Magic-User"
+      "Priest",
+      "Wizard"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -3637,7 +3637,7 @@
     "name": "Speak With Object",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -3688,7 +3688,7 @@
     "name": "Stasis",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -3703,7 +3703,7 @@
     "name": "Stoneskin",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "10 rounds",
@@ -3714,7 +3714,7 @@
     "name": "Subjugate",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3740,7 +3740,7 @@
     "name": "Summon Extraplanar",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "Focus",
@@ -3784,7 +3784,7 @@
     "name": "Summon Storm",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -3841,7 +3841,7 @@
     "name": "Telekinesis",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Far",
     "duration": "Focus",
@@ -3852,7 +3852,7 @@
     "name": "Teleport",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Close",
     "duration": "Instant",
@@ -3902,7 +3902,7 @@
     "name": "Thorn",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4048,7 +4048,7 @@
     "name": "Treeshape",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4063,7 +4063,7 @@
     "name": "Truespeech",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4078,7 +4078,7 @@
     "name": "Turn Undead",
     "tier": 1,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "Instant",
@@ -4143,7 +4143,7 @@
     "name": "Unhinge",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4158,7 +4158,7 @@
     "name": "Unlife",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4264,7 +4264,7 @@
     "name": "Wall of Force",
     "tier": 4,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Near",
     "duration": "5 rounds",
@@ -4275,7 +4275,7 @@
     "name": "Ward",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -4290,7 +4290,7 @@
     "name": "Web",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Far",
     "duration": "5 rounds",
@@ -4304,7 +4304,7 @@
     "name": "Wheel of Flames",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "prohibitedAlignments": [
       "Neutral",
@@ -4346,7 +4346,7 @@
     "name": "Whisperwind",
     "tier": 1,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4372,7 +4372,7 @@
     "name": "Wish",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "range": "Self",
     "duration": "Instant",
@@ -4453,7 +4453,7 @@
     "name": "Wrack",
     "tier": 2,
     "castingAttribute": [
-      "Magic-User"
+      "Wizard"
     ],
     "prohibitedAlignments": [
       "Lawful",
@@ -4468,7 +4468,7 @@
     "name": "Wrath",
     "tier": 4,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Self",
     "duration": "10 rounds",
@@ -4490,7 +4490,7 @@
     "name": "Zone of Truth",
     "tier": 2,
     "castingAttribute": [
-      "Cleric"
+      "Priest"
     ],
     "range": "Near",
     "duration": "Focus",

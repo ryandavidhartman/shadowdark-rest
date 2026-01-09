@@ -111,6 +111,7 @@ final case class CharacterRoute(server: CharacterServer) {
 
         setField("Hit Points", character.hitPoints.toString)
         setField("Armor Class", character.armorClass.toString)
+        setFieldFont(form, List("Hit Points", "Armor Class"), 14)
 
         val attacksText =
           if (character.attacks.nonEmpty) character.attacks.mkString("\n") else "None recorded"
@@ -185,6 +186,18 @@ final case class CharacterRoute(server: CharacterServer) {
     gearFields.foreach { name =>
       Option(form.getField(name)).foreach {
         case vt: PDVariableText => vt.setDefaultAppearance(appearance)
+        case _                  => ()
+      }
+    }
+  }
+
+  private def setFieldFont(form: PDAcroForm, names: List[String], size: Int): Unit = {
+    val appearance = s"/Helv $size Tf 0 g"
+    names.foreach { name =>
+      Option(form.getField(name)).foreach {
+        case vt: PDVariableText =>
+          vt.setDefaultAppearance(appearance)
+          vt.getWidgets.asScala.foreach(_.getCOSObject.setString(COSName.DA, appearance))
         case _                  => ()
       }
     }
