@@ -4,6 +4,7 @@
 - Standard sbt layout: app code in `src/main/scala`, tests in `src/test/scala`, shared configs/assets in `src/main/resources`.
 - Core models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, AC/HP, gear, talents/features/spells/languages), `CharacterClass` + supporting types (`ClassFeature`, `Talent`, `Spellcasting`, etc.), `Language`, `Spell`, `Item`, `Deity`, `LanguageEntry`.
 - Spells: `Spell` model in `src/main/scala/models/Spell.scala` (ObjectId, name, tier, castingAttribute: List[String], optional prohibitedAlignments: List[String], spellType/range/duration/dc, description, damage/healing details, scaling and opposed info). `Spell` has repo/server/route.
+- Spells data: `data/spells.json` is valid JSON, alphabetically sorted by `name`, and includes Western Reaches playtest spells.
 - Items: `Item` model in `src/main/scala/models/Item.scala` (ObjectId, name, itemType, description, cost, slots, magical flag, AC/defense bonuses, attack traits, versatile/dual-damage, loading flags, etc.). `Item` has repo/server/route and feeds random gear.
 - Deities: `Deity` model in `src/main/scala/models/Deity.scala` (ObjectId, name, alignment, description). `Deity` has repo/server/route and seeds random character deities by alignment.
 - Languages: `LanguageEntry` model in `src/main/scala/models/LanguageEntry.scala` (ObjectId, name, speakers, rarity). `LanguageEntry` has repo/server/route.
@@ -13,6 +14,7 @@
 - Deities seeding: `data/seed-deities.js` inserts deities from `data/deities.json`; run via `mongosh --file data/seed-deities.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
 - Languages seeding: `data/seed-languages.js` inserts languages from `data/languages.json`; run via `mongosh --file data/seed-languages.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
 - Spells seeding: `data/seed-spells.js` inserts spells from `data/spells.json`; run via `mongosh --file data/seed-spells.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
+  - Western Reaches source PDF is stored at `reference_data/Western Reaches Spells (Playtest).pdf` for reference when updating spell data.
 - Items data/seeding: `data/items.json`/`data/items-merged.json` hold merged SD2FG + BFRPG gear/weapon/armor sets (with slots, versatility, loading, defense bonuses, magic flag, zero-slot gear, deduped names). Seed via `data/seed-items.js` (`mongosh --file data/seed-items.js "$MONGO_URI"`).
 - Zero-level gear list: `src/main/resources/zero-level-gear.json` provides the 0-level gear table for the random character generator.
 

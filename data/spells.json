@@ -1,5 +1,35 @@
 [
   {
+    "name": "Abjure",
+    "tier": 5,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You and one creature you touch both die."
+  },
+  {
+    "name": "Absorb",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "You create an absorptive barrier of force around you. Halve all damage you take for the spell's duration (round down)."
+  },
+  {
     "name": "Acid Arrow",
     "tier": 2,
     "castingAttribute": [
@@ -23,6 +53,21 @@
     "duration": "1 day",
     "dc": 11,
     "description": "You touch one object, such as a door threshold, setting a magical alarm on it. If any creature you do not designate while casting the spell touches or crosses past the object, a magical bell sounds in your head."
+  },
+  {
+    "name": "Alchemy",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "One inanimate object of human size or less you touch turns into another material of equal or lesser value."
   },
   {
     "name": "Alter Self",
@@ -58,6 +103,32 @@
     "description": "Your voice carries the insight of ancient mystics, granting your allies in near distance advantage on all spellcasting, herbal, and elixir checks."
   },
   {
+    "name": "Anchor In Death",
+    "tier": 5,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Permanent",
+    "dc": 15,
+    "description": "One creature you touch of LV 10 or less becomes fixed to its location by a black thread that can only be cut by a silver or magic blade (this spell ends when it is severed).\nThe creature becomes comatose and immune to all harm while under the effects of this spell."
+  },
+  {
+    "name": "Anima",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Focus",
+    "dc": 13,
+    "description": "You animate the life force of one natural object you touch the size of a horse or less. The object becomes a loyal creature for the spell's duration using the below stats. Its level is equal to yours. The creature acts on your turn. You may use your action to command it, which it obeys. Otherwise, it does not act. AC 10 + LV, HP 4.5 x LV, ATK 2 bash +7 (1d12), MV near, S +4, D +0, C +0, I -4, W +0, Ch +0, AL N, LV *."
+  },
+  {
     "name": "Animal Totem",
     "tier": 3,
     "castingAttribute": [
@@ -72,7 +143,8 @@
     "name": "Animate Dead",
     "tier": 3,
     "castingAttribute": [
-      "Magic-User"
+      "Magic-User",
+      "Necromancer"
     ],
     "range": "Close",
     "duration": "1 day",
@@ -93,7 +165,9 @@
   {
     "name": "Arbor Vantage",
     "tier": 3,
-    "castingAttribute": [ "UNUSED"],
+    "castingAttribute": [
+      "UNUSED"
+    ],
     "range": "Near",
     "duration": "Focus",
     "dc": 13,
@@ -136,6 +210,17 @@
     "damageType": "piercing"
   },
   {
+    "name": "Ashes To Ashes",
+    "tier": 4,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 14,
+    "description": "A living creature you target begins crumbling into ash.\nYou can target a creature you can see of LV 5 or less.\nIf you successfully focus on this spell for 3 rounds in a row, the target dies and crumbles into a pile of ash."
+  },
+  {
     "name": "Augury",
     "tier": 2,
     "castingAttribute": [
@@ -148,6 +233,50 @@
     "description": "You interpret the meaning of supernatural portents and omens. Ask the GM one question about a specific course of action. The GM says whether the action will lead to \"weal\" or \"woe.\""
   },
   {
+    "name": "Balance",
+    "tier": 5,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "One creature you touch of LV 10 or less becomes partially or fully petrified in the exact manner of your choosing (for instance, one limb, both eyes, whole body).\nYou also become petrified in the exact same way."
+  },
+  {
+    "name": "Bane",
+    "tier": 2,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "One weapon you touch is empowered with necrotic energy. It deals an additional 1d6 damage against living creatures for the duration.",
+    "spellType": "Damage",
+    "damage": "1d6",
+    "damageType": "necrotic"
+  },
+  {
+    "name": "Banish",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "With a word of power, you send one extraplanar creature of LV 6 or less who hears you back to its dimension of origin."
+  },
+  {
     "name": "Barkhide",
     "tier": 1,
     "castingAttribute": [
@@ -157,6 +286,51 @@
     "duration": "5 rounds",
     "dc": 11,
     "description": "An animal or giant animal's skin you touch hardens like tree bark. For the spell's duration, the animal's armor class is increased by 2. Can also be cast on Beastmasters."
+  },
+  {
+    "name": "Barkskin",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "1 day",
+    "dc": 12,
+    "description": "Your skin hardens into tough tree bark. Your AC becomes 15 (18 on a critical spellcasting check) for the spell's duration. You take double damage from fire while you are under the spell's effects."
+  },
+  {
+    "name": "Bear Shape",
+    "tier": 4,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 14,
+    "description": "You and your gear transform into a bear of your choice for the spell's duration.\nYou assume the bear's STR, DEX, CON, HP, AC, speed, attacks, and physical characteristics, but retain your INT, WIS, and CHA.\nYou can cast spells in this form. If you go to 0 HP, you revert to your true shape at 0 HP."
+  },
+  {
+    "name": "Befriend",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "A tiny natural creature you touch regards you as a friend for the spell's duration. You may give the creature one command, which it tries to complete to the best of its ability and intelligence even after the spell ends. If the command would directly harm the creature, it abandons the task."
   },
   {
     "name": "Beguile",
@@ -171,6 +345,21 @@
     "opposed": 1,
     "opposedDc": 15,
     "opposedAbility": "wisdom"
+  },
+  {
+    "name": "Betrayal",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 13,
+    "description": "One creature of LV 7 or less you can see in range turns on its allies, regarding them as hostile enemies for the spell's duration."
   },
   {
     "name": "Bite of the Mantis",
@@ -209,6 +398,21 @@
     "description": "One creature you touch gains a luck token."
   },
   {
+    "name": "Blight",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "When you cast this spell, a close- sized patch of earth around you crumbles into lifeless ash.\nYou gain +1 to your spellcasting checks for the spell's duration."
+  },
+  {
     "name": "Blind",
     "tier": 2,
     "castingAttribute": [
@@ -229,6 +433,23 @@
     "duration": "10 rounds",
     "dc": 13,
     "description": "You form a life-preserving contract among willing allies in near range.\nIf any ally is reduced to 0 HP, that ally automatically drains 1 HP from all other allies who have at least 2 HP in near range.\nBlood Pact can only be cast once per day."
+  },
+  {
+    "name": "Blood Rite",
+    "tier": 3,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 13,
+    "description": "You enter a supernatural rage.\nFor the spell's duration, you have ADV on melee attacks, and your attacks deal +1d8 damage.\nYou must make a melee attack against the creature nearest to you on your turn, even if it's an ally. If you cannot, the spell ends.\nIf your deity is Ramlaat, cast this spell with ADV.",
+    "spellType": "Damage",
+    "damage": "1d8"
   },
   {
     "name": "Bloomquake",
@@ -332,6 +553,21 @@
     "duration": "Focus",
     "dc": 13,
     "description": "Your song stirs the dormant energy within the surrounding plants, prompting them to sprout and weave together into a bridge, stairway, or ramp, spanning a near-sized cube.\nAttempts to maintain this chant are made with advantage."
+  },
+  {
+    "name": "Breath",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 11,
+    "description": "You can hold your breath for the spell's duration."
   },
   {
     "name": "Broomstick",
@@ -475,6 +711,21 @@
     "opposedAbility": "con"
   },
   {
+    "name": "Cleanse",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "You expunge natural toxins from one creature you touch. End the effects of one poison currently affecting the target."
+  },
+  {
     "name": "Cleansing Weapon",
     "tier": 2,
     "castingAttribute": [
@@ -528,6 +779,17 @@
     "opposedAbility": "charisma"
   },
   {
+    "name": "Command Undead",
+    "tier": 2,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Far",
+    "duration": "Focus",
+    "dc": 12,
+    "description": "You issue a verbal command to one undead creature of LV 5 or less in range.\nThe command must be one word, such as \u201cstop.\u201d The target obeys the command for as long as you focus."
+  },
+  {
     "name": "Commune",
     "tier": 4,
     "castingAttribute": [
@@ -573,6 +835,36 @@
     "duration": "1 day",
     "dc": 15,
     "description": "You touch a fresh corpse to conjure a vengeful wraith to do your bidding. It acts on your turn. After 1 day it turns to dust.\nOnly one instance of this spell may be active at a time. A second casting while another instance exists immediately destroys the previous wraith, even if the spell fails. The wraith counts against the LV limit of other undead minions.\nA critical fail on casting this spell still conjures the wraith, but it turns against you. Do not roll on the mishap table."
+  },
+  {
+    "name": "Consecrate",
+    "tier": 2,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "A near-sized area around where you cast this spell becomes sanctified with a holy blessing.\nChaotic creatures of LV 4 or less cannot physically enter this area for the spell's duration.\nIf your deity is Saint Terragnis, cast this spell with ADV."
+  },
+  {
+    "name": "Contagion",
+    "tier": 4,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "Permanent",
+    "dc": 14,
+    "description": "A creature you touch is inflicted with a horrible wasting disease.\nChoose a stat. The target must pass a DC 15 CON check each day or lose 1d6 points from this stat. The target dies when the stat reaches 0."
   },
   {
     "name": "Control Water",
@@ -623,6 +915,21 @@
     "description": "You call upon the magic you share with your fellow witches. You regain the use of one tier 3 spell or lower that you can no longer cast for the day. After successfully casting this spell, you can't do so again until you complete a rest."
   },
   {
+    "name": "Covenant",
+    "tier": 3,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 13,
+    "description": "You become a beacon of cosmic order, banishing the forces of chaos and entropy.\nFor the spell's duration, you are immune to all spells and magical effects from chaotic sources.\nIf your deity is Madeera, cast this spell with ADV."
+  },
+  {
     "name": "Create Corpse",
     "tier": 2,
     "castingAttribute": [
@@ -648,7 +955,8 @@
     "name": "Create Undead",
     "tier": 5,
     "castingAttribute": [
-      "Magic-User"
+      "Magic-User",
+      "Necromancer"
     ],
     "range": "Close",
     "duration": "1 day",
@@ -680,6 +988,21 @@
     "duration": "Permanent",
     "dc": 14,
     "description": "A creature you touch is afflicted by one of the following curses:\n\nHideous boils and warts\nAll food tastes of ash\nVoice becomes shrill\nDisturbing nightmares\nAlways lose at gambling\nAn ally turns into an enemy\nFear of something ordinary"
+  },
+  {
+    "name": "Damnation",
+    "tier": 5,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "Choose one creature in range of LV 10 or less. You can only target the same creature with this spell one time.\nThe creature is cast into your god's domain. Unless the creature is a worthy follower of your god, it is trapped there to suffer eternal punishment.\nYou cannot cast this spell again until you complete penance."
   },
   {
     "name": "Dance of the Drum",
@@ -737,6 +1060,21 @@
     "description": "You utter a divine censure, deafening one creature you can see in range. The creature has disadvantage on tasks requiring listening."
   },
   {
+    "name": "Death Ward",
+    "tier": 5,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 15,
+    "description": "You touch a living creature, sealing its life force against death itself.\nThe target of this spell cannot go below 1 HP for the duration."
+  },
+  {
     "name": "Deathward Circle",
     "tier": 3,
     "castingAttribute": [
@@ -746,6 +1084,21 @@
     "duration": "Focus",
     "dc": 13,
     "description": "You conjure a circle of bones and necrotic energy out to near-sized cube centered on yourself. For the spell's duration, undead creatures LV 9 or less cannot attack or cast a hostile spell on anyone inside the circle.\nThe undead also can't possess, compel, or beguile anyone inside the circle."
+  },
+  {
+    "name": "Defile",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 13,
+    "description": "When you cast this spell, a near- sized circle of earth around you disintegrates into infertile ash.\nFor this spell's duration, treat all tier 1-3 spells you successfully cast as critical successes.\nYou cannot cast this spell while under its effects."
   },
   {
     "name": "Demonic Possession",
@@ -812,6 +1165,23 @@
     "damageType": "force"
   },
   {
+    "name": "Dismember",
+    "tier": 4,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 14,
+    "description": "One creature in range of LV 9 or less loses an arm or leg (roll randomly to determine which). It takes 1d8 damage each time this happens.\nThe target loses a new limb each round of the spell's duration. If it has no other limbs to lose, it is instead beheaded and dies.",
+    "spellType": "Damage",
+    "damage": "1d8"
+  },
+  {
     "name": "Dispel Magic",
     "tier": 3,
     "castingAttribute": [
@@ -870,6 +1240,21 @@
     "opposedAbility": "con"
   },
   {
+    "name": "Dominate",
+    "tier": 4,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 14,
+    "description": "You subjugate the will of one creature of LV 9 or less that you can see within range.\nThe creature cannot act except to follow your commands for the spell's duration.\nOn your turn, you can command the creature to take actions and move.\nThe creature acts and moves on its turn, following any instructions you gave it."
+  },
+  {
     "name": "Dominion",
     "tier": 5,
     "castingAttribute": [
@@ -879,6 +1264,19 @@
     "duration": "10 rounds",
     "dc": 15,
     "description": "Mighty beings come to your aid. The beings must have a combined total of 16 levels or less. Chaotic PCs summon demons/devils, and lawful or neutral PCs summon angels. The beings act of free will to aid you on your turn. After 10 rounds, they return to their realms. You cannot cast this spell again until you complete penance."
+  },
+  {
+    "name": "Drain Life",
+    "tier": 3,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "One living creature you touch takes 2d6 damage.\nYou regain HP equal to half the damage you dealt (round down).\nIf you target an undead creature with this spell, you take damage and it regains HP instead.",
+    "spellType": "Damage",
+    "damage": "2d6"
   },
   {
     "name": "Drainblade",
@@ -903,6 +1301,35 @@
     "description": "You and any willing creatures you choose within close range step into the dream of a sleeping creature you name that is on your same plane. You and anyone travelling with you can step out of the creature, appearing next to it as if having teleported there."
   },
   {
+    "name": "Dust To Dust",
+    "tier": 5,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You command the spirits of the dead to seek their final rest.\nAll undead creatures of LV 10 or less within range must make a DC 15 CHA check. On a failure, they are destroyed."
+  },
+  {
+    "name": "Earthquake",
+    "tier": 5,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "spellType": "Damage",
+    "range": "Double near",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "The earth shakes violently and splits open, swallowing creatures down to their doom. All creatures standing on the ground within double near of you take 4d6 damage. Each affected creature of LV 9 or less must pass a DEX check equal to the damage they took or else be swallowed by the earth, never to be seen again.",
+    "damage": "4d6",
+    "damageType": "blunt"
+  },
+  {
     "name": "Enfeeble",
     "tier": 5,
     "castingAttribute": [
@@ -925,6 +1352,21 @@
     "description": "An animal you touch grows into the giant version of itself.\nReplace its stat block with its giant version."
   },
   {
+    "name": "Envenom",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "You turn one cup or vial of potable liquid into a toxic poison. It still appears to be the original liquid in all ways.\nA living creature of LV 10 or less who drinks the liquid must pass a DC 15 CON check or go to 0 HP."
+  },
+  {
     "name": "Evoke Rage",
     "tier": 1,
     "castingAttribute": [
@@ -934,6 +1376,34 @@
     "duration": "1d4 rounds",
     "dc": 11,
     "description": "You call out the berserk rage locked inside someone. One willing humanoid you touch enters a berserk state. The target is immune to morale checks, has ADV on STR checks and melee attacks, and deals +1d4 damage for the spell's duration. If the target does not attack another creature on its turn, the spell ends."
+  },
+  {
+    "name": "Excoriate",
+    "tier": 4,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 14,
+    "description": "You burn the life force away from one living creature in range, dealing it 1d10 damage per round. Undead creatures are\nhealed by this spell instead.",
+    "spellType": "Damage",
+    "damage": "1d10"
+  },
+  {
+    "name": "Extract",
+    "tier": 2,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "A creature you touch is\ncompelled to tell you its secrets.\nOn its turn, the target tells you the secret it holds most dear that you do not already know.\nIf your deity is Shune the Vile, cast this spell with ADV."
   },
   {
     "name": "Eyebite",
@@ -975,6 +1445,21 @@
     "damageType": "psychic"
   },
   {
+    "name": "Feast",
+    "tier": 2,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "All food within near of you is blessed by Gede's bounty.\nCreatures who willingly join you in eating the food who are not friendly toward you become so for one day. This effect ends if you do anything to harm them.\nCreatures who are already friendly toward you regain 1d6 HP and may make an additional\ncheck to end any poisons or diseases affecting them.\nUneaten food loses the effects of this spell after the meal is over."
+  },
+  {
     "name": "Feather Fall",
     "tier": 1,
     "castingAttribute": [
@@ -984,6 +1469,43 @@
     "duration": "Instant",
     "dc": 11,
     "description": "You may make an attempt to cast this spell when you fall. Your rate of descent slows so that you land safely on your feet."
+  },
+  {
+    "name": "Feeblemind",
+    "tier": 5,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "1d8 days",
+    "dc": 15,
+    "description": "One creature of LV 10 or less within range has its INT and CHA reduced to 1 for the duration. It can't cast spells."
+  },
+  {
+    "name": "Fifth Gate",
+    "tier": 5,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You can target one dying creature in range.\nThe target gains 5 rounds on its death timer. It becomes conscious and may act normally while dying.\nIf the creature would take damage while under the effects of this spell, it instead loses a round on its death timer.\nIf the creature dies while under the effects of this spell, it may make a DC 18 CON check. On a success, it returns to life at 1 HP."
+  },
+  {
+    "name": "Final Toll",
+    "tier": 2,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "One undead you touch of LV 2 or less instantly crumbles to dust."
   },
   {
     "name": "Finger of Death",
@@ -1022,6 +1544,17 @@
     "description": "You animate a single skull as your familiar from a corpse or skull you touch. The skull is bathed in blue flames and gifted with levitation-based flight.\nIt projects light in a near distance, it can speak and understand, retrieve small items, perform a minor bite attack, and deliver messages.\nOn your turn you can move it a near distance. See NPC entry for stats. Only one instance of this spell may be active at a time."
   },
   {
+    "name": "First Gate",
+    "tier": 1,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "You can target a living creature of LV 2 or less or an undead creature of LV 4 or less.\nThe creature falls into a deep sleep. Being injured wakes it."
+  },
+  {
     "name": "Fixed Object",
     "tier": 2,
     "castingAttribute": [
@@ -1045,6 +1578,21 @@
     "description": "You call down a holy pillar of fire, immolating one creature you can see within range. The target takes 2d6 fire damage.",
     "damage": "2d6",
     "damageType": "fire"
+  },
+  {
+    "name": "Flare",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "1 round",
+    "dc": 11,
+    "description": "A flash of blinding, white light bursts from you. All enemies in range who see it are blinded for the spell's duration."
   },
   {
     "name": "Floating Disk",
@@ -1091,6 +1639,21 @@
     "description": "A thick cloud of fog blooms in a close area around you, making you hard to see. The cloud moves with you. Attacks against creatures in the cloud have disadvantage."
   },
   {
+    "name": "Forbid",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 13,
+    "description": "Creatures cannot teleport into, out of, or within an area of effect extending out to double near from you. This area of effect moves with you."
+  },
+  {
     "name": "Foresee Good",
     "tier": 2,
     "castingAttribute": [
@@ -1135,6 +1698,21 @@
     "description": "You call on the very essence of nature to bestow sentient life to up to 4 trees in a forest.\nThese trees become fully realized oak treants (see NPC entry) who will act friendly toward you and assist you with any task that does not involve the destruction of nature.\nThey return to their tree form when the spell ends."
   },
   {
+    "name": "Fortify",
+    "tier": 1,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "One creature you touch gains 1d6 temporary HP for the spell's duration.\nYou cannot target the same creature with this spell again until its effects end."
+  },
+  {
     "name": "Fossilize",
     "tier": 3,
     "castingAttribute": [
@@ -1144,6 +1722,17 @@
     "duration": "Permanent",
     "dc": 13,
     "description": "Your touch hardens the bones of an undead minion, granting it +2 AC and imposing half damage on all damage dealt to it.\nFossilized undead cannot be healed.\nThis spell has no effect on already fossilized undead."
+  },
+  {
+    "name": "Fourth Gate",
+    "tier": 4,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "10 rounds",
+    "dc": 14,
+    "description": "You transform a willing creature you touch of LV 10 or less into an undead creature of equal level or less for the spell's duration.\nAny gear the target carries melds into its new form. It can't cast spells while under the effects of this one.\nIn place of the above effect, you can permanently restore a shape-changed creature back to its original form."
   },
   {
     "name": "Freya's Omen",
@@ -1216,6 +1805,19 @@
     "duration": "Focus",
     "dc": 15,
     "description": "You and your equipment become incorporeal, allowing you to move in any direction, including up or down at half movement speed.\nYou can move through solid objects and cannot attack with or be struck by physical weapons. You may cast spells and spells can still affect you."
+  },
+  {
+    "name": "Ghoul Touch",
+    "tier": 2,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "You strike at the life force of a living creature, dealing it 1d6 damage. If the target is LV 4 or less, it becomes paralyzed for 1d4 rounds.",
+    "spellType": "Damage",
+    "damage": "1d6"
   },
   {
     "name": "Ghoulish Claws",
@@ -1307,6 +1909,21 @@
     "description": "A creature you touch becomes fragile. It takes double damage for the spell's duration."
   },
   {
+    "name": "Glyph",
+    "tier": 4,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "1 week",
+    "dc": 14,
+    "description": "You draw an arcane symbol on an object that imparts one of the following effects: Bind (a reader of LV 6 or less is paralyzed for 1 hour), Harm (the reader takes 3d6 damage), Message (the reader hears a brief mental message), or Teleportation Sigil (treat the object as a teleportation sigil per the teleport spell). The glyph disappears once activated."
+  },
+  {
     "name": "Grace of the Gazelle",
     "tier": 2,
     "castingAttribute": [
@@ -1355,6 +1972,36 @@
     "duration": "Focus",
     "dc": 13,
     "description": "One creature you target in near whose level is less than or equal to your own is overcome by visions of what might yet come to pass. For the spell's duration, the target cannot act on its turn unless it passes a Wisdom check equal to your last spellcasting check."
+  },
+  {
+    "name": "Halo",
+    "tier": 4,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 14,
+    "description": "A brilliant halo of golden light appears over your head.\nHostile spells that target you are DC 18 to cast for this spell's duration."
+  },
+  {
+    "name": "Harm",
+    "tier": 5,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "One creature you touch goes to 0 hit points.\nYou cannot cast this spell again until you complete penance."
   },
   {
     "name": "Heal",
@@ -1487,6 +2134,21 @@
     "opposedAbility": "charisma"
   },
   {
+    "name": "Identify",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Touch",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "You learn all the magical properties of one item you touch. You cannot cast this spell again until you complete a rest."
+  },
+  {
     "name": "Illusion",
     "tier": 3,
     "castingAttribute": [
@@ -1499,6 +2161,38 @@
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "wisdom"
+  },
+  {
+    "name": "Inflict Wounds",
+    "tier": 2,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "A vile word you utter drains the life from a creature in range.\nThe target takes 2d4 damage.\nPROTECTION",
+    "spellType": "Damage",
+    "damage": "2d4"
+  },
+  {
+    "name": "Instill",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "One weapon you wield is imbued with life force. It becomes a +1 weapon for the spell's duration. If the weapon is a staff, it deals d6 damage instead of d4."
   },
   {
     "name": "Invisibility",
@@ -1559,6 +2253,17 @@
     "description": "You instantly know the intention of a creature within range."
   },
   {
+    "name": "Lamentation",
+    "tier": 2,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 12,
+    "description": "You sing a haunting death dirge about one creature in range. The target must be of a level equal to or less than your own.\nThe target cannot act on its turn unless it passes a CHA check equal to your last spellcasting check."
+  },
+  {
     "name": "Lay to Rest",
     "tier": 3,
     "castingAttribute": [
@@ -1568,6 +2273,17 @@
     "duration": "Instant",
     "dc": 13,
     "description": "An undead creature you touch, whose level is equal to or less than yours, is instantly sent to its final afterlife, reducing it to grave dust."
+  },
+  {
+    "name": "Lay To Rest",
+    "tier": 3,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "You instantly send an undead creature you touch to its final afterlife, destroying it utterly.\nYou can target an undead creature of LV 9 or less."
   },
   {
     "name": "Leaves in the Breeze",
@@ -1662,6 +2378,24 @@
     "description": "You know the direction and range of the closest nonanimated corpse."
   },
   {
+    "name": "Locusts",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "spellType": "Damage",
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 13,
+    "description": "A disorienting cloud of angry, biting locusts fills an area around you out to near. The cloud moves with you as you move, and you are not affected by it. Creatures in the area of effect take 1d10 damage per round at the start of their turn. They must pass a CON check equal to your last spellcasting check or be unable to move on their turn.",
+    "damage": "1d10",
+    "damageType": "piercing"
+  },
+  {
     "name": "Loki's Trickery",
     "tier": 4,
     "castingAttribute": [
@@ -1723,6 +2457,21 @@
     "damageType": "force"
   },
   {
+    "name": "Magnetize",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "One object you touch up to the size of a horse becomes powerfully magnetized. It attracts all smaller magnetic objects within near. If it can move, it is pulled toward larger magnetic objects within near. A metal creature must pass a STR check equal to your spellcasting check to resist."
+  },
+  {
     "name": "Mass Breathe Water",
     "tier": 4,
     "castingAttribute": [
@@ -1747,6 +2496,36 @@
     "healing": "2d6"
   },
   {
+    "name": "Mazzim's Mesmerism",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 13,
+    "description": "You weave a mind-numbing miasma of dark magic around your targets.\nAt the start of their turn, all humanoid creatures of LV 5 or less in range must pass a CHA check vs. the last spellcasting check you made.\nCreatures who fail stand motionless and agape, staring at unseen images."
+  },
+  {
+    "name": "Meld",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "You merge slightly with the ethereal plane, freeing yourself from physical hindrances. You may ignore any effect that would impact your movement for the spell's duration."
+  },
+  {
     "name": "Mirror Image",
     "tier": 2,
     "castingAttribute": [
@@ -1756,6 +2535,21 @@
     "duration": "5 rounds",
     "dc": 12,
     "description": "You create a number of illusory duplicates of yourself equal to half your level rounded down (minimum 1). The duplicates surround you and mimic you. Each time a creature attacks you, the attack misses and causes one of the duplicates to evaporate. If all of the illusions have disappeared, the spell ends."
+  },
+  {
+    "name": "Mischief",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "You magically beguile one humanoid of level 2 or less within near range.\nThe target is overcome with a compulsion to commit harmful mischief for the spell's duration.\nEach round, it tries to commit a sneaky, cruel act that would hinder or inconvenience its nearest ally.\nThe spell ends if you or your allies do anything to hurt the target that it notices."
   },
   {
     "name": "Mistletoe",
@@ -1830,6 +2624,47 @@
     "description": "After a day of preparation and ceremony, you embalm a corpse as a mummy who acts on your turn. Mummies deteriorate when walking long distances, but can be carried in a casket or left to guard a location. This minion does not count against the LV limit of other raised undead minions."
   },
   {
+    "name": "Mycelium",
+    "tier": 4,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "Instant",
+    "dc": 14,
+    "description": "You connect your mind with the earth's vast fungi network. Ask the GM one question of up to 15 words. The GM answers truthfully using up to 15 words. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
+    "name": "Naming",
+    "tier": 5,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You learn the True Name of one creature you touch. If the creature is willing, you may give it a new True Name. A creature may only change its True Name once in its lifetime. If it does so, its alignment changes to your alignment."
+  },
+  {
+    "name": "Necronomicon",
+    "tier": 4,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Self",
+    "duration": "3 rounds",
+    "dc": 14,
+    "description": "You draw on your knowledge of the Book of the Dead to divine portents reflected in the dark waters of the River of Death.\nYou can ask the GM up to three yes or no questions (one each round). The GM truthfully answers \"yes\" or \"no\" to each.\nIf you cast this spell more than once a week, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
     "name": "Nightmare",
     "tier": 4,
     "castingAttribute": [
@@ -1874,6 +2709,36 @@
     "description": "For the spell's duration, add your level as an additional bonus to your Wisdom checks and spellcasting checks."
   },
   {
+    "name": "Oxidize",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "One inanimate object you touch the size of a door or less ages d100 years."
+  },
+  {
+    "name": "Pacify",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "Choose one creature within range of LV 3 or less. It must make a morale check (creatures immune to morale checks are not affected by this spell)."
+  },
+  {
     "name": "Pass Tree",
     "tier": 5,
     "castingAttribute": [
@@ -1894,6 +2759,51 @@
     "duration": "5 rounds",
     "dc": 14,
     "description": "A tunnel of your height opens in a barrier you touch and lasts for the duration. The passage can be up to near distance in length and must be in a straight line."
+  },
+  {
+    "name": "Peace",
+    "tier": 2,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "5 rounds",
+    "dc": 12,
+    "description": "You calm the anger and hostility of all creatures of LV 4 or less within near range.\nThese creatures will not attack you or your allies for the spell's duration. This spell ends if the creatures notice any attempts to harm them.\nWhen this spell ends, the creatures revert to their original dispositions."
+  },
+  {
+    "name": "Permanence",
+    "tier": 5,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "1 year",
+    "dc": 15,
+    "description": "Sprinkle a powdered diamond on the target to cast this spell. Choose one object in range that is currently under the effects of a spell you have cast. The duration of that spell becomes 1 year. You cannot alter the original spell's effects after casting permanence; for instance, you can no longer move an object under the effects of telekinesis."
+  },
+  {
+    "name": "Phantoms",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "You conjure a terrifying illusion that appears in the mind of one target of LV 3 or less in range.\nThe target must immediately make a morale check.\n62\nPROTECTION"
   },
   {
     "name": "Pillar of Salt",
@@ -2005,6 +2915,21 @@
     "description": "You utter the Word of Doom. One creature you target of LV 9 or less dies if it hears you. Treat a failed spellcasting check for this spell as a critical failure, and roll the mishap with disadvantage."
   },
   {
+    "name": "Prayer",
+    "tier": 1,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "You say a prayer over one creature, granting it resolve.\nThe next time the target fails an attack roll during this spell's duration, it succeeds instead and this spell ends.\nYou cannot target the same creature with this spell again\nuntil its effects end."
+  },
+  {
     "name": "Prevent Decay",
     "tier": 2,
     "castingAttribute": [
@@ -2078,6 +3003,33 @@
     "opposedAbility": "charisma"
   },
   {
+    "name": "Protection From Evil",
+    "tier": 1,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Focus",
+    "dc": 11,
+    "description": "For the spell's duration, chaotic beings have disadvantage on attack rolls and hostile spellcasting checks against the target. These beings also can't possess, compel, or beguile it.\nWhen cast on an already-possessed target, the possessing entity makes a CHA check vs. the last spellcasting check. On a failure, the entity is expelled."
+  },
+  {
+    "name": "Protection From Good",
+    "tier": 1,
+    "castingAttribute": [
+      "Cleric",
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "Focus",
+    "dc": 11,
+    "description": "For the spell's duration, lawful beings have disadvantage on attack rolls and hostile spellcasting checks against the target. These beings also can't possess, compel, or beguile it.\nWhen cast on an already-possessed target, the possessing entity makes a CHA check vs. the last spellcasting check. On a failure, the entity is expelled."
+  },
+  {
     "name": "Protection from Undead",
     "tier": 1,
     "castingAttribute": [
@@ -2106,6 +3058,21 @@
     "opposedAbility": "charisma"
   },
   {
+    "name": "Push/Pull",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "You move one human-sized object or a creature of LV 4 or less a near distance. If the target is anchored in a way that prevents free movement, the DC to cast this spell is 18."
+  },
+  {
     "name": "Ragnarok",
     "tier": 5,
     "castingAttribute": [
@@ -2128,6 +3095,21 @@
     "description": "You utter an incantation and all corpses within a near range rise as zombies or skeletons under your control, their condition dictating which form they take.\nThey maintain the shape, HP and LV they had in life, but lose all of their abilities. They gain the attacks, stats, and abilities of skeletons or zombies.\nThey act on your turn, then collapse to dust after 1 day.\nThe combined LV of controlled undead cannot exceed yours.\nRecasting adds to or replaces previous undead minions with new ones until the LV limit is reached. (See pg. 41 for more information.)\nA critical fail causes all undead minions under your control to collapse into grave dust including undead gained from other spells or the Claim Undead ability. Do not roll on the mishap table."
   },
   {
+    "name": "Rapture",
+    "tier": 5,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Far",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "The searing light of Law itself blazes out from you, washing over everything in sight.\nAll other creatures of LV 15 or less in range must pass a DC 15 CHA check or be permanently rendered mute and blind.\nYou cannot cast this spell again until you complete penance."
+  },
+  {
     "name": "Raven",
     "tier": 3,
     "castingAttribute": [
@@ -2148,6 +3130,28 @@
     "duration": "Instant",
     "dc": 12,
     "description": "You ask the gods a question and cast the runestones, interpreting the meaning of the results. Ask the Game Master one yes or no question. The Game Master truthfully answers \"yes\" or \"no.\""
+  },
+  {
+    "name": "Read The Runes",
+    "tier": 2,
+    "castingAttribute": [
+      "Seer"
+    ],
+    "range": "Self",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "You ask the gods a question and cast the runestones, interpreting the meaning of the results.\nAsk the Game Master one yes or no question. The Game Master truthfully answers \"yes\" or \"no.\""
+  },
+  {
+    "name": "Reap The Soul",
+    "tier": 3,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "You draw life force from one creature in range that was killed within the last round.\nYou gain HP and a bonus to your next attack roll or spellcasting check equal to the target's level."
   },
   {
     "name": "Rebuke Unholy",
@@ -2188,6 +3192,21 @@
     "healing": "1d4"
   },
   {
+    "name": "Regrowth",
+    "tier": 2,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "One creature you touch regains 1d6 HP or a severed limb of your choice."
+  },
+  {
     "name": "Remove Curse",
     "tier": 4,
     "castingAttribute": [
@@ -2197,6 +3216,21 @@
     "duration": "Instant",
     "dc": 14,
     "description": "With the touch of your hands, you expunge one curse of your choice affecting the target."
+  },
+  {
+    "name": "Rend",
+    "tier": 3,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 13,
+    "description": "You become a conduit of pure chaos, shredding all organized magic around you.\nFor the spell's duration, you are immune to all spells and magical effects from lawful sources.\nIf your deity is Memnon, cast this spell with ADV."
   },
   {
     "name": "Resilient Sphere",
@@ -2232,6 +3266,58 @@
     "description": "You bring a natural animal you touch back to life from the dead.\nThe animal must have been dead for no more than the number of days equal to half your level rounded up."
   },
   {
+    "name": "Reveal",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "End all invisibility effects out to a near distance from you. You also become aware of the location of any hiding creatures within range."
+  },
+  {
+    "name": "Revenant",
+    "tier": 4,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 14,
+    "description": "You bolster an undead creature, infusing it with potent energy.\nTransform an undead creature you touch into another undead creature that is up to two levels higher.\nYou can't bring an undead creature above 10th level with this spell."
+  },
+  {
+    "name": "Revitalize",
+    "tier": 3,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "One creature you touch surges with healing energy.\nRoll a number of d10s equal to 1 + half your level (rounded down).\nThe target regains that many hit points."
+  },
+  {
+    "name": "Riverwalk",
+    "tier": 5,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Far",
+    "duration": "Instant",
+    "dc": 15,
+    "description": "You can only cast this spell while standing in a river.\nYou briefly step into the River of Death, sliding between space and time itself.\nYou and any willing creatures you choose within close range teleport to another river you've stood in on your same plane."
+  },
+  {
     "name": "Rock to Mud",
     "tier": 5,
     "castingAttribute": [
@@ -2241,6 +3327,21 @@
     "duration": "Instant",
     "dc": 15,
     "description": "With your touch, you transmute up to a near-cube area of contiguous rock into mud."
+  },
+  {
+    "name": "Root",
+    "tier": 5,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Focus",
+    "dc": 15,
+    "description": "One creature you touch is immune to damage for the spell's duration.\nYou cannot cast this spell again until you complete penance."
   },
   {
     "name": "Sacred Bounty",
@@ -2279,6 +3380,28 @@
     "opposedAbility": "wisdom"
   },
   {
+    "name": "Seal Soul",
+    "tier": 1,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Permanent",
+    "dc": 11,
+    "description": "One dead body you touch becomes sealed against necromantic energy.\nThis body cannot be used to create an undead creature or be possessed by a dead spirit."
+  },
+  {
+    "name": "Second Gate",
+    "tier": 2,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 12,
+    "description": "You render one creature in range mute for the spell's duration. It cannot speak and has DISADV on spellcasting checks.\nIn place of the above effect, you can restore the lost speech and/or thought of one creature in range for the spell's duration."
+  },
+  {
     "name": "Sending",
     "tier": 3,
     "castingAttribute": [
@@ -2288,6 +3411,21 @@
     "duration": "Instant",
     "dc": 13,
     "description": "You send a brief, mental message to any creature with whom you are familiar who is on the same plane."
+  },
+  {
+    "name": "Serpent",
+    "tier": 3,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 13,
+    "description": "An ordinary stick you touch turns into a loyal cobra.\nThe cobra acts on your turn and follows simple instructions you give it, such as \"attack\" or \"wait.\"\nWhen the spell ends, the cobra slithers away."
   },
   {
     "name": "Shadowdance",
@@ -2301,17 +3439,6 @@
     "description": "You spin shadowstuff into a convincing visible and audible illusion at a point within near. The illusion can be as big as a person and can move within a near range of where it appeared. The illusion can't affect physical objects. Touching the illusion reveals its false nature."
   },
   {
-    "name": "Shamanic Purge",
-    "tier": 1,
-    "castingAttribute": [
-      "UNUSED"
-    ],
-    "range": "Near",
-    "duration": "Focus",
-    "dc": 11,
-    "description": "You compel your allies within a near range from you to undergo a violent upheaval, expelling possessing spirits, compulsions, or beguilements."
-  },
-  {
     "name": "Shaman's Shield",
     "tier": 5,
     "castingAttribute": [
@@ -2321,6 +3448,17 @@
     "duration": "Focus",
     "dc": 15,
     "description": "Harnessing the power of ancestral shamans, you conjure a shield of protection against hostile magic out to a near-sized cube centered on yourself. Such magic cannot affect or harm you or your allies inside the shield."
+  },
+  {
+    "name": "Shamanic Purge",
+    "tier": 1,
+    "castingAttribute": [
+      "UNUSED"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 11,
+    "description": "You compel your allies within a near range from you to undergo a violent upheaval, expelling possessing spirits, compulsions, or beguilements."
   },
   {
     "name": "Shapechange",
@@ -2365,6 +3503,21 @@
     "duration": "Focus",
     "dc": 12,
     "description": "You magically mute sound in a near cube within the spell's range. Creatures inside the area are deafened, and any sounds they create cannot be heard."
+  },
+  {
+    "name": "Siphon",
+    "tier": 4,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Far",
+    "duration": "Focus",
+    "dc": 14,
+    "description": "You suppress the magical effects on one creature or from one object in range for the spell's duration.\nYou also suppress the effects of all spells cast on the target except this spell for its duration.\nYou have ADV on the next spell you cast after this one ends.\nIf your deity is Ord, cast this spel with ADV."
   },
   {
     "name": "Sleep",
@@ -2470,6 +3623,32 @@
     "description": "A dead body you touch answers your questions in a distant, wheezing voice. You can ask the dead body up to three yes or no questions (one at a time). The GM truthfully answers \"yes\" or \"no\" to each. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
   },
   {
+    "name": "Speak With Dead",
+    "tier": 3,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "A dead body you touch answers your questions in a distant, wheezing voice.\nYou can ask the dead body up to three yes or no questions (one at a time). The GM truthfully answers \"yes\" or \"no\" to each.\nIf you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
+    "name": "Speak With Object",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "An object you touch mentally answers your questions. The object's wit matches the rarity of its primary materials. You can ask the object up to three yes or no questions (one at a time). If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
     "name": "Spectral Drain",
     "tier": 4,
     "castingAttribute": [
@@ -2506,6 +3685,21 @@
     "description": "Sticky spidersilk covers your hands and feet. For the spell's duration, you can walk on vertical surfaces as easily as if it were flat ground."
   },
   {
+    "name": "Stasis",
+    "tier": 4,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Indefinite",
+    "dc": 14,
+    "description": "A willing creature you touch becomes suspended in time. If the target is unwilling, it must be of LV 5 or less. The target becomes unconscious and does not age; its bodily functions cease, though it remains alive. You may end the spell at any time or when a predefined condition you chose while casting the spell is met."
+  },
+  {
     "name": "Stoneskin",
     "tier": 4,
     "castingAttribute": [
@@ -2515,6 +3709,21 @@
     "duration": "10 rounds",
     "dc": 14,
     "description": "Your skin becomes like granite. For the spell's duration, your armor class becomes 17 (20 on a critical spellcasting check). [Replace the X values in the effects with the correct amounts for success result and critical success result.]"
+  },
+  {
+    "name": "Subjugate",
+    "tier": 5,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "1 year",
+    "dc": 15,
+    "description": "In order to cast this spell, you must sprinkle a powdered diamond on the target.\nChoose one creature in range that is currently under the effects of a dominate, feeblemind, or polymorph spell you have cast. The duration of\nthat spell becomes 1 year."
   },
   {
     "name": "Summon Animal",
@@ -2559,6 +3768,32 @@
     "duration": "5 rounds",
     "dc": 14,
     "description": "You summon forth a mummy from its hidden crypt who will act on your turn and do your bidding. After 5 rounds, it melts away into smoke.\nA critical fail on casting this spell still summons the mummy, but it turns against you during its 5 round lifespan. Do not roll on the mishap table."
+  },
+  {
+    "name": "Summon Soul",
+    "tier": 5,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "10 rounds",
+    "dc": 15,
+    "description": "An undead being comes to your aid. You must know the being's name in order to summon it.\nThe being appears within near of you. It acts of free will to aid you on your turn, treating you as an ally for the spell's duration.\nIf you harm the being, the spell ends. After 10 rounds, the being departs.\nYou cannot cast this spell again to summon the same being for a year's time."
+  },
+  {
+    "name": "Summon Storm",
+    "tier": 4,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "1 mile",
+    "duration": "10 rounds",
+    "dc": 14,
+    "description": "You summon a violent storm that affects an area around you out to one mile for the duration. The storm brings darkened skies, severe wind, and driving rain. For the duration of the spell, you can cast control water even if you do not know the spell. For the duration of the spell, you can cast lightning bolt even if you do not know the spell."
   },
   {
     "name": "Summon Wraith",
@@ -2639,6 +3874,17 @@
     "damageType": "blunt"
   },
   {
+    "name": "Third Gate",
+    "tier": 3,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 13,
+    "description": "You read the mind of a creature within range, learning one of its memories of your choosing.\nIn place of the above effect, you can permanently erase one memory of a creature within range."
+  },
+  {
     "name": "Thor's Thunder",
     "tier": 4,
     "castingAttribute": [
@@ -2651,6 +3897,23 @@
     "description": "Thor casts down a bolt of lightning to strike one target. The target takes 3d6 lightning damage.",
     "damage": "3d6",
     "damageType": "lightning"
+  },
+  {
+    "name": "Thorn",
+    "tier": 1,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "A weapon or suit of armor you touch sprouts dense thorns.\nWeapons become magical and deal +1d4 damage for the spell's duration.\nArmor becomes magical and deals 1d4 damage to anyone who touches its wearer for the spell's duration.\nIf your deity is Gede, cast this spell with ADV.",
+    "spellType": "Damage",
+    "damage": "1d4"
   },
   {
     "name": "Thrall Offering",
@@ -2782,6 +4045,36 @@
     "description": "After 2 rounds of concentration, a portal appears on a tree you touch. Stepping inside seals the portal, transporting you to a secure chamber within the tree.\nWhile inside, you are aware of, but protected from, external influences. You are expelled from the chamber if the tree is destroyed.\nYou may complete a rest while safely in this chamber. Once your rest is complete, you reemerge from the tree.\nNo one else can pass through the tree portal."
   },
   {
+    "name": "Treeshape",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 13,
+    "description": "You and your gear turn into a treant with the below stats for the spell's duration. You do not have the treant's Animate Tree talent. You cannot cast spells while under the effect of this spell. You retain your INT, WIS, and CHA stats. AC 14, HP 38, ATK 2 slam +8 (1d12) or 1 rock (far) +8 (2d6), MV near, S +4, D -1, C +2, I *, W *, Ch *, AL N, LV 8."
+  },
+  {
+    "name": "Truespeech",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Close",
+    "duration": "Instant",
+    "dc": 12,
+    "description": "A natural creature you touch understands and can communicate with you in the true language of all animals. You can ask the creature one yes or no question. If you cast this spell more than once on the same creature in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
+  },
+  {
     "name": "Turn Undead",
     "tier": 1,
     "castingAttribute": [
@@ -2794,6 +4087,17 @@
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "charisma"
+  },
+  {
+    "name": "Undeath",
+    "tier": 1,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Close",
+    "duration": "5 rounds",
+    "dc": 11,
+    "description": "You touch one humanoid's remains, and it rises as a zombie or skeleton under your control. The remains must have at least three limbs and its head intact.\nThe creature acts on your turn.\nYou can only create one undead creature with this spell at a time. When the spell ends, the corpse collapses into grave dust."
   },
   {
     "name": "Undeath Blessing",
@@ -2834,6 +4138,36 @@
     "duration": "Permanent",
     "dc": 15,
     "description": "You imbue a landmark with profane magic, permanently turning it into a necromantic beacon of undeath.\nAll the land within 6 miles of the beacon is cursed. Any burial grounds in the area are immediately overrun with the rising of the dead in the form of zombies or skeletons.\nThese undead are not under your control, but will savagely attack anyone they find.\nAnyone who dies in this cursed area immediately rises again as a zombie."
+  },
+  {
+    "name": "Unhinge",
+    "tier": 4,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Near",
+    "duration": "Focus",
+    "dc": 14,
+    "description": "One creature in range of LV 5 or less descends into total madness.\nIt spends its turn raving and stalking around uselessly.\nIf you successfully focus on this spell for 3 rounds in a row, the madness becomes permanent.\nIf your deity is The Lost, cast this spell with ADV."
+  },
+  {
+    "name": "Unlife",
+    "tier": 3,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Close",
+    "duration": "1 day",
+    "dc": 13,
+    "description": "A humanoid skull you touch regains a semblance of its former life, animating with red witchlight in its eyes.\nThe skull can converse in Common. It retains its personality and memories from life, but its recall can be spotty if it's been dead a long time.\nWhen the spell ends, the skull crumbles into grave dust."
   },
   {
     "name": "Valkyrie",
@@ -2878,6 +4212,17 @@
     "duration": "Focus",
     "dc": 12,
     "description": "The teeth on an animal you touch elongates and sharpens.\nThe animal gains an extra die of damage on any bite attack.\nThis spell can be applied to Beastmasters."
+  },
+  {
+    "name": "Vision",
+    "tier": 4,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Self",
+    "duration": "5 rounds",
+    "dc": 14,
+    "description": "You can only cast this spell while standing in a river.\nThe waters around you become the River of Death itself, and visions dance on its surface.\nFor the spell's duration, you can see and hear a creature or location you choose.\nTreat a failed spellcasting check for this spell as a critical failure."
   },
   {
     "name": "Voice of Verity",
@@ -2927,6 +4272,21 @@
     "description": "You lift your hands, conjuring a transparent wall of force. The thin wall must be contiguous and can cover a near-sized area in width and length. You choose its shape. Nothing on the same plane can physically pass through the wall."
   },
   {
+    "name": "Ward",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Self",
+    "duration": "10 rounds",
+    "dc": 11,
+    "description": "You ward yourself with a magical charm against ambush. For the spell's duration, you can't be surprised."
+  },
+  {
     "name": "Web",
     "tier": 2,
     "castingAttribute": [
@@ -2939,6 +4299,23 @@
     "opposed": 1,
     "opposedDc": 0,
     "opposedAbility": "strength"
+  },
+  {
+    "name": "Wheel of Flames",
+    "tier": 4,
+    "castingAttribute": [
+      "Cleric"
+    ],
+    "prohibitedAlignments": [
+      "Neutral",
+      "Chaotic"
+    ],
+    "range": "Near",
+    "duration": "Instant",
+    "dc": 14,
+    "description": "You summon a blazing wheel of flames and eyes that envelops one creature in holy energy.\nThe target takes 3d6 damage.\nIf the target is a demon or devil, it must pass a DC 15 CHA check or be paralyzed for 3 rounds.",
+    "spellType": "Damage",
+    "damage": "3d6"
   },
   {
     "name": "Whip of Fire Ants",
@@ -2964,6 +4341,21 @@
     "duration": "Instant",
     "dc": 13,
     "description": "You whisper into another creature's ear, planting a false memory in its mind. You describe one brief, false memory that the target believes is true going forward. If you fail this spellcasting check, the GM chooses a short, false memory to plant in your mind, instead."
+  },
+  {
+    "name": "Whisperwind",
+    "tier": 1,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Chaotic"
+    ],
+    "range": "Far",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "You send a brief, whispered message that reaches any creature in range."
   },
   {
     "name": "Willowman",
@@ -3010,6 +4402,21 @@
     "description": "You lift your hands, and all plants within near range quickly wither and die. This also dispels any spells that enhance or conjure plants.\nPlant creatures like Assassin Vines, Venus Flytraps, or Treants take 3d6 damage."
   },
   {
+    "name": "Withermark",
+    "tier": 1,
+    "castingAttribute": [
+      "Necromancer"
+    ],
+    "range": "Far",
+    "duration": "Instant",
+    "dc": 11,
+    "description": "You fling a dark rune of necrotic energy at a target in range.\nThe target takes 1d4 damage. This damage increases to 2d4 when you reach 5th level.\nUndead creatures are unharmed by this spell.",
+    "spellType": "Damage",
+    "damage": "1d4",
+    "damageType": "necrotic",
+    "levelScaling": "Damage increases to 2d4 at 5th level."
+  },
+  {
     "name": "Wolfshape",
     "tier": 3,
     "castingAttribute": [
@@ -3043,6 +4450,21 @@
     "description": "The roots of the life-giving World Tree wrap around the soul of a creature you touch. For the spell's duration, the target can't be brought below 1 HP."
   },
   {
+    "name": "Wrack",
+    "tier": 2,
+    "castingAttribute": [
+      "Magic-User"
+    ],
+    "prohibitedAlignments": [
+      "Lawful",
+      "Neutral"
+    ],
+    "range": "Far",
+    "duration": "Focus",
+    "dc": 12,
+    "description": "A creature you can see within range of LV 5 or less is overcome by agonizing pain.\nThe target must pass a CON check on its turn equal to your last spellcasting check or it cannot move or act."
+  },
+  {
     "name": "Wrath",
     "tier": 4,
     "castingAttribute": [
@@ -3074,491 +4496,5 @@
     "duration": "Focus",
     "dc": 12,
     "description": "You compel a creature you can see to speak truth. It can't utter a deliberate lie while within range."
-  },
-  {
-    "name": "Breath",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "10 rounds",
-    "dc": 11,
-    "description": "You can hold your breath for the spell's duration."
-  },
-  {
-    "name": "Instill",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "5 rounds",
-    "dc": 11,
-    "description": "One weapon you wield is imbued with life force. It becomes a +1 weapon for the spell's duration. If the weapon is a staff, it deals d6 damage instead of d4."
-  },
-  {
-    "name": "Oxidize",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 11,
-    "description": "One inanimate object you touch the size of a door or less ages d100 years."
-  },
-  {
-    "name": "Whisperwind",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Far",
-    "duration": "Instant",
-    "dc": 11,
-    "description": "You send a brief, whispered message that reaches any creature in range."
-  },
-  {
-    "name": "Barkskin",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "1 day",
-    "dc": 12,
-    "description": "Your skin hardens into tough tree bark. Your AC becomes 15 (18 on a critical spellcasting check) for the spell's duration. You take double damage from fire while you are under the spell's effects."
-  },
-  {
-    "name": "Befriend",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "5 rounds",
-    "dc": 12,
-    "description": "A tiny natural creature you touch regards you as a friend for the spell's duration. You may give the creature one command, which it tries to complete to the best of its ability and intelligence even after the spell ends. If the command would directly harm the creature, it abandons the task."
-  },
-  {
-    "name": "Magnetize",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "5 rounds",
-    "dc": 12,
-    "description": "One object you touch up to the size of a horse becomes powerfully magnetized. It attracts all smaller magnetic objects within near. If it can move, it is pulled toward larger magnetic objects within near. A metal creature must pass a STR check equal to your spellcasting check to resist."
-  },
-  {
-    "name": "Truespeech",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 12,
-    "description": "A natural creature you touch understands and can communicate with you in the true language of all animals. You can ask the creature one yes or no question. If you cast this spell more than once on the same creature in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
-  },
-  {
-    "name": "Alchemy",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 13,
-    "description": "One inanimate object of human size or less you touch turns into another material of equal or lesser value."
-  },
-  {
-    "name": "Anima",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Focus",
-    "dc": 13,
-    "description": "You animate the life force of one natural object you touch the size of a horse or less. The object becomes a loyal creature for the spell's duration using the below stats. Its level is equal to yours. The creature acts on your turn. You may use your action to command it, which it obeys. Otherwise, it does not act. AC 10 + LV, HP 4.5 x LV, ATK 2 bash +7 (1d12), MV near, S +4, D +0, C +0, I -4, W +0, Ch +0, AL N, LV *."
-  },
-  {
-    "name": "Locusts",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "spellType": "Damage",
-    "range": "Near",
-    "duration": "Focus",
-    "dc": 13,
-    "description": "A disorienting cloud of angry, biting locusts fills an area around you out to near. The cloud moves with you as you move, and you are not affected by it. Creatures in the area of effect take 1d10 damage per round at the start of their turn. They must pass a CON check equal to your last spellcasting check or be unable to move on their turn.",
-    "damage": "1d10",
-    "damageType": "piercing"
-  },
-  {
-    "name": "Treeshape",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "10 rounds",
-    "dc": 13,
-    "description": "You and your gear turn into a treant with the below stats for the spell's duration. You do not have the treant's Animate Tree talent. You cannot cast spells while under the effect of this spell. You retain your INT, WIS, and CHA stats. AC 14, HP 38, ATK 2 slam +8 (1d12) or 1 rock (far) +8 (2d6), MV near, S +4, D -1, C +2, I *, W *, Ch *, AL N, LV 8."
-  },
-  {
-    "name": "Mycelium",
-    "tier": 4,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "Instant",
-    "dc": 14,
-    "description": "You connect your mind with the earth's vast fungi network. Ask the GM one question of up to 15 words. The GM answers truthfully using up to 15 words. If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
-  },
-  {
-    "name": "Summon Storm",
-    "tier": 4,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "1 mile",
-    "duration": "10 rounds",
-    "dc": 14,
-    "description": "You summon a violent storm that affects an area around you out to one mile for the duration. The storm brings darkened skies, severe wind, and driving rain. For the duration of the spell, you can cast control water even if you do not know the spell. For the duration of the spell, you can cast lightning bolt even if you do not know the spell."
-  },
-  {
-    "name": "Earthquake",
-    "tier": 5,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "spellType": "Damage",
-    "range": "Double near",
-    "duration": "Instant",
-    "dc": 15,
-    "description": "The earth shakes violently and splits open, swallowing creatures down to their doom. All creatures standing on the ground within double near of you take 4d6 damage. Each affected creature of LV 9 or less must pass a DEX check equal to the damage they took or else be swallowed by the earth, never to be seen again.",
-    "damage": "4d6",
-    "damageType": "blunt"
-  },
-  {
-    "name": "Naming",
-    "tier": 5,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Lawful",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 15,
-    "description": "You learn the True Name of one creature you touch. If the creature is willing, you may give it a new True Name. A creature may only change its True Name once in its lifetime. If it does so, its alignment changes to your alignment."
-  },
-  {
-    "name": "Cleanse",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 11,
-    "description": "You expunge natural toxins from one creature you touch. End the effects of one poison currently affecting the target."
-  },
-  {
-    "name": "Flare",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Near",
-    "duration": "1 round",
-    "dc": 11,
-    "description": "A flash of blinding, white light bursts from you. All enemies in range who see it are blinded for the spell's duration."
-  },
-  {
-    "name": "Reveal",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Near",
-    "duration": "Instant",
-    "dc": 11,
-    "description": "End all invisibility effects out to a near distance from you. You also become aware of the location of any hiding creatures within range."
-  },
-  {
-    "name": "Ward",
-    "tier": 1,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "10 rounds",
-    "dc": 11,
-    "description": "You ward yourself with a magical charm against ambush. For the spell's duration, you can't be surprised."
-  },
-  {
-    "name": "Absorb",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "5 rounds",
-    "dc": 12,
-    "description": "You create an absorptive barrier of force around you. Halve all damage you take for the spell's duration (round down)."
-  },
-  {
-    "name": "Meld",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "5 rounds",
-    "dc": 12,
-    "description": "You merge slightly with the ethereal plane, freeing yourself from physical hindrances. You may ignore any effect that would impact your movement for the spell's duration."
-  },
-  {
-    "name": "Pacify",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Near",
-    "duration": "Instant",
-    "dc": 12,
-    "description": "Choose one creature within range of LV 3 or less. It must make a morale check (creatures immune to morale checks are not affected by this spell)."
-  },
-  {
-    "name": "Push/Pull",
-    "tier": 2,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Near",
-    "duration": "Instant",
-    "dc": 12,
-    "description": "You move one human-sized object or a creature of LV 4 or less a near distance. If the target is anchored in a way that prevents free movement, the DC to cast this spell is 18."
-  },
-  {
-    "name": "Banish",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Near",
-    "duration": "Instant",
-    "dc": 13,
-    "description": "With a word of power, you send one extraplanar creature of LV 6 or less who hears you back to its dimension of origin."
-  },
-  {
-    "name": "Forbid",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Self",
-    "duration": "10 rounds",
-    "dc": 13,
-    "description": "Creatures cannot teleport into, out of, or within an area of effect extending out to double near from you. This area of effect moves with you."
-  },
-  {
-    "name": "Identify",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Touch",
-    "duration": "Instant",
-    "dc": 13,
-    "description": "You learn all the magical properties of one item you touch. You cannot cast this spell again until you complete a rest."
-  },
-  {
-    "name": "Speak With Object",
-    "tier": 3,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 13,
-    "description": "An object you touch mentally answers your questions. The object's wit matches the rarity of its primary materials. You can ask the object up to three yes or no questions (one at a time). If you cast this spell more than once in 24 hours, treat a failed spellcasting check for it as a critical failure instead."
-  },
-  {
-    "name": "Glyph",
-    "tier": 4,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "1 week",
-    "dc": 14,
-    "description": "You draw an arcane symbol on an object that imparts one of the following effects: Bind (a reader of LV 6 or less is paralyzed for 1 hour), Harm (the reader takes 3d6 damage), Message (the reader hears a brief mental message), or Teleportation Sigil (treat the object as a teleportation sigil per the teleport spell). The glyph disappears once activated."
-  },
-  {
-    "name": "Stasis",
-    "tier": 4,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Indefinite",
-    "dc": 14,
-    "description": "A willing creature you touch becomes suspended in time. If the target is unwilling, it must be of LV 5 or less. The target becomes unconscious and does not age; its bodily functions cease, though it remains alive. You may end the spell at any time or when a predefined condition you chose while casting the spell is met."
-  },
-  {
-    "name": "Abjure",
-    "tier": 5,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "Instant",
-    "dc": 15,
-    "description": "You and one creature you touch both die."
-  },
-  {
-    "name": "Permanence",
-    "tier": 5,
-    "castingAttribute": [
-      "Magic-User"
-    ],
-    "prohibitedAlignments": [
-      "Neutral",
-      "Chaotic"
-    ],
-    "range": "Close",
-    "duration": "1 year",
-    "dc": 15,
-    "description": "Sprinkle a powdered diamond on the target to cast this spell. Choose one object in range that is currently under the effects of a spell you have cast. The duration of that spell becomes 1 year. You cannot alter the original spell's effects after casting permanence; for instance, you can no longer move an object under the effects of telekinesis."
   }
 ]
