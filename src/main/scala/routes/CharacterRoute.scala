@@ -96,7 +96,7 @@ final case class CharacterRoute(server: CharacterServer) {
         setField("Class", character.characterClass.getOrElse(""))
         setField("Level", character.level.map(_.toString).getOrElse(""))
         setField("XP Current", character.xp.map(_.toString).getOrElse("0"))
-        setField("XP Target", "")
+        setField("XP Target", character.xpForNextLevel.toString)
         setField("Title", character.title.getOrElse(""))
         setField("Alignment", character.alignment.getOrElse(""))
         setField("Background", character.background.getOrElse(""))
@@ -140,9 +140,12 @@ final case class CharacterRoute(server: CharacterServer) {
         primaryGear.zipWithIndex.foreach { case (item, idx) =>
           setField(s"Gear ${idx + 1}", item)
         }
-        val totalSlots = gearLinesRaw.length
-        if (totalSlots < gearFieldCount) {
-          val unavailable = ((totalSlots + 1) to gearFieldCount).map(i => s"Gear $i").toList
+        val availableSlots =
+          if (character.level.contains(0)) math.max(character.abilities.strength.score, 10)
+          else gearLinesRaw.length
+        val clampedSlots = math.min(gearFieldCount, availableSlots)
+        if (clampedSlots < gearFieldCount) {
+          val unavailable = ((clampedSlots + 1) to gearFieldCount).map(i => s"Gear $i").toList
           drawCrosses(document, form, unavailable)
         }
 

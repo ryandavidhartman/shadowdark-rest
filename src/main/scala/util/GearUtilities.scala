@@ -25,6 +25,15 @@ object GearUtilities {
   private def allowsDexBonus(description: Option[String]): Boolean =
     description.exists(_.toLowerCase.contains("dex"))
 
+  def formatGearSlots(gear: List[String], totalSlots: Int): List[String] = {
+    val clampedTotal = math.max(0, totalSlots)
+    val filled       = gear.take(clampedTotal)
+    val empties      = List.fill(math.max(0, clampedTotal - filled.size))("Empty")
+    (filled ++ empties).zipWithIndex.map { case (name, idx) =>
+      s"Slot ${idx + 1}: $name"
+    }
+  }
+
   def selectStartingGear(
     items: List[Item],
     allowedWeapons: List[String],

@@ -344,6 +344,7 @@ final case class CharacterServer(
       characterClass = pickedClass.map(_.name),
       level = Some(level),
       xp = Some(0),
+      xpForNextLevel = level * 10,
       title = pickedTitle,
       alignment = pickedAlign,
       background = pickedBg.map(_.name),
@@ -386,6 +387,7 @@ final case class CharacterServer(
       races         <- raceServer.getRaces
       backgrounds   <- backgroundServer.getBackgrounds
       personalities <- personalityServer.getPersonalities
+      deities       <- deityServer.getDeities
       randomRace    <- pickWeightedRace(races).flatMap {
                          case some @ Some(_) => ZIO.succeed(some)
                          case None           => pickOne(races)
@@ -400,6 +402,13 @@ final case class CharacterServer(
       chaScore      <- roll3d6
       pickedAlign   <- pickOne(alignments)
       pickedBg      <- pickWeightedBackground(backgrounds)
+      pickedDeity   <- {
+                         val aligned = pickedAlign
+                           .map(aln => deities.filter(_.alignment.equalsIgnoreCase(aln)))
+                           .getOrElse(deities)
+                         val pool = if (aligned.nonEmpty) aligned else deities
+                         pickOne(pool).map(_.map(_.name))
+                       }
       gearTable     <- loadZeroLevelGear
       gearCount     <- roll1d4
       zeroGear       = pickDistinct(gearTable, gearCount)
@@ -433,6 +442,8 @@ final case class CharacterServer(
                          None,
                        )
       conMod         = abilities.constitution.modifier
+      totalSlots     = math.max(abilities.strength.score, 10)
+      zeroGearSlots   = util.GearUtilities.formatGearSlots(zeroGear, totalSlots)
       hitPoints      = Math.max(1, conMod)
       armorClass     = 10 + abilities.dexterity.modifier
       attacks        = zeroLevelAttacks(zeroGear, abilities)
@@ -457,10 +468,11 @@ final case class CharacterServer(
       characterClass = None,
       level = Some(0),
       xp = Some(0),
+      xpForNextLevel = 0,
       title = None,
       alignment = pickedAlign,
       background = pickedBg.map(_.name),
-      deity = None,
+      deity = pickedDeity,
       abilities = abilities,
       hitPoints = hitPoints,
       armorClass = armorClass,
@@ -468,7 +480,7 @@ final case class CharacterServer(
       talents = List.empty,
       spells = List.empty,
       attacks = attacks,
-      gear = if (zeroGear.nonEmpty) zeroGear else gearChoices,
+      gear = if (zeroGearSlots.nonEmpty) zeroGearSlots else gearChoices,
       languages = languages,
       personalities = pickedPersonalities,
       gender = randomGender,

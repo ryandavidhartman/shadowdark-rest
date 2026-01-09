@@ -15,6 +15,7 @@
 - Languages seeding: `data/seed-languages.js` inserts languages from `data/languages.json`; run via `mongosh --file data/seed-languages.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
 - Spells seeding: `data/seed-spells.js` inserts spells from `data/spells.json`; run via `mongosh --file data/seed-spells.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
   - Western Reaches source PDF is stored at `reference_data/Western Reaches Spells (Playtest).pdf` for reference when updating spell data.
+- Titles seeding: `data/seed-titles.js` inserts titles from `data/titles.json`; run via `mongosh --file data/seed-titles.js "$MONGO_URI"` (honors `db=`/`collection=` args or env overrides).
 - Items data/seeding: `data/items.json`/`data/items-merged.json` hold merged SD2FG + BFRPG gear/weapon/armor sets (with slots, versatility, loading, defense bonuses, magic flag, zero-slot gear, deduped names). Seed via `data/seed-items.js` (`mongosh --file data/seed-items.js "$MONGO_URI"`).
 - Zero-level gear list: `src/main/resources/zero-level-gear.json` provides the 0-level gear table for the random character generator.
 
@@ -31,7 +32,7 @@
 
 ## Testing Guidelines
 - Place tests in `src/test/scala`, mirroring package paths.
-- Use a single framework (ScalaTest or MUnit); declare it in `build.sbt` with any fixtures (embedded Mongo, fakes).
+- Use a single framework (ZIO Test); declare it in `build.sbt` with any fixtures (embedded Mongo, fakes).
 - Behavior-focused names: `"CharacterRepository" should "persist and fetch by id"`. Cover success, failure, and edge cases (empty collections, invalid payloads).
 - Keep unit tests fast and deterministic; mark slower Mongo integrations with tags so they can be skipped when needed.
 

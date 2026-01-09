@@ -34,6 +34,7 @@ final case class Character(
   characterClass: Option[String] = None,
   level: Option[Int] = None,
   xp: Option[Int] = None,
+  xpForNextLevel: Int = 0,
   title: Option[String] = None,
   alignment: Option[String] = None,
   background: Option[String] = None,
