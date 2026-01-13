@@ -10,6 +10,7 @@ import routes.{
   NameRoute,
   PersonalityRoute,
   RaceRoute,
+  SettlementRoute,
   SpellRoute,
   TitleRoute,
 }
@@ -38,6 +39,7 @@ import servers.{
   NameServer,
   PersonalityServer,
   RaceServer,
+  SettlementServer,
   SpellServer,
   TitleServer,
 }
@@ -70,8 +72,9 @@ object Main extends ZIOAppDefault {
           deityRoutes       <- ZIO.serviceWith[DeityRoute](_.routes)
           languageRoutes    <- ZIO.serviceWith[LanguageRoute](_.routes)
           monsterRoutes     <- ZIO.serviceWith[MonsterRoute](_.routes)
+          settlementRoutes  <- ZIO.serviceWith[SettlementRoute](_.routes)
           _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes,
+                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementRoutes,
                                )
         } yield ()
 
@@ -100,6 +103,7 @@ object Main extends ZIOAppDefault {
           DeityServer.live,
           LanguageServer.live,
           MonsterServer.live,
+          SettlementServer.live,
           CharacterServer.live,
           CharacterRoute.live,
           NameRoute.live,
@@ -113,6 +117,7 @@ object Main extends ZIOAppDefault {
           DeityRoute.live,
           LanguageRoute.live,
           MonsterRoute.live,
+          SettlementRoute.live,
         )
       }
       .orDie

@@ -7,15 +7,15 @@ import zio._
 import zio.http._
 import zio.json._
 
-final case class PersonalityRoute(server: PersonalityServer) {
+private[routes] final case class PersonalityCreate(
+  name: String,
+  alignment: String,
+)
+private[routes] object PersonalityCreate {
+  implicit val decoder: JsonDecoder[PersonalityCreate] = DeriveJsonDecoder.gen[PersonalityCreate]
+}
 
-  private final case class PersonalityCreate(
-    name: String,
-    alignment: String,
-  )
-  private object PersonalityCreate {
-    implicit val decoder: JsonDecoder[PersonalityCreate] = DeriveJsonDecoder.gen[PersonalityCreate]
-  }
+final case class PersonalityRoute(server: PersonalityServer) {
 
   private def decodePersonality(req: Request): IO[Response, Personality] =
     for {

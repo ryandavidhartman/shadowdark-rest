@@ -7,18 +7,18 @@ import zio._
 import zio.http._
 import zio.json._
 
-final case class NameRoute(server: NameServer) {
+private[routes] final case class NameCreate(
+  name: String,
+  race: String,
+  gender: Option[String],
+  firstName: Option[Boolean],
+  lastName: Option[Boolean],
+)
+private[routes] object NameCreate {
+  implicit val decoder: JsonDecoder[NameCreate] = DeriveJsonDecoder.gen[NameCreate]
+}
 
-  private final case class NameCreate(
-    name: String,
-    race: String,
-    gender: Option[String],
-    firstName: Option[Boolean],
-    lastName: Option[Boolean],
-  )
-  private object NameCreate {
-    implicit val decoder: JsonDecoder[NameCreate] = DeriveJsonDecoder.gen[NameCreate]
-  }
+final case class NameRoute(server: NameServer) {
 
   private def decodeName(req: Request): IO[Response, Name] =
     for {
