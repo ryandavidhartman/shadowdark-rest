@@ -54,3 +54,41 @@
 - Characters: `CharacterServer` builds random characters with weighted races, class-driven HP, features, talents (rolled 2d6 per talent level), spell summaries, gear, and language selection (Common + race languages + class-granted picks, resolving “extra” placeholders to actual common/rare languages). Gear slots are filled from Items (class weapon/armor allowances, slots, deduped gear, ammo for ranged, crawling-kit fillers; zero-slot gear goes to `freeToCarry`). `CharacterRoute` renders the random character both as JSON and as a filled PDF using the bundled sheet template.
 - Caching: `NameServer` and `RaceServer` cache list fetches for 5 minutes via zio-cache (capacity 1) and invalidate on create.
 - Names API: `/names` GET returns cached list; POST accepts JSON (`name`, `race`, optional `gender`, `firstName`, `lastName`) and inserts a new ObjectId-backed `Name`, returns 201 JSON and clears cache.
+
+## Settlement Generator Notes (WIP)
+- Current status: settlement maps are generated via `SettlementServer` with Voronoi districts, organic outer boundary, lightweight building footprints, plazas, POI markers, and banner labels.
+- PNG endpoint: `/settlements/random.png` renders the map with clipped boundary and legend index entries; use a local save to inspect (e.g., `random.png` in repo root).
+- New data/model additions:
+  - `NpcQuality` model and repo/server for NPC qualities (`appearance`, `does`, `secret`, plus weighted `age` and `wealth` entries).
+  - Seed files: `data/npc-qualities.json`, `data/seed-npc-qualities.js`.
+  - Settlement model now includes `Npc`, `Building`, `Plaza`, and `PointOfInterest` fields (IDs and locations), plus `District.boundary` and `District.plazas`.
+- NPC generation uses: Name/Race/Personality/Background servers + NpcQuality entries; backgrounds are matched by keyword vs POI type.
+- Visual tweaks implemented:
+  - Non-rectangular outer boundary built from district union + smoothing; map content is clipped to it.
+  - Buildings are clustered but partially aligned to a main road axis; plazas keep a clear center area.
+  - Main roads have thicker stroke; minor roads thinner and fewer.
+  - POI markers snap near POI-assigned buildings.
+  - Grid opacity reduced.
+  - District labels are banner-style boxes, but they still sometimes truncate at edges.
+
+## Next Steps (Resume Tomorrow)
+- Fix district label truncation:
+  - Labels are clamped to map bounds but can still overflow near the organic boundary.
+  - Consider: clamping to boundary polygon bounds, shrinking font if banner would exceed boundary, or offsetting labels toward district centroid.
+- Re-check legend formatting/spacing if banner size changes.
+- Confirm POI marker snap behavior vs buildings after label adjustments.
+
+## Settlement Roadmap (Phases)
+### Phase 1 (Current)
+- Organic boundary, Voronoi wards, curved roads with hierarchy, clustered buildings with partial road alignment, plazas, POI markers, softer grid.
+- Remaining issue: district label truncation near boundary.
+
+### Phase 2 (Layout Improvements)
+- Add a main street loop or radial spine from the seat with clearer connectivity.
+- Make plazas influence roads/buildings (larger open spaces, road-fronting buildings).
+- Increase building density along roads and near hubs; reduce near boundaries.
+
+### Phase 3 (Polish)
+- Improve legend formatting/spacing with small icons for POI types.
+- Add subtle ward-themed textures or color variation (lightweight).
+- Optionally vary building shapes by ward (temples larger, markets stall-like).

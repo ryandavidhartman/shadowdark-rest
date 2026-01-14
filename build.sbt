@@ -9,7 +9,8 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-test" % "2.1.24" % Test,
   "dev.zio" %% "zio-test-sbt" % "2.1.24" % Test,
   "com.typesafe" % "config" % "1.4.5",
-  "org.apache.pdfbox" % "pdfbox" % "3.0.6"
+  "org.apache.pdfbox" % "pdfbox" % "3.0.6",
+  "org.locationtech.jts" % "jts-core" % "1.18.1"
 )
 
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")

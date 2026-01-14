@@ -36,6 +36,19 @@ final case class Tavern(
   food: List[Food],
 )
 
+final case class Npc(
+  name: String,
+  ancestry: String,
+  age: String,
+  alignment: String,
+  wealth: String,
+  appearance: String,
+  mannerism: String,
+  secret: String,
+  background: Option[String],
+  personality: Option[String],
+)
+
 final case class Shop(
   name: String,
   shopType: String,
@@ -44,10 +57,26 @@ final case class Shop(
 )
 
 final case class PointOfInterest(
+  id: Int,
   name: String,
   kind: String,
+  location: Point,
   tavern: Option[Tavern],
   shop: Option[Shop],
+  npc: Option[Npc],
+  buildingId: Option[Int],
+)
+
+final case class Building(
+  id: Int,
+  footprint: List[Point],
+  usage: String,
+  poiId: Option[Int],
+)
+
+final case class Plaza(
+  center: Point,
+  radius: Int,
 )
 
 final case class District(
@@ -57,7 +86,10 @@ final case class District(
   alignment: String,
   seatOfGovernment: Boolean,
   position: Point,
+  boundary: List[Point],
+  plazas: List[Plaza],
   pointsOfInterest: List[PointOfInterest],
+  buildings: List[Building],
 )
 
 final case class Settlement(
@@ -85,10 +117,16 @@ object Settlement {
   implicit val foodDecoder: JsonDecoder[Food] = DeriveJsonDecoder.gen[Food]
   implicit val tavernEncoder: JsonEncoder[Tavern] = DeriveJsonEncoder.gen[Tavern]
   implicit val tavernDecoder: JsonDecoder[Tavern] = DeriveJsonDecoder.gen[Tavern]
+  implicit val npcEncoder: JsonEncoder[Npc] = DeriveJsonEncoder.gen[Npc]
+  implicit val npcDecoder: JsonDecoder[Npc] = DeriveJsonDecoder.gen[Npc]
   implicit val shopEncoder: JsonEncoder[Shop] = DeriveJsonEncoder.gen[Shop]
   implicit val shopDecoder: JsonDecoder[Shop] = DeriveJsonDecoder.gen[Shop]
   implicit val poiEncoder: JsonEncoder[PointOfInterest] = DeriveJsonEncoder.gen[PointOfInterest]
   implicit val poiDecoder: JsonDecoder[PointOfInterest] = DeriveJsonDecoder.gen[PointOfInterest]
+  implicit val buildingEncoder: JsonEncoder[Building] = DeriveJsonEncoder.gen[Building]
+  implicit val buildingDecoder: JsonDecoder[Building] = DeriveJsonDecoder.gen[Building]
+  implicit val plazaEncoder: JsonEncoder[Plaza] = DeriveJsonEncoder.gen[Plaza]
+  implicit val plazaDecoder: JsonDecoder[Plaza] = DeriveJsonDecoder.gen[Plaza]
   implicit val districtEncoder: JsonEncoder[District] = DeriveJsonEncoder.gen[District]
   implicit val districtDecoder: JsonDecoder[District] = DeriveJsonDecoder.gen[District]
   implicit val settlementEncoder: JsonEncoder[Settlement] = DeriveJsonEncoder.gen[Settlement]
