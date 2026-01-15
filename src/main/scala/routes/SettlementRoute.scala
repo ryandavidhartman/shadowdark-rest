@@ -14,19 +14,19 @@ final case class SettlementRoute(server: SettlementServer) {
             server.randomSettlement.map(settlement => Response.json(settlement.toJson))
           }
           .mapError(err => Response.internalServerError(err.getMessage)),
-      Method.GET / "settlements" / "random.png" ->
+      Method.GET / "settlements" / "random.pdf" ->
         Handler
           .fromFunctionZIO[Request] { _ =>
             for {
               settlement <- server.randomSettlement
-              png        <- server.renderSettlementPng(settlement)
+              pdf        <- server.renderSettlementPdf(settlement)
             } yield Response(
               status = Status.Ok,
               headers = Headers(
-                Header.Custom("Content-Type", "image/png"),
-                Header.Custom("Content-Disposition", "inline; filename=\"random-settlement.png\""),
+                Header.Custom("Content-Type", "application/pdf"),
+                Header.Custom("Content-Disposition", "inline; filename=\"random-settlement.pdf\""),
               ),
-              body = Body.fromChunk(Chunk.fromArray(png)),
+              body = Body.fromChunk(Chunk.fromArray(pdf)),
             )
           }
           .mapError(err => Response.internalServerError(err.getMessage)),

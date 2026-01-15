@@ -82,11 +82,19 @@
 ### Phase 1 (Current)
 - Organic boundary, Voronoi wards, curved roads with hierarchy, clustered buildings with partial road alignment, plazas, POI markers, softer grid.
 - Remaining issue: district label truncation near boundary.
+### Phase 1 Summary
+- Replaced on-map district labels with a right-side District Key; keys moved to a second PDF page rendered by `/settlements/random.pdf`.
+- District types are unique when the settlement has fewer than eight districts.
+- Legend formatting improved with bold district headers and spacing; keyed index runs on its own page.
+- POI markers now stay anchored to their assigned building footprints.
 
 ### Phase 2 (Layout Improvements)
 - Add a main street loop or radial spine from the seat with clearer connectivity.
 - Make plazas influence roads/buildings (larger open spaces, road-fronting buildings).
 - Increase building density along roads and near hubs; reduce near boundaries.
+### Phase 2 Progress
+- Implemented a main street loop connecting districts around the seat.
+- Added road-aware building alignment with frontage bias plus a 14px road keep-out buffer.
 
 ### Phase 3 (Polish)
 - Improve legend formatting/spacing with small icons for POI types.

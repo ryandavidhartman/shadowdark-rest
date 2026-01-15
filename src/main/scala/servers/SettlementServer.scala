@@ -6,6 +6,10 @@ import zio._
 import java.awt.{BasicStroke, Color, Font, GradientPaint, RenderingHints}
 import java.awt.geom.{Ellipse2D, Path2D}
 import java.awt.image.BufferedImage
+import org.apache.pdfbox.pdmodel.{PDDocument, PDPage}
+import org.apache.pdfbox.pdmodel.common.PDRectangle
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory
+import org.apache.pdfbox.pdmodel.PDPageContentStream
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ThreadLocalRandom
 import javax.imageio.ImageIO
@@ -56,6 +60,16 @@ final case class SettlementServer(
     "Temple district",
     "University district",
     "Castle district",
+  )
+  private val districtPalette = List(
+    new Color(198, 132, 118, 150),
+    new Color(155, 181, 196, 150),
+    new Color(173, 196, 156, 150),
+    new Color(214, 190, 127, 150),
+    new Color(178, 156, 196, 150),
+    new Color(206, 170, 140, 150),
+    new Color(165, 196, 178, 150),
+    new Color(201, 167, 185, 150),
   )
 
   private val alignments = List(
@@ -562,7 +576,7 @@ final case class SettlementServer(
     boundary: List[Point],
     rand: Random,
     targetCount: Int,
-    roadAnchor: Option[(Point, Point)],
+    roadAnchors: List[(Point, Point, Boolean)],
     plazas: List[Plaza],
   ): List[List[Point]] = {
     if (boundary.size < 3 || targetCount <= 0) List.empty
@@ -581,15 +595,30 @@ final case class SettlementServer(
         (plaza, geometryFactory.createPoint(toCoordinate(plaza.center)))
       }
 
+      val roadLines = roadAnchors.map { case (start, end, isMain) =>
+        val coords = Array(toCoordinate(start), toCoordinate(end))
+        (geometryFactory.createLineString(coords), isMain)
+      }
+      val roadBuffer = 14.0
+
+      def pickRoadAnchor(): Option[(Point, Point, Boolean)] = {
+        if (roadAnchors.isEmpty) None
+        else {
+          val main = roadAnchors.filter(_._3)
+          if (main.nonEmpty && rand.nextDouble() < 0.7) Some(main(rand.nextInt(main.length)))
+          else Some(roadAnchors(rand.nextInt(roadAnchors.length)))
+        }
+      }
+
       while (footprints.size < targetCount && attempts < maxAttempts) {
         attempts += 1
         val width = 16 + rand.nextInt(30)
         val height = 16 + rand.nextInt(30)
         val baseX = envelope.getMinX + rand.nextDouble() * math.max(1.0, envelope.getWidth - width)
         val baseY = envelope.getMinY + rand.nextDouble() * math.max(1.0, envelope.getHeight - height)
-        val alignToRoad = roadAnchor.isDefined && rand.nextDouble() < 0.45
-        val (x, y, angle) = roadAnchor match {
-          case Some((start, end)) if alignToRoad =>
+        val alignToRoad = roadAnchors.nonEmpty && rand.nextDouble() < 0.7
+        val (x, y, angle) = pickRoadAnchor() match {
+          case Some((start, end, _)) if alignToRoad =>
             val t = 0.2 + rand.nextDouble() * 0.7
             val lineX = start.x + (end.x - start.x) * t
             val lineY = start.y + (end.y - start.y) * t
@@ -598,11 +627,14 @@ final case class SettlementServer(
             val len = math.max(1.0, math.hypot(dx.toDouble, dy.toDouble))
             val nx = -dy / len
             val ny = dx / len
-            val offset = (rand.nextDouble() - 0.5) * 2 * 24.0
-            val px = lineX + nx * offset
-            val py = lineY + ny * offset
-            val angle = math.atan2(dy.toDouble, dx.toDouble) + (rand.nextDouble() - 0.5) * 0.3
-            (px, py, angle)
+            val lane = if (rand.nextBoolean()) 1.0 else -1.0
+            val corridor = 16.0 + rand.nextDouble() * 12.0
+            val px = lineX
+            val py = lineY
+            val angle = math.atan2(dy.toDouble, dx.toDouble) + (rand.nextDouble() - 0.5) * 0.08
+            val offsetX = px + nx * corridor * lane
+            val offsetY = py + ny * corridor * lane
+            (offsetX, offsetY, angle)
           case _ =>
             val mix = if (rand.nextDouble() < 0.6) 0.6 + rand.nextDouble() * 0.3 else 0.25 + rand.nextDouble() * 0.35
             val px = centroid.x * mix + baseX * (1.0 - mix)
@@ -626,7 +658,8 @@ final case class SettlementServer(
         val nearPlaza = plazasByCoord.exists { case (plaza, point) =>
           point.distance(rotated.getCentroid) <= (plaza.radius + 14)
         }
-        if (within && !overlaps && !nearPlaza) {
+        val nearRoad = roadLines.exists { case (line, _) => line.distance(rotated) < roadBuffer }
+        if (within && !overlaps && !nearPlaza && !nearRoad) {
           val rotatedPolygon = rotated.asInstanceOf[Polygon]
           buildings += rotatedPolygon
           val coords = rotatedPolygon.getExteriorRing.getCoordinates.toList.dropRight(1).map(toPoint _)
@@ -741,35 +774,67 @@ final case class SettlementServer(
     rand: Random,
     boundary: List[Point],
     buildings: List[Building],
+    anchor: Option[Point],
   ): Point = {
     val minDistance = 26.0
     val boundaryPoly = if (boundary.size >= 3) polygonFrom(boundary) else null
     val boundaryCentroid =
       if (boundaryPoly != null) toPoint(boundaryPoly.getCentroid.getCoordinate) else Point(mapWidth / 2, mapHeight / 2)
-    var current = point
-    var attempts = 0
-    while (attempts < 12 && (used.exists(p => distance(p, current) < minDistance) || !insideBoundary(current, boundaryPoly))) {
-      attempts += 1
-      val nudged = Point(
-        math.max(10, math.min(mapWidth - 10, current.x + rand.nextInt(31) - 15)),
-        math.max(10, math.min(mapHeight - 10, current.y + rand.nextInt(31) - 15)),
-      )
-      current =
-        if (boundaryPoly != null && !insideBoundary(nudged, boundaryPoly)) {
-          Point(
-            ((nudged.x + boundaryCentroid.x) / 2.0).round.toInt,
-            ((nudged.y + boundaryCentroid.y) / 2.0).round.toInt,
+    anchor match {
+      case Some(center) =>
+        val ringOffsets = List(0, 8, 12, 16)
+        val directions = List(
+          Point(0, 0),
+          Point(1, 0),
+          Point(-1, 0),
+          Point(0, 1),
+          Point(0, -1),
+          Point(1, 1),
+          Point(-1, 1),
+          Point(1, -1),
+          Point(-1, -1),
+        )
+        val candidates = ringOffsets.flatMap { radius =>
+          directions.map { dir =>
+            Point(center.x + dir.x * radius, center.y + dir.y * radius)
+          }
+        }
+        candidates.find { candidate =>
+          insideBoundary(candidate, boundaryPoly) &&
+          used.forall(p => distance(p, candidate) >= minDistance)
+        }.getOrElse {
+          if (insideBoundary(center, boundaryPoly)) center
+          else Point(
+            ((center.x + boundaryCentroid.x) / 2.0).round.toInt,
+            ((center.y + boundaryCentroid.y) / 2.0).round.toInt,
           )
-        } else nudged
+        }
+      case None =>
+        var current = point
+        var attempts = 0
+        while (attempts < 12 && (used.exists(p => distance(p, current) < minDistance) || !insideBoundary(current, boundaryPoly))) {
+          attempts += 1
+          val nudged = Point(
+            math.max(10, math.min(mapWidth - 10, current.x + rand.nextInt(31) - 15)),
+            math.max(10, math.min(mapHeight - 10, current.y + rand.nextInt(31) - 15)),
+          )
+          current =
+            if (boundaryPoly != null && !insideBoundary(nudged, boundaryPoly)) {
+              Point(
+                ((nudged.x + boundaryCentroid.x) / 2.0).round.toInt,
+                ((nudged.y + boundaryCentroid.y) / 2.0).round.toInt,
+              )
+            } else nudged
+        }
+        val candidate = buildings
+          .filter(_.poiId.isDefined)
+          .map(b => centroid(b.footprint))
+          .sortBy(p => distance(p, current))
+          .headOption
+          .filter(p => distance(p, current) <= 50)
+          .getOrElse(current)
+        candidate
     }
-    val candidate = buildings
-      .filter(_.poiId.isDefined)
-      .map(b => centroid(b.footprint))
-      .sortBy(p => distance(p, current))
-      .headOption
-      .filter(p => distance(p, current) <= 50)
-      .getOrElse(current)
-    candidate
   }
 
   private def insideBoundary(point: Point, boundaryPoly: Polygon): Boolean =
@@ -829,6 +894,12 @@ final case class SettlementServer(
                            case _                           => roughenBoundary(maskPoints, new Random(seed + 17))
                          }
                          val rand               = new Random(seed)
+                         val roadEdgesForPoints = buildRoadEdgesForPoints(points, seatIndex)
+                         val districtTypeAssignments =
+                           if (dieRolls.size < districtTypes.length)
+                             shuffleWith(districtTypes, new Random(seed + 31)).take(dieRolls.size)
+                           else
+                             dieRolls.map(districtTypeForRoll)
 
                          var poiId      = 0
                          var buildingId = 0
@@ -836,7 +907,7 @@ final case class SettlementServer(
 
                          val seatPoint = points.lift(seatIndex - 1).getOrElse(Point(mapWidth / 2, mapHeight / 2))
                          val districts = dieRolls.zip(points).zipWithIndex.map { case ((roll, point), idx) =>
-                           val districtType = districtTypeForRoll(roll)
+                           val districtType = districtTypeAssignments(idx)
                            val fallbackBoundary = List(
                              Point(point.x - 40, point.y - 40),
                              Point(point.x + 40, point.y - 40),
@@ -855,8 +926,11 @@ final case class SettlementServer(
                              }
                            val area = polygonFrom(boundary).getArea
                            val buildingTarget = math.max(8, math.min(40, (area / 5500).toInt))
-                           val roadAnchor = if (point == seatPoint) None else Some(point -> seatPoint)
-                           val footprints = generateBuildingFootprints(boundary, rand, buildingTarget, roadAnchor, plazas)
+                           val roadAnchors = roadEdgesForPoints.collect {
+                             case (start, end, isMain) if start == point => (start, end, isMain)
+                             case (start, end, isMain) if end == point   => (end, start, isMain)
+                           }
+                           val footprints = generateBuildingFootprints(boundary, rand, buildingTarget, roadAnchors, plazas)
                            val baseBuildings = footprints.map { footprint =>
                              buildingId += 1
                              Building(id = buildingId, footprint = footprint, usage = "Residence", poiId = None)
@@ -892,6 +966,7 @@ final case class SettlementServer(
                                  rand,
                                  boundary,
                                  nextBuildings,
+                                 buildingIdOpt.map(_ => buildingLocation),
                                )
                                usedPoiLocations += markerLocation
                                val poi = PointOfInterest(
@@ -939,49 +1014,101 @@ final case class SettlementServer(
 
   def renderSettlementPng(settlement: Settlement): Task[Array[Byte]] =
     ZIO.attempt {
-      val image = new BufferedImage(pageWidth, pageHeight, BufferedImage.TYPE_INT_ARGB)
-      val g     = image.createGraphics()
+      val image = renderSettlementMapImage(settlement)
+      val output = new ByteArrayOutputStream()
       try {
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+        ImageIO.write(image, "png", output)
+        output.toByteArray
+      } finally output.close()
+    }
 
-        val parchmentTop    = new Color(245, 231, 204)
-        val parchmentBottom = new Color(230, 214, 183)
-        g.setPaint(new GradientPaint(0f, 0f, parchmentTop, 0f, pageHeight.toFloat, parchmentBottom))
-        g.fillRect(0, 0, pageWidth, pageHeight)
-
-        val mapX      = pageMargin
-        val mapY      = pageMargin
-        val mapWidth  = settlement.layout.width
-        val mapHeight = settlement.layout.height
-
-        val fallbackOutline = List(
-          Point(mapPadding, mapPadding),
-          Point(mapWidth - mapPadding, mapPadding),
-          Point(mapWidth - mapPadding, mapHeight - mapPadding),
-          Point(mapPadding, mapHeight - mapPadding),
-        )
-        val outlinePoints = if (settlement.layout.outline.size >= 3) settlement.layout.outline else fallbackOutline
-        val outlinePath = polygonPath(mapX, mapY, outlinePoints, new Random(settlement.layout.seed + 7))
-
-        g.setColor(new Color(235, 222, 198))
-        g.fill(outlinePath)
-
-        val oldClip = g.getClip
-        g.setClip(outlinePath)
-        drawGrid(g, mapX, mapY, mapWidth, mapHeight, settlement.layout.gridSize)
-        drawDistricts(g, mapX, mapY, settlement, new Random(settlement.layout.seed + 19))
-        g.setClip(oldClip)
-        drawOutline(g, outlinePath)
-        drawLegend(g, settlement)
-        drawTitle(g, settlement)
-
+  def renderSettlementPdf(settlement: Settlement): Task[Array[Byte]] =
+    ZIO.attempt {
+      val mapImage = renderSettlementMapImage(settlement)
+      val legendImage = renderSettlementLegendImage(settlement)
+      val pageSize = new PDRectangle(pageWidth.toFloat, pageHeight.toFloat)
+      val document = new PDDocument()
+      try {
+        val mapPage = new PDPage(pageSize)
+        val legendPage = new PDPage(pageSize)
+        document.addPage(mapPage)
+        document.addPage(legendPage)
+        val mapXObject = LosslessFactory.createFromImage(document, mapImage)
+        val legendXObject = LosslessFactory.createFromImage(document, legendImage)
+        val mapStream = new PDPageContentStream(document, mapPage)
+        try mapStream.drawImage(mapXObject, 0, 0, pageWidth, pageHeight)
+        finally mapStream.close()
+        val legendStream = new PDPageContentStream(document, legendPage)
+        try legendStream.drawImage(legendXObject, 0, 0, pageWidth, pageHeight)
+        finally legendStream.close()
         val output = new ByteArrayOutputStream()
         try {
-          ImageIO.write(image, "png", output)
+          document.save(output)
           output.toByteArray
         } finally output.close()
-      } finally g.dispose()
+      } finally document.close()
     }
+
+  private def renderSettlementMapImage(settlement: Settlement): BufferedImage = {
+    val image = baseSettlementImage()
+    val g = image.createGraphics()
+    try {
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+      paintBackground(g)
+
+      val mapX      = pageMargin
+      val mapY      = pageMargin
+      val mapWidth  = settlement.layout.width
+      val mapHeight = settlement.layout.height
+
+      val fallbackOutline = List(
+        Point(mapPadding, mapPadding),
+        Point(mapWidth - mapPadding, mapPadding),
+        Point(mapWidth - mapPadding, mapHeight - mapPadding),
+        Point(mapPadding, mapHeight - mapPadding),
+      )
+      val outlinePoints = if (settlement.layout.outline.size >= 3) settlement.layout.outline else fallbackOutline
+      val outlinePath = polygonPath(mapX, mapY, outlinePoints, new Random(settlement.layout.seed + 7))
+
+      g.setColor(new Color(235, 222, 198))
+      g.fill(outlinePath)
+
+      val oldClip = g.getClip
+      g.setClip(outlinePath)
+      drawGrid(g, mapX, mapY, mapWidth, mapHeight, settlement.layout.gridSize)
+      drawDistricts(g, mapX, mapY, settlement, outlinePath, new Random(settlement.layout.seed + 19))
+      g.setClip(oldClip)
+      drawOutline(g, outlinePath)
+      drawTitle(g, settlement)
+    } finally g.dispose()
+    image
+  }
+
+  private def renderSettlementLegendImage(settlement: Settlement): BufferedImage = {
+    val image = baseSettlementImage()
+    val g = image.createGraphics()
+    try {
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+      paintBackground(g)
+      val legendX = pageMargin
+      val legendY = pageMargin
+      val legendW = pageWidth - (pageMargin * 2)
+      val legendH = pageHeight - (pageMargin * 2)
+      drawLegend(g, settlement, legendX, legendY, legendW, legendH)
+      drawTitle(g, settlement)
+    } finally g.dispose()
+    image
+  }
+
+  private def baseSettlementImage(): BufferedImage =
+    new BufferedImage(pageWidth, pageHeight, BufferedImage.TYPE_INT_ARGB)
+
+  private def paintBackground(g: java.awt.Graphics2D): Unit = {
+    val parchmentTop    = new Color(245, 231, 204)
+    val parchmentBottom = new Color(230, 214, 183)
+    g.setPaint(new GradientPaint(0f, 0f, parchmentTop, 0f, pageHeight.toFloat, parchmentBottom))
+    g.fillRect(0, 0, pageWidth, pageHeight)
+  }
 
   private def drawGrid(
     g: java.awt.Graphics2D,
@@ -1016,33 +1143,26 @@ final case class SettlementServer(
     mapX: Int,
     mapY: Int,
     settlement: Settlement,
+    outlinePath: Path2D,
     rand: Random,
   ): Unit = {
-    val palette = List(
-      new Color(198, 132, 118, 150),
-      new Color(155, 181, 196, 150),
-      new Color(173, 196, 156, 150),
-      new Color(214, 190, 127, 150),
-      new Color(178, 156, 196, 150),
-      new Color(206, 170, 140, 150),
-      new Color(165, 196, 178, 150),
-      new Color(201, 167, 185, 150),
-    )
-
     settlement.districts.zipWithIndex.foreach { case (district, idx) =>
       val path   = polygonPath(mapX, mapY, roughenBoundary(district.boundary, rand), rand)
-      g.setColor(palette(idx % palette.length))
+      g.setColor(districtPalette(idx % districtPalette.length))
       g.fill(path)
       g.setColor(new Color(90, 70, 50, 180))
       g.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
       g.draw(path)
     }
 
+    val roadEdges = buildRoadEdges(settlement.districts)
+    val roadSeed = rand.nextLong()
+    val roadSamples = sampleRoads(roadEdges, mapX, mapY, new Random(roadSeed))
+
     drawPlazas(g, mapX, mapY, settlement.districts)
     drawBuildings(g, mapX, mapY, settlement.districts, rand)
-    drawRoads(g, mapX, mapY, settlement.districts, rand)
+    drawRoads(g, mapX, mapY, roadEdges, new Random(roadSeed))
     drawPoiMarkers(g, mapX, mapY, settlement.districts)
-    drawDistrictLabels(g, mapX, mapY, mapWidth, mapHeight, settlement.districts)
   }
 
   private def drawPlazas(
@@ -1133,14 +1253,8 @@ final case class SettlementServer(
     }
   }
 
-  private def drawRoads(
-    g: java.awt.Graphics2D,
-    mapX: Int,
-    mapY: Int,
-    districts: List[District],
-    rand: Random,
-  ): Unit = {
-    if (districts.isEmpty) return
+  private def buildRoadEdges(districts: List[District]): List[(District, District, Boolean)] = {
+    if (districts.isEmpty) return Nil
 
     val seat = districts.find(_.seatOfGovernment).getOrElse(districts.head)
     val mainTargets = districts
@@ -1160,6 +1274,16 @@ final case class SettlementServer(
 
     mainTargets.foreach(target => addEdge(seat, target, main = true))
 
+    val ringDistricts = districts.filterNot(_.id == seat.id)
+    if (ringDistricts.size >= 3) {
+      val sorted = ringDistricts.sortBy { district =>
+        math.atan2((district.position.y - seat.position.y).toDouble, (district.position.x - seat.position.x).toDouble)
+      }
+      sorted.zip(sorted.tail :+ sorted.head).foreach { case (a, b) =>
+        addEdge(a, b, main = true)
+      }
+    }
+
     districts.foreach { district =>
       val neighbor = districts
         .filterNot(_.id == district.id)
@@ -1167,9 +1291,97 @@ final case class SettlementServer(
       addEdge(district, neighbor, main = false)
     }
 
-    edges.foreach { case ((aId, bId), isMain) =>
-      val a = districts.find(_.id == aId).get
-      val b = districts.find(_.id == bId).get
+    val byId = districts.map(d => d.id -> d).toMap
+    edges.toList.flatMap { case ((aId, bId), isMain) =>
+      for {
+        a <- byId.get(aId)
+        b <- byId.get(bId)
+      } yield (a, b, isMain)
+    }
+  }
+
+  private def buildRoadEdgesForPoints(points: List[Point], seatIndex: Int): List[(Point, Point, Boolean)] = {
+    if (points.isEmpty) return Nil
+
+    val seat = points.lift(seatIndex - 1).getOrElse(points.head)
+    val mainTargets = points.zipWithIndex
+      .filterNot { case (_, idx) => idx == seatIndex - 1 }
+      .sortBy { case (point, _) => distance(seat, point) }
+      .take(math.min(2, points.size - 1))
+
+    val edges = scala.collection.mutable.LinkedHashMap.empty[(Int, Int), Boolean]
+
+    def addEdge(a: Int, b: Int, main: Boolean): Unit = {
+      val key = if (a < b) (a, b) else (b, a)
+      edges.updateWith(key) {
+        case Some(existing) => Some(existing || main)
+        case None           => Some(main)
+      }
+    }
+
+    mainTargets.foreach { case (_, idx) => addEdge(seatIndex - 1, idx, main = true) }
+
+    val ringPoints = points.zipWithIndex.filterNot { case (_, idx) => idx == seatIndex - 1 }
+    if (ringPoints.size >= 3) {
+      val sorted = ringPoints.sortBy { case (point, _) =>
+        math.atan2((point.y - seat.y).toDouble, (point.x - seat.x).toDouble)
+      }
+      sorted.zip(sorted.tail :+ sorted.head).foreach { case ((_, aIdx), (_, bIdx)) =>
+        addEdge(aIdx, bIdx, main = true)
+      }
+    }
+
+    points.indices.foreach { idx =>
+      val neighbor = points.indices.filterNot(_ == idx).minBy(other => distance(points(idx), points(other)))
+      addEdge(idx, neighbor, main = false)
+    }
+
+    edges.toList.map { case ((aIdx, bIdx), isMain) =>
+      (points(aIdx), points(bIdx), isMain)
+    }
+  }
+
+  private def sampleRoads(
+    roadEdges: List[(District, District, Boolean)],
+    mapX: Int,
+    mapY: Int,
+    rand: Random,
+  ): List[(Double, Double)] =
+    roadEdges.flatMap { case (a, b, isMain) =>
+      val startX = mapX + jitter(a.position.x, rand)
+      val startY = mapY + jitter(a.position.y, rand)
+      val endX = mapX + jitter(b.position.x, rand)
+      val endY = mapY + jitter(b.position.y, rand)
+      val midX = (startX + endX) / 2.0
+      val midY = (startY + endY) / 2.0
+      val dx = endX - startX
+      val dy = endY - startY
+      val len = math.max(1.0, math.hypot(dx, dy))
+      val nx = -dy / len
+      val ny = dx / len
+      val bend = (rand.nextDouble() - 0.5) * 2 * (if (isMain) 50.0 else 32.0)
+      val ctrlX = midX + nx * bend
+      val ctrlY = midY + ny * bend
+      val steps = if (isMain) 12 else 10
+      (0 to steps).map { i =>
+        val t = i.toDouble / steps
+        val one = 1.0 - t
+        val x = one * one * startX + 2 * one * t * ctrlX + t * t * endX
+        val y = one * one * startY + 2 * one * t * ctrlY + t * t * endY
+        (x, y)
+      }
+    }
+
+  private def drawRoads(
+    g: java.awt.Graphics2D,
+    mapX: Int,
+    mapY: Int,
+    roadEdges: List[(District, District, Boolean)],
+    rand: Random,
+  ): Unit = {
+    if (roadEdges.isEmpty) return
+
+    roadEdges.foreach { case (a, b, isMain) =>
       val stroke = if (isMain) 3.0f else 1.3f
       val color = if (isMain) new Color(110, 88, 66, 220) else new Color(130, 106, 82, 180)
       g.setColor(color)
@@ -1203,43 +1415,122 @@ final case class SettlementServer(
     mapWidth: Int,
     mapHeight: Int,
     districts: List[District],
+    outlinePath: Path2D,
+    roadSamples: List[(Double, Double)],
   ): Unit = {
     val labelFont = new Font("Serif", Font.BOLD, 18)
     g.setFont(labelFont)
     val metrics = g.getFontMetrics
+    val poiCenters = districts.flatMap(_.pointsOfInterest).map(poi => (mapX + poi.location.x, mapY + poi.location.y))
+    val poiRadius = 16.0
+    val roadMargin = 10.0
+
+    def intersectsPoi(centerX: Double, centerY: Double, width: Double, height: Double): Boolean = {
+      val left = centerX - width / 2.0
+      val right = centerX + width / 2.0
+      val top = centerY - height / 2.0
+      val bottom = centerY + height / 2.0
+      poiCenters.exists { case (px, py) =>
+        val closestX = math.max(left, math.min(px.toDouble, right))
+        val closestY = math.max(top, math.min(py.toDouble, bottom))
+        val dx = px - closestX
+        val dy = py - closestY
+        (dx * dx + dy * dy) <= (poiRadius * poiRadius)
+      }
+    }
+
+    def intersectsRoad(centerX: Double, centerY: Double, width: Double, height: Double): Boolean = {
+      val left = centerX - width / 2.0 - roadMargin
+      val right = centerX + width / 2.0 + roadMargin
+      val top = centerY - height / 2.0 - roadMargin
+      val bottom = centerY + height / 2.0 + roadMargin
+      roadSamples.exists { case (rx, ry) =>
+        rx >= left && rx <= right && ry >= top && ry <= bottom
+      }
+    }
+
     districts.foreach { district =>
+      val districtPoly = if (district.boundary.size >= 3) polygonFrom(district.boundary) else null
       val x = mapX + district.position.x
       val y = mapY + district.position.y
-      val text = s"${district.id}. ${district.districtType}"
+      val seatSuffix = if (district.seatOfGovernment) " • Seat" else ""
+      val text = s"${district.id}. ${district.districtType}$seatSuffix"
       val paddingX = 10
       val paddingY = 6
       val textWidth = metrics.stringWidth(text)
       val textHeight = metrics.getHeight
-      val rectX = x - textWidth / 2 - paddingX
-      val rectY = y - textHeight / 2 - paddingY
       val rectW = textWidth + paddingX * 2
       val rectH = textHeight + paddingY * 2
-      val clampedX = math.max(mapX + 6, math.min(mapX + mapWidth - rectW - 6, rectX))
-      val clampedY = math.max(mapY + 6, math.min(mapY + mapHeight - rectH - 6, rectY))
+      val totalWidth = rectW
+      val boundaryCenter = centroid(district.boundary)
+      val boundaryX = mapX + boundaryCenter.x
+      val boundaryY = mapY + boundaryCenter.y
+
+      def rectInside(cx: Double, cy: Double): Boolean = {
+        val left = cx - totalWidth / 2.0
+        val right = cx + totalWidth / 2.0
+        val top = cy - rectH / 2.0
+        val bottom = cy + rectH / 2.0
+        if (districtPoly == null)
+          outlinePath.contains(left, top, totalWidth, rectH)
+        else {
+          val corners = List(
+            new Coordinate(left, top),
+            new Coordinate(right, top),
+            new Coordinate(right, bottom),
+            new Coordinate(left, bottom),
+          )
+          corners.forall(coord => districtPoly.contains(geometryFactory.createPoint(coord)))
+        }
+      }
+
+      def findSpot(center: (Double, Double)): Option[(Double, Double)] = {
+        val (baseX, baseY) = center
+        val rings = List(0.0, 12.0, 24.0, 36.0)
+        val angles = (0 until 8).map(_ * (Math.PI / 4.0))
+        val points = rings.flatMap { r =>
+          if (r == 0.0) List((baseX, baseY))
+          else angles.map(a => (baseX + Math.cos(a) * r, baseY + Math.sin(a) * r)).toList
+        }
+        points.find { case (cx, cy) =>
+          rectInside(cx, cy) &&
+          !intersectsPoi(cx, cy, totalWidth, rectH) &&
+          !intersectsRoad(cx, cy, totalWidth, rectH)
+        }
+      }
+
+      val candidates = List(
+        (x.toDouble, y.toDouble),
+        (boundaryX.toDouble, boundaryY.toDouble),
+        ((x + boundaryX) / 2.0, (y + boundaryY) / 2.0),
+      )
+
+      val chosen = candidates.view.flatMap(findSpot).headOption
+        .orElse(candidates.find { case (cx, cy) => rectInside(cx, cy) })
+        .getOrElse((boundaryX.toDouble, boundaryY.toDouble))
+
+      val drawX = (chosen._1 - rectW / 2.0).round.toInt
+      val drawY = (chosen._2 - rectH / 2.0).round.toInt
       g.setColor(new Color(246, 240, 222, 230))
-      g.fillRoundRect(clampedX, clampedY, rectW, rectH, 12, 12)
+      g.fillRoundRect(drawX, drawY, rectW, rectH, 12, 12)
       g.setColor(new Color(90, 70, 50, 200))
       g.setStroke(new BasicStroke(1.6f))
-      g.drawRoundRect(clampedX, clampedY, rectW, rectH, 12, 12)
+      g.drawRoundRect(drawX, drawY, rectW, rectH, 12, 12)
       g.setColor(new Color(60, 45, 30))
-      g.drawString(text, clampedX + paddingX, clampedY + paddingY + metrics.getAscent - 2)
-      if (district.seatOfGovernment) {
-        g.setColor(new Color(140, 90, 40))
-        g.drawString("Seat", clampedX + rectW + 6, clampedY + paddingY + metrics.getAscent - 2)
-      }
+      g.drawString(text, drawX + paddingX, drawY + paddingY + metrics.getAscent - 2)
     }
   }
 
-  private def drawLegend(g: java.awt.Graphics2D, settlement: Settlement): Unit = {
-    val legendX = pageMargin
-    val legendY = pageMargin + mapHeight + 20
-    val legendW = pageWidth - (pageMargin * 2)
-    val legendH = legendHeight - 20
+  private def drawLegend(
+    g: java.awt.Graphics2D,
+    settlement: Settlement,
+    legendX: Int,
+    legendY: Int,
+    legendW: Int,
+    legendH: Int,
+  ): Unit = {
+    val keyColumnWidth = 260
+    val keyGap = 16
 
     g.setColor(new Color(235, 222, 198))
     g.fillRect(legendX, legendY, legendW, legendH)
@@ -1248,19 +1539,57 @@ final case class SettlementServer(
     g.drawRect(legendX, legendY, legendW, legendH)
 
     val titleFont = new Font("Serif", Font.BOLD, 18)
-    val bodyFont  = new Font("Serif", Font.PLAIN, 14)
+    val bodyFontSizes = List(14, 13, 12, 11)
+    val headerFontSizes = bodyFontSizes.map(size => new Font("Serif", Font.BOLD, size))
     g.setFont(titleFont)
     g.drawString("Keyed Index", legendX + 10, legendY + 24)
 
+    val bodyStartY = legendY + 40
+    val maxWidth = legendW - keyColumnWidth - keyGap - 20
+    val availableHeight = legendY + legendH - 12 - bodyStartY
+
+    def estimateHeight(fontSize: Int): Int = {
+      val font = new Font("Serif", Font.PLAIN, fontSize)
+      val metrics = g.getFontMetrics(font)
+      val lineHeight = metrics.getHeight
+      val spacing = math.max(2, lineHeight / 3)
+      settlement.districts.foldLeft(0) { (acc, district) =>
+        val seatLabel = if (district.seatOfGovernment) " (Seat)" else ""
+        val header = s"${district.id}. ${district.districtType} (${district.alignment})$seatLabel"
+        val headerLines = countWrappedLines(header, metrics, maxWidth)
+        val poiLines = district.pointsOfInterest.foldLeft(0) { (poiAcc, poi) =>
+          val detail = poi.tavern.map(t => s"${t.name} - ${t.knownFor}")
+            .orElse(poi.shop.map(s => s"${s.name} - ${s.knownFor}"))
+          val baseLine = detail.map(d => s"  ${poi.id}. ${poi.name}: $d").getOrElse(s"  ${poi.id}. ${poi.name}")
+          val npcLine = poi.npc.map { npc =>
+            val bg = npc.background.getOrElse("Unknown background")
+            val personality = npc.personality.getOrElse("No personality")
+            s"      NPC: ${npc.name} (${npc.ancestry}), $bg, $personality"
+          }
+          val baseLines = countWrappedLines(baseLine, metrics, maxWidth)
+          val npcLines = npcLine.map(line => countWrappedLines(line, metrics, maxWidth)).getOrElse(0)
+          poiAcc + baseLines + npcLines
+        }
+        acc + (headerLines + poiLines) * lineHeight + spacing
+      }
+    }
+
+    val chosenSize = bodyFontSizes.find(size => estimateHeight(size) <= availableHeight).getOrElse(bodyFontSizes.last)
+    val bodyFont = new Font("Serif", Font.PLAIN, chosenSize)
+    val headerFont = new Font("Serif", Font.BOLD, chosenSize)
     g.setFont(bodyFont)
-    val lineHeight = g.getFontMetrics.getHeight
-    var cursorY = legendY + 40
-    val maxWidth = legendW - 20
+    val metrics = g.getFontMetrics
+    val lineHeight = metrics.getHeight
+    val spacing = math.max(2, lineHeight / 3)
+    var cursorY = bodyStartY
 
     settlement.districts.foreach { district =>
+      if (cursorY <= legendY + legendH - 12) {
       val seatLabel = if (district.seatOfGovernment) " (Seat)" else ""
       val header = s"${district.id}. ${district.districtType} (${district.alignment})$seatLabel"
+      g.setFont(headerFont)
       cursorY = drawWrappedText(g, header, legendX + 10, cursorY, maxWidth, lineHeight)
+      g.setFont(bodyFont)
       district.pointsOfInterest.foreach { poi =>
         val detail = poi.tavern.map(t => s"${t.name} - ${t.knownFor}")
           .orElse(poi.shop.map(s => s"${s.name} - ${s.knownFor}"))
@@ -1275,7 +1604,31 @@ final case class SettlementServer(
           cursorY = drawWrappedText(g, line, legendX + 10, cursorY, maxWidth, lineHeight)
         }
       }
-      cursorY += lineHeight / 3
+      cursorY += lineHeight
+      }
+    }
+
+    val keyX = legendX + legendW - keyColumnWidth + 12
+    val keyTitleY = legendY + 24
+    val keyLineStart = legendX + legendW - keyColumnWidth - (keyGap / 2)
+    g.setColor(new Color(90, 70, 50))
+    g.setStroke(new BasicStroke(1.4f))
+    g.drawLine(keyLineStart, legendY + 8, keyLineStart, legendY + legendH - 8)
+
+    g.setFont(titleFont)
+    g.drawString("District Key", keyX, keyTitleY)
+    g.setFont(bodyFont)
+    var keyCursorY = legendY + 44
+    val swatchSize = 14
+    settlement.districts.zipWithIndex.foreach { case (district, idx) =>
+      val color = districtPalette(idx % districtPalette.length)
+      g.setColor(color)
+      g.fillRect(keyX, keyCursorY - swatchSize + 3, swatchSize, swatchSize)
+      g.setColor(new Color(90, 70, 50))
+      g.drawRect(keyX, keyCursorY - swatchSize + 3, swatchSize, swatchSize)
+      g.setColor(new Color(60, 45, 30))
+      g.drawString(s"${district.id}. ${district.districtType}", keyX + swatchSize + 8, keyCursorY)
+      keyCursorY += lineHeight + 4
     }
   }
 
@@ -1315,6 +1668,27 @@ final case class SettlementServer(
       cursor += lineHeight
     }
     cursor
+  }
+
+  private def countWrappedLines(
+    text: String,
+    metrics: java.awt.FontMetrics,
+    maxWidth: Int,
+  ): Int = {
+    val words = text.split("\\s+").toList
+    var line = ""
+    var count = 0
+    words.foreach { word =>
+      val test = if (line.isEmpty) word else s"$line $word"
+      if (metrics.stringWidth(test) <= maxWidth) {
+        line = test
+      } else {
+        if (line.nonEmpty) count += 1
+        line = word
+      }
+    }
+    if (line.nonEmpty) count += 1
+    math.max(1, count)
   }
 
   private def jitter(value: Int, rand: Random): Int =
