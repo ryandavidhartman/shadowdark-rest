@@ -1432,9 +1432,7 @@ final case class SettlementServer(
     outlinePath: Path2D,
     roadSamples: List[(Double, Double)],
   ): Unit = {
-    val labelFont = new Font("Serif", Font.BOLD, 18)
-    g.setFont(labelFont)
-    val metrics = g.getFontMetrics
+    val fontSizes = List(18, 16, 14, 12)
     val poiCenters = districts.flatMap(_.pointsOfInterest).map(poi => (mapX + poi.location.x, mapY + poi.location.y))
     val poiRadius = 16.0
     val roadMargin = 10.0
@@ -1471,47 +1469,11 @@ final case class SettlementServer(
       val text = s"${district.id}. ${district.districtType}$seatSuffix"
       val paddingX = 10
       val paddingY = 6
-      val textWidth = metrics.stringWidth(text)
-      val textHeight = metrics.getHeight
-      val rectW = textWidth + paddingX * 2
-      val rectH = textHeight + paddingY * 2
-      val totalWidth = rectW
       val boundaryCenter = centroid(district.boundary)
       val boundaryX = mapX + boundaryCenter.x
       val boundaryY = mapY + boundaryCenter.y
-
-      def rectInside(cx: Double, cy: Double): Boolean = {
-        val left = cx - totalWidth / 2.0
-        val right = cx + totalWidth / 2.0
-        val top = cy - rectH / 2.0
-        val bottom = cy + rectH / 2.0
-        if (districtPoly == null)
-          outlinePath.contains(left, top, totalWidth, rectH)
-        else {
-          val corners = List(
-            new Coordinate(left, top),
-            new Coordinate(right, top),
-            new Coordinate(right, bottom),
-            new Coordinate(left, bottom),
-          )
-          corners.forall(coord => districtPoly.contains(geometryFactory.createPoint(coord)))
-        }
-      }
-
-      def findSpot(center: (Double, Double)): Option[(Double, Double)] = {
-        val (baseX, baseY) = center
-        val rings = List(0.0, 12.0, 24.0, 36.0)
-        val angles = (0 until 8).map(_ * (Math.PI / 4.0))
-        val points = rings.flatMap { r =>
-          if (r == 0.0) List((baseX, baseY))
-          else angles.map(a => (baseX + Math.cos(a) * r, baseY + Math.sin(a) * r)).toList
-        }
-        points.find { case (cx, cy) =>
-          rectInside(cx, cy) &&
-          !intersectsPoi(cx, cy, totalWidth, rectH) &&
-          !intersectsRoad(cx, cy, totalWidth, rectH)
-        }
-      }
+      val mapCenterX = mapX + mapWidth / 2.0
+      val mapCenterY = mapY + mapHeight / 2.0
 
       val candidates = List(
         (x.toDouble, y.toDouble),
@@ -1519,19 +1481,78 @@ final case class SettlementServer(
         ((x + boundaryX) / 2.0, (y + boundaryY) / 2.0),
       )
 
-      val chosen = candidates.view.flatMap(findSpot).headOption
-        .orElse(candidates.find { case (cx, cy) => rectInside(cx, cy) })
-        .getOrElse((boundaryX.toDouble, boundaryY.toDouble))
+      val chosen = fontSizes.view.flatMap { size =>
+        val labelFont = new Font("Serif", Font.BOLD, size)
+        g.setFont(labelFont)
+        val metrics = g.getFontMetrics(labelFont)
+        val textWidth = metrics.stringWidth(text)
+        val textHeight = metrics.getHeight
+        val rectW = textWidth + paddingX * 2
+        val rectH = textHeight + paddingY * 2
+        val totalWidth = rectW
 
-      val drawX = (chosen._1 - rectW / 2.0).round.toInt
-      val drawY = (chosen._2 - rectH / 2.0).round.toInt
-      g.setColor(new Color(246, 240, 222, 230))
-      g.fillRoundRect(drawX, drawY, rectW, rectH, 12, 12)
-      g.setColor(new Color(90, 70, 50, 200))
-      g.setStroke(new BasicStroke(1.6f))
-      g.drawRoundRect(drawX, drawY, rectW, rectH, 12, 12)
-      g.setColor(new Color(60, 45, 30))
-      g.drawString(text, drawX + paddingX, drawY + paddingY + metrics.getAscent - 2)
+        def rectInside(cx: Double, cy: Double): Boolean = {
+          val left = cx - totalWidth / 2.0
+          val right = cx + totalWidth / 2.0
+          val top = cy - rectH / 2.0
+          val bottom = cy + rectH / 2.0
+          if (districtPoly == null)
+            outlinePath.contains(left, top, totalWidth, rectH)
+          else {
+            val corners = List(
+              new Coordinate(left, top),
+              new Coordinate(right, top),
+              new Coordinate(right, bottom),
+              new Coordinate(left, bottom),
+            )
+            corners.forall(coord => districtPoly.contains(geometryFactory.createPoint(coord)))
+          }
+        }
+
+        def findSpot(center: (Double, Double)): Option[(Double, Double)] = {
+          val (baseX, baseY) = center
+          val rings = List(0.0, 12.0, 24.0, 36.0)
+          val angles = (0 until 8).map(_ * (Math.PI / 4.0))
+          val points = rings.flatMap { r =>
+            if (r == 0.0) List((baseX, baseY))
+            else angles.map(a => (baseX + Math.cos(a) * r, baseY + Math.sin(a) * r)).toList
+          }
+          points.find { case (cx, cy) =>
+            rectInside(cx, cy) &&
+            !intersectsPoi(cx, cy, totalWidth, rectH) &&
+            !intersectsRoad(cx, cy, totalWidth, rectH)
+          }
+        }
+
+        def nudgeTowardMapCenter(center: (Double, Double)): Option[(Double, Double)] = {
+          val (baseX, baseY) = center
+          val steps = List(0.15, 0.3, 0.45, 0.6, 0.75, 0.9)
+          steps
+            .map { t => (baseX + (mapCenterX - baseX) * t, baseY + (mapCenterY - baseY) * t) }
+            .find { case (cx, cy) => rectInside(cx, cy) }
+        }
+
+        val spot = candidates.view.flatMap(findSpot).headOption
+          .orElse(candidates.find { case (cx, cy) => rectInside(cx, cy) })
+          .orElse(candidates.view.flatMap(nudgeTowardMapCenter).headOption)
+          .orElse(nudgeTowardMapCenter((boundaryX.toDouble, boundaryY.toDouble)))
+
+        spot.map { case (cx, cy) =>
+          val drawX = (cx - rectW / 2.0).round.toInt
+          val drawY = (cy - rectH / 2.0).round.toInt
+          (drawX, drawY, rectW, rectH, metrics.getAscent)
+        }
+      }.headOption
+
+      chosen.foreach { case (drawX, drawY, rectW, rectH, ascent) =>
+        g.setColor(new Color(246, 240, 222, 230))
+        g.fillRoundRect(drawX, drawY, rectW, rectH, 12, 12)
+        g.setColor(new Color(90, 70, 50, 200))
+        g.setStroke(new BasicStroke(1.6f))
+        g.drawRoundRect(drawX, drawY, rectW, rectH, 12, 12)
+        g.setColor(new Color(60, 45, 30))
+        g.drawString(text, drawX + paddingX, drawY + paddingY + ascent - 2)
+      }
     }
   }
 
@@ -1618,7 +1639,7 @@ final case class SettlementServer(
           cursorY = drawWrappedText(g, line, legendX + 10, cursorY, maxWidth, lineHeight)
         }
       }
-      cursorY += lineHeight
+      cursorY += spacing
       }
     }
 

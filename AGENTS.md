@@ -56,7 +56,7 @@
 - Names API: `/names` GET returns cached list; POST accepts JSON (`name`, `race`, optional `gender`, `firstName`, `lastName`) and inserts a new ObjectId-backed `Name`, returns 201 JSON and clears cache.
 
 ## Settlement Generator Notes (WIP)
-- Current status: settlement maps are generated via `SettlementServer` with Voronoi districts, organic outer boundary, lightweight building footprints, plazas, POI markers, and banner labels.
+- Current status: settlement maps are generated via `SettlementServer` with Voronoi districts, organic outer boundary, lightweight building footprints, plazas, POI markers, and district labels shown in the keyed index on page 2 of the PDF (map page shows POI numbers only).
 - PNG endpoint: `/settlements/random.png` renders the map with clipped boundary and legend index entries; use a local save to inspect (e.g., `random.png` in repo root).
 - New data/model additions:
   - `NpcQuality` model and repo/server for NPC qualities (`appearance`, `does`, `secret`, plus weighted `age` and `wealth` entries).
@@ -69,19 +69,16 @@
   - Main roads have thicker stroke; minor roads thinner and fewer.
   - POI markers snap near POI-assigned buildings.
   - Grid opacity reduced.
-  - District labels are banner-style boxes, but they still sometimes truncate at edges.
+- District labels are rendered in the keyed index on page 2; on-map banner labels are removed.
 
 ## Next Steps (Resume Tomorrow)
-- Fix district label truncation:
-  - Labels are clamped to map bounds but can still overflow near the organic boundary.
-  - Consider: clamping to boundary polygon bounds, shrinking font if banner would exceed boundary, or offsetting labels toward district centroid.
-- Re-check legend formatting/spacing if banner size changes.
-- Confirm POI marker snap behavior vs buildings after label adjustments.
+- Re-check keyed index formatting/spacing if header sizes or fonts change. (Done: spacing tightened)
+- Confirm POI marker snap behavior vs buildings after label adjustments. (Done: markers appear anchored near building footprints in latest PDF sample)
 
 ## Settlement Roadmap (Phases)
 ### Phase 1 (Current)
 - Organic boundary, Voronoi wards, curved roads with hierarchy, clustered buildings with partial road alignment, plazas, POI markers, softer grid.
-- Remaining issue: district label truncation near boundary.
+- Remaining issue: verify keyed index formatting/spacing as content density grows.
 ### Phase 1 Summary
 - Replaced on-map district labels with a right-side District Key; keys moved to a second PDF page rendered by `/settlements/random.pdf`.
 - District types are unique when the settlement has fewer than eight districts.
