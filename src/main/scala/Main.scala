@@ -10,6 +10,7 @@ import routes.{
   NameRoute,
   PersonalityRoute,
   RaceRoute,
+  SettlementNameRoute,
   SettlementRoute,
   SpellRoute,
   TitleRoute,
@@ -26,6 +27,7 @@ import repositories.{
   NpcQualityRepositoryLive,
   PersonalityRepositoryLive,
   RaceRepositoryLive,
+  SettlementNameRepositoryLive,
   SpellRepositoryLive,
   TitleRepositoryLive,
 }
@@ -41,6 +43,7 @@ import servers.{
   NpcQualityServer,
   PersonalityServer,
   RaceServer,
+  SettlementNameServer,
   SettlementServer,
   SpellServer,
   TitleServer,
@@ -74,9 +77,10 @@ object Main extends ZIOAppDefault {
           deityRoutes       <- ZIO.serviceWith[DeityRoute](_.routes)
           languageRoutes    <- ZIO.serviceWith[LanguageRoute](_.routes)
           monsterRoutes     <- ZIO.serviceWith[MonsterRoute](_.routes)
+          settlementNameRoutes <- ZIO.serviceWith[SettlementNameRoute](_.routes)
           settlementRoutes  <- ZIO.serviceWith[SettlementRoute](_.routes)
           _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementRoutes,
+                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementNameRoutes ++ settlementRoutes,
                                )
         } yield ()
 
@@ -95,6 +99,7 @@ object Main extends ZIOAppDefault {
           LanguageRepositoryLive.layer,
           MonsterRepositoryLive.layer,
           NpcQualityRepositoryLive.layer,
+          SettlementNameRepositoryLive.layer,
           NameServer.live,
           RaceServer.live,
           PersonalityServer.live,
@@ -107,6 +112,7 @@ object Main extends ZIOAppDefault {
           LanguageServer.live,
           MonsterServer.live,
           NpcQualityServer.live,
+          SettlementNameServer.live,
           SettlementServer.live,
           CharacterServer.live,
           CharacterRoute.live,
@@ -121,6 +127,7 @@ object Main extends ZIOAppDefault {
           DeityRoute.live,
           LanguageRoute.live,
           MonsterRoute.live,
+          SettlementNameRoute.live,
           SettlementRoute.live,
         )
       }

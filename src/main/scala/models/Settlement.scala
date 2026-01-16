@@ -93,6 +93,7 @@ final case class District(
 )
 
 final case class Settlement(
+  name: String,
   settlementType: SettlementType,
   alignment: String,
   districts: List[District],

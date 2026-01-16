@@ -34,6 +34,7 @@ final case class SettlementServer(
   personalityServer: PersonalityServer,
   backgroundServer: BackgroundServer,
   npcQualityServer: NpcQualityServer,
+  settlementNameServer: SettlementNameServer,
 ) {
   private val pageWidth    = 1275
   private val pageHeight   = 1650
@@ -711,6 +712,16 @@ final case class SettlementServer(
     }
   }
 
+  private def pickSettlementName(
+    settlementNames: List[SettlementName],
+    settlementType: SettlementType,
+    rand: Random,
+  ): String = {
+    val matching = settlementNames.filter(_.settlementType.equalsIgnoreCase(settlementType.name))
+    if (matching.isEmpty) settlementType.name
+    else matching(rand.nextInt(matching.length)).name
+  }
+
   private def qualityValue(qualities: List[NpcQuality], category: String): Option[String] =
     pickOne(qualities.filter(_.category == category).map(_.value))
 
@@ -878,14 +889,17 @@ final case class SettlementServer(
       personalities <- personalityServer.getPersonalities
       backgrounds   <- backgroundServer.getBackgrounds
       qualities     <- npcQualityServer.getQualities
+      settlementNames <- settlementNameServer.getSettlementNames
       settlement    <- ZIO.attempt {
                          val settlementType     = settlementTypeForRoll(rollDie(6))
                          val seed               = rng.nextLong()
+                         val rand               = new Random(seed)
                          val dieRolls           = (1 to settlementType.diceCount).map(_ => rollDie(settlementType.dieSides)).toList
                          val maskPoints         = buildCityMask(seed)
                          val maskPolygon         = polygonFrom(maskPoints)
                          val points             = buildPoints(settlementType.diceCount, maskPolygon)
                          val settlementAlignment = rollAlignment
+                         val settlementName     = pickSettlementName(settlementNames, settlementType, rand)
                          val maxRoll            = dieRolls.max
                          val seatIndex          = dieRolls.indexOf(maxRoll) + 1
                          val cellBoundaries     = buildVoronoiCells(points, maskPolygon)
@@ -893,7 +907,6 @@ final case class SettlementServer(
                            case points if points.size >= 3 => points
                            case _                           => roughenBoundary(maskPoints, new Random(seed + 17))
                          }
-                         val rand               = new Random(seed)
                          val roadEdgesForPoints = buildRoadEdgesForPoints(points, seatIndex)
                          val districtTypeAssignments =
                            if (dieRolls.size < districtTypes.length)
@@ -997,6 +1010,7 @@ final case class SettlementServer(
                          }
 
                          Settlement(
+                           name = settlementName,
                            settlementType = settlementType,
                            alignment = settlementAlignment,
                            districts = districts,
@@ -1636,7 +1650,7 @@ final case class SettlementServer(
     val titleFont = new Font("Serif", Font.BOLD, 26)
     g.setFont(titleFont)
     g.setColor(new Color(60, 45, 30))
-    val title = s"${settlement.settlementType.name} (${settlement.alignment})"
+    val title = s"${settlement.name} (${settlement.settlementType.name}, ${settlement.alignment})"
     val width = g.getFontMetrics.stringWidth(title)
     g.drawString(title, (pageWidth - width) / 2, pageMargin - 10)
   }
@@ -1710,7 +1724,7 @@ final case class SettlementServer(
 
 object SettlementServer {
   val live: ZLayer[
-    NameServer with RaceServer with PersonalityServer with BackgroundServer with NpcQualityServer,
+    NameServer with RaceServer with PersonalityServer with BackgroundServer with NpcQualityServer with SettlementNameServer,
     Nothing,
     SettlementServer,
   ] =
