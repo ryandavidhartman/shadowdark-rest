@@ -575,6 +575,38 @@ final case class SettlementServer(
     }
   }
 
+  private final case class BuildingProfile(
+    minWidth: Int,
+    maxWidth: Int,
+    minHeight: Int,
+    maxHeight: Int,
+  )
+
+  private def buildingProfileFor(districtType: String, rand: Random): BuildingProfile =
+    districtType match {
+      case "Temple district" =>
+        BuildingProfile(28, 60, 28, 60)
+      case "Castle district" =>
+        BuildingProfile(36, 72, 36, 72)
+      case "Market" =>
+        if (rand.nextBoolean())
+          BuildingProfile(10, 18, 20, 36)
+        else
+          BuildingProfile(20, 36, 10, 18)
+      case "University district" =>
+        BuildingProfile(24, 54, 18, 40)
+      case "High District" =>
+        BuildingProfile(22, 48, 20, 44)
+      case "Artisan district" =>
+        BuildingProfile(18, 40, 16, 36)
+      case "Low district" =>
+        BuildingProfile(16, 34, 14, 30)
+      case "Slums" =>
+        BuildingProfile(12, 28, 12, 28)
+      case _ =>
+        BuildingProfile(16, 46, 16, 46)
+    }
+
   private def generateBuildingFootprints(
     boundary: List[Point],
     rand: Random,
@@ -582,6 +614,7 @@ final case class SettlementServer(
     roadAnchors: List[(Point, Point, Boolean)],
     roadCurves: List[RoadCurve],
     plazas: List[Plaza],
+    profile: BuildingProfile,
   ): List[List[Point]] = {
     if (boundary.size < 3 || targetCount <= 0) List.empty
     else {
@@ -625,8 +658,10 @@ final case class SettlementServer(
 
       while (footprints.size < targetCount && attempts < maxAttempts) {
         attempts += 1
-        val width = 16 + rand.nextInt(30)
-        val height = 16 + rand.nextInt(30)
+        val widthRange = math.max(1, profile.maxWidth - profile.minWidth + 1)
+        val heightRange = math.max(1, profile.maxHeight - profile.minHeight + 1)
+        val width = profile.minWidth + rand.nextInt(widthRange)
+        val height = profile.minHeight + rand.nextInt(heightRange)
         val baseX = envelope.getMinX + rand.nextDouble() * math.max(1.0, envelope.getWidth - width)
         val baseY = envelope.getMinY + rand.nextDouble() * math.max(1.0, envelope.getHeight - height)
         val plazaGuided = plazas.nonEmpty && rand.nextDouble() < 0.6
@@ -986,8 +1021,17 @@ final case class SettlementServer(
                            val edgeFactor = math.max(0.0, math.min(1.0, (edgeDistance - 20.0) / 120.0))
                            val edgeBias = 0.7 + 0.3 * edgeFactor
                            val buildingTarget = math.max(6, math.min(50, (baseTarget * roadBias * (1.0 + hubBias) * edgeBias).round.toInt))
+                           val buildingProfile = buildingProfileFor(districtType, rand)
                            val footprints =
-                             generateBuildingFootprints(boundary, rand, buildingTarget, roadAnchors, roadCurves, plazas)
+                             generateBuildingFootprints(
+                               boundary,
+                               rand,
+                               buildingTarget,
+                               roadAnchors,
+                               roadCurves,
+                               plazas,
+                               buildingProfile,
+                             )
                            val baseBuildings = footprints.map { footprint =>
                              buildingId += 1
                              Building(id = buildingId, footprint = footprint, usage = "Residence", poiId = None)
@@ -1196,6 +1240,114 @@ final case class SettlementServer(
     g.draw(path)
   }
 
+  private sealed trait TexturePattern
+  private case object DiagonalHatch extends TexturePattern
+  private case object CrossHatch extends TexturePattern
+  private case object DotPattern extends TexturePattern
+  private case object HorizontalHatch extends TexturePattern
+
+  private final case class DistrictStyle(fill: Color, pattern: TexturePattern)
+
+  private def clampColor(value: Int): Int =
+    math.max(0, math.min(255, value))
+
+  private def tintedColor(base: Color, seed: Long): Color = {
+    val rand = new Random(seed)
+    val delta = rand.nextInt(19) - 9
+    new Color(
+      clampColor(base.getRed + delta),
+      clampColor(base.getGreen + delta),
+      clampColor(base.getBlue + delta),
+      base.getAlpha,
+    )
+  }
+
+  private def texturePatternFor(districtType: String): TexturePattern =
+    districtType match {
+      case "Temple district"     => CrossHatch
+      case "Castle district"     => DiagonalHatch
+      case "Market"              => DotPattern
+      case "University district" => HorizontalHatch
+      case "High District"       => DiagonalHatch
+      case "Artisan district"    => DotPattern
+      case "Low district"        => HorizontalHatch
+      case "Slums"               => DiagonalHatch
+      case _                     => DiagonalHatch
+    }
+
+  private def districtStyleFor(district: District, idx: Int, seed: Long): DistrictStyle = {
+    val base = districtPalette(idx % districtPalette.length)
+    val tintSeed = seed + district.id * 31L + district.districtType.hashCode.toLong
+    DistrictStyle(tintedColor(base, tintSeed), texturePatternFor(district.districtType))
+  }
+
+  private def patternColor(fill: Color, alpha: Int): Color =
+    new Color(
+      clampColor(fill.getRed - 32),
+      clampColor(fill.getGreen - 32),
+      clampColor(fill.getBlue - 32),
+      alpha,
+    )
+
+  private def drawTextureInBounds(
+    g: java.awt.Graphics2D,
+    path: Path2D,
+    pattern: TexturePattern,
+    fill: Color,
+  ): Unit = {
+    val bounds = path.getBounds2D
+    val oldClip = g.getClip
+    g.setClip(path)
+    pattern match {
+      case DotPattern =>
+        g.setColor(patternColor(fill, 45))
+        val spacing = 14
+        val size = 3
+        var y = bounds.getY.toInt
+        while (y <= bounds.getMaxY) {
+          var x = bounds.getX.toInt
+          while (x <= bounds.getMaxX) {
+            g.fillOval(x, y, size, size)
+            x += spacing
+          }
+          y += spacing
+        }
+      case HorizontalHatch =>
+        g.setColor(patternColor(fill, 50))
+        g.setStroke(new BasicStroke(1.0f))
+        val spacing = 12
+        var y = bounds.getY.toInt
+        while (y <= bounds.getMaxY) {
+          g.drawLine(bounds.getX.toInt, y, bounds.getMaxX.toInt, y)
+          y += spacing
+        }
+      case DiagonalHatch =>
+        g.setColor(patternColor(fill, 50))
+        g.setStroke(new BasicStroke(1.0f))
+        val spacing = 14
+        val start = bounds.getX.toInt - bounds.getHeight.toInt
+        val end = bounds.getMaxX.toInt + bounds.getHeight.toInt
+        var x = start
+        while (x <= end) {
+          g.drawLine(x, bounds.getY.toInt, x + bounds.getHeight.toInt, bounds.getMaxY.toInt)
+          x += spacing
+        }
+      case CrossHatch =>
+        g.setColor(patternColor(fill, 48))
+        g.setStroke(new BasicStroke(1.0f))
+        val spacing = 14
+        val start = bounds.getX.toInt - bounds.getHeight.toInt
+        val end = bounds.getMaxX.toInt + bounds.getHeight.toInt
+        var x = start
+        while (x <= end) {
+          g.drawLine(x, bounds.getY.toInt, x + bounds.getHeight.toInt, bounds.getMaxY.toInt)
+          g.drawLine(x, bounds.getMaxY.toInt, x + bounds.getHeight.toInt, bounds.getY.toInt)
+          x += spacing
+        }
+    }
+    g.setClip(oldClip)
+  }
+
   private def drawDistricts(
     g: java.awt.Graphics2D,
     mapX: Int,
@@ -1206,8 +1358,10 @@ final case class SettlementServer(
   ): Unit = {
     settlement.districts.zipWithIndex.foreach { case (district, idx) =>
       val path   = polygonPath(mapX, mapY, roughenBoundary(district.boundary, rand), rand)
-      g.setColor(districtPalette(idx % districtPalette.length))
+      val style = districtStyleFor(district, idx, settlement.layout.seed)
+      g.setColor(style.fill)
       g.fill(path)
+      drawTextureInBounds(g, path, style.pattern, style.fill)
       g.setColor(new Color(90, 70, 50, 180))
       g.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
       g.draw(path)
@@ -1793,9 +1947,8 @@ final case class SettlementServer(
     var keyCursorY = legendY + 44
     val swatchSize = 14
     settlement.districts.zipWithIndex.foreach { case (district, idx) =>
-      val color = districtPalette(idx % districtPalette.length)
-      g.setColor(color)
-      g.fillRect(keyX, keyCursorY - swatchSize + 3, swatchSize, swatchSize)
+      val style = districtStyleFor(district, idx, settlement.layout.seed)
+      drawTextureSwatch(g, keyX, keyCursorY - swatchSize + 3, swatchSize, style)
       g.setColor(new Color(90, 70, 50))
       g.drawRect(keyX, keyCursorY - swatchSize + 3, swatchSize, swatchSize)
       g.setColor(new Color(60, 45, 30))
@@ -1811,6 +1964,24 @@ final case class SettlementServer(
     val title = s"${settlement.name} (${settlement.settlementType.name}, ${settlement.alignment})"
     val width = g.getFontMetrics.stringWidth(title)
     g.drawString(title, (pageWidth - width) / 2, pageMargin - 10)
+  }
+
+  private def drawTextureSwatch(
+    g: java.awt.Graphics2D,
+    x: Int,
+    y: Int,
+    size: Int,
+    style: DistrictStyle,
+  ): Unit = {
+    val path = new Path2D.Double()
+    path.moveTo(x.toDouble, y.toDouble)
+    path.lineTo(x + size, y.toDouble)
+    path.lineTo(x + size, y + size)
+    path.lineTo(x.toDouble, y + size)
+    path.closePath()
+    g.setColor(style.fill)
+    g.fill(path)
+    drawTextureInBounds(g, path, style.pattern, style.fill)
   }
 
   private def drawWrappedText(

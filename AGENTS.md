@@ -115,9 +115,8 @@
 - Density tuning by area, road access, hubs, and edge falloff.
 
 ### Remaining Work (Phase 3)
-- Add POI icons in the legend and refine spacing so it never crowds.
 - Add subtle district theming (light textures or color variation).
-- Vary building shapes by ward (temples larger, markets stall-like).
+ - Vary building shapes by ward (temples larger, markets stall-like). (Complete)
 
 ### Current Focus
 - Work on Phase 3 items only; Phase 2 is complete.
