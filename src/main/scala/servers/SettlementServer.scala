@@ -1373,6 +1373,7 @@ final case class SettlementServer(
 
     drawPlazas(g, mapX, mapY, settlement.districts)
     drawBuildings(g, mapX, mapY, settlement.districts, rand)
+    drawTrees(g, mapX, mapY, settlement.districts, roadSamples, new Random(settlement.layout.seed + 43))
     drawRoads(g, mapX, mapY, roadEdges, new Random(roadSeed))
     drawPoiMarkers(g, mapX, mapY, settlement.districts)
   }
@@ -1436,6 +1437,110 @@ final case class SettlementServer(
         val width = if (building.poiId.isDefined) 2.0f else 1.2f
         g.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
         g.draw(path)
+      }
+    }
+  }
+
+  private def treeDensityFor(districtType: String): Double =
+    districtType match {
+      case "Castle district"     => 0.25
+      case "Market"              => 0.35
+      case "High District"       => 0.4
+      case "Temple district"     => 0.45
+      case "University district" => 0.5
+      case "Artisan district"    => 0.55
+      case "Low district"        => 0.65
+      case "Slums"               => 0.7
+      case _                     => 0.6
+    }
+
+  private def treeTrunkHeight(size: Int): Int =
+    math.max(3, size / 2 + 2)
+
+  private def drawTreeAt(
+    g: java.awt.Graphics2D,
+    x: Int,
+    y: Int,
+    size: Int,
+    canopyFill: Color,
+    canopyStroke: Color,
+    trunkFill: Color,
+  ): Unit = {
+    val trunkHeight = treeTrunkHeight(size)
+    val trunkWidth = math.max(2, size / 3)
+    val trunkX = x - trunkWidth / 2
+    val trunkY = y + size - 1
+    g.setColor(trunkFill)
+    g.fillRect(trunkX, trunkY, trunkWidth, trunkHeight)
+
+    g.setColor(canopyFill)
+    g.fillOval(x - size, y - size, size * 2, size * 2)
+    g.fillOval(x - size + 2, y - size - 2, size * 2 - 3, size * 2 - 3)
+    g.setColor(canopyStroke)
+    g.setStroke(new BasicStroke(1.1f))
+    g.drawOval(x - size, y - size, size * 2, size * 2)
+  }
+
+  private def drawTrees(
+    g: java.awt.Graphics2D,
+    mapX: Int,
+    mapY: Int,
+    districts: List[District],
+    roadSamples: List[(Double, Double)],
+    rand: Random,
+  ): Unit = {
+    val canopyFill = new Color(142, 156, 118, 170)
+    val canopyStroke = new Color(92, 104, 72, 200)
+    val trunkFill = new Color(90, 70, 50, 200)
+    val roadBuffer = 12.0
+    val minSpacing = 12.0
+
+    districts.foreach { district =>
+      if (district.boundary.size >= 3) {
+        val districtPoly = polygonFrom(district.boundary)
+        val envelope = districtPoly.getEnvelopeInternal
+        val density = treeDensityFor(district.districtType) * 0.7
+        val area = districtPoly.getArea
+        val baseCount = area / 3500.0 * density
+        val targetCount = math.max(0, math.min(60, (baseCount + rand.nextInt(4)).round.toInt))
+        val buildings = district.buildings
+          .filter(_.footprint.size >= 3)
+          .map(building => polygonFrom(building.footprint).buffer(6.0))
+        val plazas = district.plazas
+        val poiCenters = district.pointsOfInterest.map(_.location)
+
+        val picked = scala.collection.mutable.ListBuffer.empty[(Point, Int)]
+        var attempts = 0
+        val maxAttempts = targetCount * 20 + 40
+        while (picked.size < targetCount && attempts < maxAttempts) {
+          attempts += 1
+          val x = (envelope.getMinX + rand.nextDouble() * envelope.getWidth).toInt
+          val y = (envelope.getMinY + rand.nextDouble() * envelope.getHeight).toInt
+          val size = 4 + rand.nextInt(5)
+          val trunkHeight = treeTrunkHeight(size)
+          val point = Point(x, y)
+          val trunkBottom = Point(x, y + size + trunkHeight)
+          val inside =
+            districtPoly.contains(geometryFactory.createPoint(toCoordinate(point))) &&
+              districtPoly.contains(geometryFactory.createPoint(toCoordinate(trunkBottom)))
+
+          if (inside) {
+            val tooCloseToOther = picked.exists { case (p, s) => distance(p, point) < (minSpacing + s) }
+            val nearPlaza = plazas.exists(plaza => distance(plaza.center, point) <= plaza.radius + 10)
+            val nearPoi = poiCenters.exists(poi => distance(poi, point) <= 18)
+            val nearBuilding = buildings.exists(_.contains(geometryFactory.createPoint(toCoordinate(point))))
+            val nearRoad = roadSamples.exists { case (rx, ry) =>
+              math.hypot(mapX + point.x - rx, mapY + point.y - ry) <= roadBuffer
+            }
+            if (!tooCloseToOther && !nearPlaza && !nearPoi && !nearBuilding && !nearRoad) {
+              picked += ((point, size))
+            }
+          }
+        }
+
+        picked.foreach { case (point, size) =>
+          drawTreeAt(g, mapX + point.x, mapY + point.y, size, canopyFill, canopyStroke, trunkFill)
+        }
       }
     }
   }
