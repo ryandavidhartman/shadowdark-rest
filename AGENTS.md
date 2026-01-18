@@ -101,22 +101,10 @@
 - Buildings/plazas: `generateBuildingFootprints`, `drawPlazas`, `drawBuildings`.
 - Output: `randomSettlement`, `renderSettlementPdf`, `drawLegend`.
 
-## Settlement Roadmap (Phases)
-### Phase 1 (Complete)
+## Settlement Random Settlement Generation
 - Organic boundary, Voronoi wards, curved roads with hierarchy, clustered buildings with partial road alignment, plazas, POI markers, softer grid.
 - Replaced on-map district labels with a right-side District Key; keys moved to a second PDF page rendered by `/settlements/random.pdf`.
 - District types are unique when the settlement has fewer than eight districts.
 - Legend formatting improved with bold district headers and spacing; keyed index runs on its own page.
 - POI markers now stay anchored to their assigned building footprints.
 
-### Phase 2 (Complete)
-- Main street loop + seat connectors; radial spine added and emphasized.
-- Plaza influence on buildings and roads; plaza spurs softened.
-- Density tuning by area, road access, hubs, and edge falloff.
-
-### Remaining Work (Phase 3)
-- Add subtle district theming (light textures or color variation).
- - Vary building shapes by ward (temples larger, markets stall-like). (Complete)
-
-### Current Focus
-- Work on Phase 3 items only; Phase 2 is complete.
