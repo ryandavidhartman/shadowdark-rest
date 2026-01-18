@@ -1143,6 +1143,15 @@ final case class SettlementServer(
         val legendStream = new PDPageContentStream(document, legendPage)
         try legendStream.drawImage(legendXObject, 0, 0, pageWidth, pageHeight)
         finally legendStream.close()
+        settlement.districts.foreach { district =>
+          val districtImage = renderSettlementDistrictPageImage(settlement, district)
+          val districtPage = new PDPage(pageSize)
+          document.addPage(districtPage)
+          val districtXObject = LosslessFactory.createFromImage(document, districtImage)
+          val districtStream = new PDPageContentStream(document, districtPage)
+          try districtStream.drawImage(districtXObject, 0, 0, pageWidth, pageHeight)
+          finally districtStream.close()
+        }
         val output = new ByteArrayOutputStream()
         try {
           document.save(output)
@@ -1199,6 +1208,82 @@ final case class SettlementServer(
       val legendH = pageHeight - (pageMargin * 2)
       drawLegend(g, settlement, legendX, legendY, legendW, legendH)
       drawTitle(g, settlement)
+    } finally g.dispose()
+    image
+  }
+
+  private def renderSettlementDistrictPageImage(settlement: Settlement, district: District): BufferedImage = {
+    val image = baseSettlementImage()
+    val g = image.createGraphics()
+    try {
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+      paintBackground(g)
+
+      val contentX = pageMargin
+      val contentY = pageMargin
+      val contentW = pageWidth - (pageMargin * 2)
+      val contentH = pageHeight - (pageMargin * 2)
+      val gap = 18
+      val mapAreaH = (contentH * 0.58).toInt
+      val keyAreaY = contentY + mapAreaH + gap
+      val keyAreaH = contentH - mapAreaH - gap
+
+      if (district.boundary.size >= 3) {
+        val districtPoly = polygonFrom(district.boundary)
+        val envelope = districtPoly.getEnvelopeInternal
+        val pad = 20
+        val targetW = math.max(1, contentW - pad * 2)
+        val targetH = math.max(1, mapAreaH - pad * 2)
+        val scaleX = targetW / math.max(1.0, envelope.getWidth)
+        val scaleY = targetH / math.max(1.0, envelope.getHeight)
+        val scale = math.min(scaleX, scaleY)
+        val offsetX = contentX + (contentW - envelope.getWidth * scale) / 2.0 - envelope.getMinX * scale
+        val offsetY = contentY + (mapAreaH - envelope.getHeight * scale) / 2.0 - envelope.getMinY * scale
+
+        val outlinePath = pathFromPolygon(0, 0, districtPoly)
+        val roadSeed = roadSeedFor(settlement.layout.seed)
+        val roadEdges = buildRoadEdges(settlement.districts)
+        val roadSamples = sampleRoads(roadEdges, 0, 0, new Random(roadSeed))
+
+        val oldTransform = g.getTransform
+        g.translate(offsetX, offsetY)
+        g.scale(scale, scale)
+
+        val styleIndex = settlement.districts.indexWhere(_.id == district.id) match {
+          case -1 => 0
+          case idx => idx
+        }
+        val style = districtStyleFor(district, styleIndex, settlement.layout.seed)
+        g.setColor(style.fill)
+        g.fill(outlinePath)
+        drawTextureInBounds(g, outlinePath, style.pattern, style.fill)
+
+        val oldClip = g.getClip
+        g.setClip(outlinePath)
+        drawPlazas(g, 0, 0, List(district), settlement.layout.seed)
+        drawBuildings(g, 0, 0, List(district), new Random(settlement.layout.seed + 19))
+        drawTrees(g, 0, 0, List(district), roadSamples, new Random(settlement.layout.seed + 43))
+        drawRoads(g, 0, 0, roadEdges, new Random(roadSeed))
+        drawPoiMarkers(g, 0, 0, List(district))
+        g.setClip(oldClip)
+
+        g.setColor(new Color(90, 70, 50))
+        g.setStroke(new BasicStroke(3f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+        g.draw(outlinePath)
+
+        g.setTransform(oldTransform)
+      }
+
+      drawDistrictPoiKey(
+        g,
+        List(district),
+        contentX,
+        keyAreaY,
+        contentW,
+        keyAreaH,
+        "District POI Key",
+      )
+      drawTitleText(g, s"${settlement.name} - ${district.districtType}")
     } finally g.dispose()
     image
   }
@@ -2130,6 +2215,91 @@ final case class SettlementServer(
     }
   }
 
+  private def drawDistrictPoiKey(
+    g: java.awt.Graphics2D,
+    districts: List[District],
+    pageX: Int,
+    pageY: Int,
+    pageW: Int,
+    pageH: Int,
+    title: String,
+  ): Unit = {
+    g.setColor(new Color(235, 222, 198))
+    g.fillRect(pageX, pageY, pageW, pageH)
+    g.setColor(new Color(90, 70, 50))
+    g.setStroke(new BasicStroke(2f))
+    g.drawRect(pageX, pageY, pageW, pageH)
+
+    val titleFont = new Font("Serif", Font.BOLD, 18)
+    val bodyFontSizes = List(14, 13, 12, 11)
+    g.setFont(titleFont)
+    g.drawString(title, pageX + 10, pageY + 24)
+
+    val bodyStartY = pageY + 40
+    val maxWidth = pageW - 20
+    val availableHeight = pageY + pageH - 12 - bodyStartY
+
+    def estimateHeight(fontSize: Int): Int = {
+      val font = new Font("Serif", Font.PLAIN, fontSize)
+      val metrics = g.getFontMetrics(font)
+      val lineHeight = metrics.getHeight
+      val spacing = math.max(2, lineHeight / 3)
+      districts.foldLeft(0) { (acc, district) =>
+        val seatLabel = if (district.seatOfGovernment) " (Seat)" else ""
+        val header = s"${district.id}. ${district.districtType} (${district.alignment})$seatLabel"
+        val headerLines = countWrappedLines(header, metrics, maxWidth)
+        val poiLines = district.pointsOfInterest.foldLeft(0) { (poiAcc, poi) =>
+          val detail = poi.tavern.map(t => s"${t.name} - ${t.knownFor}")
+            .orElse(poi.shop.map(s => s"${s.name} - ${s.knownFor}"))
+          val baseLine = detail.map(d => s"  ${poi.id}. ${poi.name}: $d").getOrElse(s"  ${poi.id}. ${poi.name}")
+          val npcLine = poi.npc.map { npc =>
+            val bg = npc.background.getOrElse("Unknown background")
+            val personality = npc.personality.getOrElse("No personality")
+            s"      NPC: ${npc.name} (${npc.ancestry}), $bg, $personality"
+          }
+          val baseLines = countWrappedLines(baseLine, metrics, maxWidth)
+          val npcLines = npcLine.map(line => countWrappedLines(line, metrics, maxWidth)).getOrElse(0)
+          poiAcc + baseLines + npcLines
+        }
+        acc + (headerLines + poiLines) * lineHeight + spacing
+      }
+    }
+
+    val chosenSize = bodyFontSizes.find(size => estimateHeight(size) <= availableHeight).getOrElse(bodyFontSizes.last)
+    val bodyFont = new Font("Serif", Font.PLAIN, chosenSize)
+    val headerFont = new Font("Serif", Font.BOLD, chosenSize)
+    g.setFont(bodyFont)
+    val metrics = g.getFontMetrics
+    val lineHeight = metrics.getHeight
+    val spacing = math.max(2, lineHeight / 3)
+    var cursorY = bodyStartY
+
+    districts.foreach { district =>
+      if (cursorY <= pageY + pageH - 12) {
+        val seatLabel = if (district.seatOfGovernment) " (Seat)" else ""
+        val header = s"${district.id}. ${district.districtType} (${district.alignment})$seatLabel"
+        g.setFont(headerFont)
+        cursorY = drawWrappedText(g, header, pageX + 10, cursorY, maxWidth, lineHeight)
+        g.setFont(bodyFont)
+        district.pointsOfInterest.foreach { poi =>
+          val detail = poi.tavern.map(t => s"${t.name} - ${t.knownFor}")
+            .orElse(poi.shop.map(s => s"${s.name} - ${s.knownFor}"))
+          val baseLine = detail.map(d => s"  ${poi.id}. ${poi.name}: $d").getOrElse(s"  ${poi.id}. ${poi.name}")
+          cursorY = drawWrappedText(g, baseLine, pageX + 10, cursorY, maxWidth, lineHeight)
+          val npcLine = poi.npc.map { npc =>
+            val bg = npc.background.getOrElse("Unknown background")
+            val personality = npc.personality.getOrElse("No personality")
+            s"      NPC: ${npc.name} (${npc.ancestry}), $bg, $personality"
+          }
+          npcLine.foreach { line =>
+            cursorY = drawWrappedText(g, line, pageX + 10, cursorY, maxWidth, lineHeight)
+          }
+        }
+        cursorY += spacing
+      }
+    }
+  }
+
   private def drawTitle(g: java.awt.Graphics2D, settlement: Settlement): Unit = {
     val titleFont = new Font("Serif", Font.BOLD, 26)
     g.setFont(titleFont)
@@ -2139,6 +2309,13 @@ final case class SettlementServer(
     g.drawString(title, (pageWidth - width) / 2, pageMargin - 10)
   }
 
+  private def drawTitleText(g: java.awt.Graphics2D, title: String): Unit = {
+    val titleFont = new Font("Serif", Font.BOLD, 26)
+    g.setFont(titleFont)
+    g.setColor(new Color(60, 45, 30))
+    val width = g.getFontMetrics.stringWidth(title)
+    g.drawString(title, (pageWidth - width) / 2, pageMargin - 10)
+  }
   private def drawTextureSwatch(
     g: java.awt.Graphics2D,
     x: Int,

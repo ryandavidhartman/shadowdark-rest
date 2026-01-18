@@ -58,7 +58,7 @@
 
 ## Settlement Generator Notes (WIP)
 - Current status: `SettlementServer` generates settlement JSON and a PDF map with Voronoi districts, an organic outer boundary, building footprints, plazas, POI markers, and a keyed district index.
-- Endpoints: `/settlements/random` returns settlement JSON; `/settlements/random.pdf` renders the map on page 1 (POI numbers only) and the keyed index on page 2 (district labels and entries).
+- Endpoints: `/settlements/random` returns settlement JSON; `/settlements/random.pdf` renders page 1 map (POI numbers only), page 2 keyed index, and then one page per district with an enlarged district map plus that district’s POI key.
 - PNG rendering: `renderSettlementPng` exists but no HTTP route currently exposes it.
 - Voronoi flow (code path):
   1) Seed points are generated within a city mask.
@@ -81,7 +81,7 @@
   - Grid opacity is reduced.
 ## Settlement Quick Verification Checklist
 - Routes: `/settlements/random` JSON and `/settlements/random.pdf` PDF both respond.
-- PDF: page 1 map shows POI numbers only; page 2 shows the keyed index with district headers and POI/NPC lines.
+- PDF: page 1 map shows POI numbers only; page 2 shows the keyed index with district headers and POI/NPC lines; subsequent pages are per-district map + POI key.
 - Roads: ring loop between non-seat districts exists when 3+ districts; main connectors from seat are thicker.
 - Buildings: align to main roads with a 14px road keep-out buffer; plazas keep open centers.
 - NPCs: POIs include NPCs built from Name/Race/Personality/Background/NpcQuality sources.
@@ -107,4 +107,3 @@
 - District types are unique when the settlement has fewer than eight districts.
 - Legend formatting improved with bold district headers and spacing; keyed index runs on its own page.
 - POI markers now stay anchored to their assigned building footprints.
-
