@@ -1371,11 +1371,70 @@ final case class SettlementServer(
     val roadSeed = roadSeedFor(settlement.layout.seed)
     val roadSamples = sampleRoads(roadEdges, mapX, mapY, new Random(roadSeed))
 
-    drawPlazas(g, mapX, mapY, settlement.districts)
+    drawPlazas(g, mapX, mapY, settlement.districts, settlement.layout.seed)
     drawBuildings(g, mapX, mapY, settlement.districts, rand)
     drawTrees(g, mapX, mapY, settlement.districts, roadSamples, new Random(settlement.layout.seed + 43))
     drawRoads(g, mapX, mapY, roadEdges, new Random(roadSeed))
     drawPoiMarkers(g, mapX, mapY, settlement.districts)
+  }
+
+  private sealed trait PlazaFeature
+  private case object StatueFeature extends PlazaFeature
+  private case object WellFeature extends PlazaFeature
+  private case object FountainFeature extends PlazaFeature
+
+  private def plazaFeatureFor(plaza: Plaza, districtId: Int, seed: Long): Option[PlazaFeature] = {
+    val rand = new Random(seed + districtId * 31L + plaza.center.x * 37L + plaza.center.y * 41L)
+    val roll = rand.nextDouble()
+    if (roll < 0.15) Some(StatueFeature)
+    else if (roll < 0.30) Some(WellFeature)
+    else if (roll < 0.45) Some(FountainFeature)
+    else None
+  }
+
+  private def plazaFeatureSize(radius: Int): Int =
+    math.max(6, radius / 3)
+
+  private def drawPlazaFeature(
+    g: java.awt.Graphics2D,
+    centerX: Int,
+    centerY: Int,
+    radius: Int,
+    feature: PlazaFeature,
+  ): Unit = {
+    val size = plazaFeatureSize(radius)
+    val baseColor = new Color(120, 98, 72, 190)
+    val highlight = new Color(210, 198, 176, 200)
+    feature match {
+      case StatueFeature =>
+        val pedestalW = size + 4
+        val pedestalH = math.max(4, size / 2)
+        g.setColor(baseColor)
+        g.fillRect(centerX - pedestalW / 2, centerY + size / 2, pedestalW, pedestalH)
+        g.setColor(highlight)
+        g.setStroke(new BasicStroke(1.1f))
+        g.drawRect(centerX - pedestalW / 2, centerY + size / 2, pedestalW, pedestalH)
+        g.setColor(new Color(92, 78, 58, 200))
+        g.fillOval(centerX - size / 2, centerY - size / 2, size, size)
+      case WellFeature =>
+        g.setColor(new Color(98, 82, 64, 190))
+        g.setStroke(new BasicStroke(1.4f))
+        g.drawOval(centerX - size, centerY - size, size * 2, size * 2)
+        g.setColor(new Color(120, 108, 90, 180))
+        g.drawOval(centerX - size + 3, centerY - size + 3, (size - 3) * 2, (size - 3) * 2)
+        g.setColor(new Color(72, 90, 100, 180))
+        g.fillOval(centerX - size / 2, centerY - size / 2, size, size)
+      case FountainFeature =>
+        g.setColor(new Color(120, 108, 90, 190))
+        g.setStroke(new BasicStroke(1.3f))
+        g.drawOval(centerX - size, centerY - size, size * 2, size * 2)
+        g.setColor(new Color(76, 110, 120, 180))
+        g.fillOval(centerX - size / 2, centerY - size / 2, size, size)
+        g.setColor(new Color(190, 210, 220, 200))
+        g.fillOval(centerX - 2, centerY - size / 2 - 2, 4, 4)
+        g.fillOval(centerX - size / 3, centerY - 2, 4, 4)
+        g.fillOval(centerX + size / 3 - 2, centerY - 2, 4, 4)
+    }
   }
 
   private def drawPlazas(
@@ -1383,6 +1442,7 @@ final case class SettlementServer(
     mapX: Int,
     mapY: Int,
     districts: List[District],
+    seed: Long,
   ): Unit = {
     g.setColor(new Color(232, 224, 204, 220))
     districts.foreach { district =>
@@ -1394,6 +1454,9 @@ final case class SettlementServer(
         g.setColor(new Color(150, 128, 98, 170))
         g.setStroke(new BasicStroke(1.4f))
         g.drawOval(x, y, size, size)
+        plazaFeatureFor(plaza, district.id, seed).foreach { feature =>
+          drawPlazaFeature(g, mapX + plaza.center.x, mapY + plaza.center.y, plaza.radius, feature)
+        }
         g.setColor(new Color(232, 224, 204, 220))
       }
     }
