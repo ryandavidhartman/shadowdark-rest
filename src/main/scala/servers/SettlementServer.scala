@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ThreadLocalRandom
 import javax.imageio.ImageIO
-import org.locationtech.jts.geom.{Coordinate, Envelope, GeometryFactory, Polygon}
+import org.locationtech.jts.geom.{Coordinate, Envelope, GeometryFactory, LineString, Polygon}
 import org.locationtech.jts.geom.util.AffineTransformation
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder
@@ -27,6 +27,8 @@ private[servers] final case class PoiTemplate(
   shopQuality: Option[String] = None,
   shopTypeOverride: Option[String] = None,
 )
+
+private final case class RoadCurve(start: Point, end: Point, isMain: Boolean, line: LineString)
 
 final case class SettlementServer(
   nameServer: NameServer,
@@ -578,6 +580,7 @@ final case class SettlementServer(
     rand: Random,
     targetCount: Int,
     roadAnchors: List[(Point, Point, Boolean)],
+    roadCurves: List[RoadCurve],
     plazas: List[Plaza],
   ): List[List[Point]] = {
     if (boundary.size < 3 || targetCount <= 0) List.empty
@@ -599,11 +602,10 @@ final case class SettlementServer(
         geometryFactory.createPoint(toCoordinate(plaza.center)).buffer(plaza.radius + 6.0)
       }
 
-      val roadLines = roadAnchors.map { case (start, end, isMain) =>
-        val coords = Array(toCoordinate(start), toCoordinate(end))
-        (geometryFactory.createLineString(coords), isMain)
-      }
       val roadBuffer = 14.0
+      val roadsInDistrict = roadCurves.filter { curve =>
+        curve.line.intersects(usable) || curve.line.distance(usable) <= roadBuffer
+      }
 
       def pickRoadAnchor(): Option[(Point, Point, Boolean)] = {
         if (roadAnchors.isEmpty) None
@@ -676,7 +678,10 @@ final case class SettlementServer(
           point.distance(rotated.getCentroid) <= (plaza.radius + 14)
         }
         val intersectsPlaza = plazaBuffers.exists(_.intersects(rotated))
-        val nearRoad = roadLines.exists { case (line, _) => line.distance(rotated) < roadBuffer }
+        val nearRoad = roadsInDistrict.exists { curve =>
+          val buffer = if (curve.isMain) roadBuffer + 4.0 else roadBuffer
+          curve.line.distance(rotated) < buffer
+        }
         if (within && !overlaps && !nearRoad && !intersectsPlaza && (!nearPlaza || plazaGuided)) {
           val rotatedPolygon = rotated.asInstanceOf[Polygon]
           buildings += rotatedPolygon
@@ -926,6 +931,8 @@ final case class SettlementServer(
                          }
                          val outlinePolygon = polygonFrom(outline)
                          val roadEdgesForPoints = buildRoadEdgesForPoints(points, seatIndex)
+                         val roadSeed = roadSeedFor(seed)
+                         val roadCurves = buildRoadCurvesForPoints(roadEdgesForPoints, new Random(roadSeed))
                          val districtTypeAssignments =
                            if (dieRolls.size < districtTypes.length)
                              shuffleWith(districtTypes, new Random(seed + 31)).take(dieRolls.size)
@@ -972,7 +979,8 @@ final case class SettlementServer(
                            val edgeFactor = math.max(0.0, math.min(1.0, (edgeDistance - 20.0) / 120.0))
                            val edgeBias = 0.7 + 0.3 * edgeFactor
                            val buildingTarget = math.max(6, math.min(50, (baseTarget * roadBias * (1.0 + hubBias) * edgeBias).round.toInt))
-                           val footprints = generateBuildingFootprints(boundary, rand, buildingTarget, roadAnchors, plazas)
+                           val footprints =
+                             generateBuildingFootprints(boundary, rand, buildingTarget, roadAnchors, roadCurves, plazas)
                            val baseBuildings = footprints.map { footprint =>
                              buildingId += 1
                              Building(id = buildingId, footprint = footprint, usage = "Residence", poiId = None)
@@ -1199,7 +1207,7 @@ final case class SettlementServer(
     }
 
     val roadEdges = buildRoadEdges(settlement.districts)
-    val roadSeed = rand.nextLong()
+    val roadSeed = roadSeedFor(settlement.layout.seed)
     val roadSamples = sampleRoads(roadEdges, mapX, mapY, new Random(roadSeed))
 
     drawPlazas(g, mapX, mapY, settlement.districts)
@@ -1296,6 +1304,9 @@ final case class SettlementServer(
     }
   }
 
+  private def roadSeedFor(seed: Long): Long =
+    seed + 971L
+
   private def buildRoadEdges(districts: List[District]): List[(District, District, Boolean)] = {
     if (districts.isEmpty) return Nil
 
@@ -1349,6 +1360,36 @@ final case class SettlementServer(
       } yield (a, b, isMain)
     }
   }
+
+  private def buildRoadCurvesForPoints(
+    roadEdges: List[(Point, Point, Boolean)],
+    rand: Random,
+  ): List[RoadCurve] =
+    roadEdges.map { case (start, end, isMain) =>
+      val startX = jitter(start.x, rand).toDouble
+      val startY = jitter(start.y, rand).toDouble
+      val endX = jitter(end.x, rand).toDouble
+      val endY = jitter(end.y, rand).toDouble
+      val midX = (startX + endX) / 2.0
+      val midY = (startY + endY) / 2.0
+      val dx = endX - startX
+      val dy = endY - startY
+      val len = math.max(1.0, math.hypot(dx, dy))
+      val nx = -dy / len
+      val ny = dx / len
+      val bend = (rand.nextDouble() - 0.5) * 2 * (if (isMain) 50.0 else 32.0)
+      val ctrlX = midX + nx * bend
+      val ctrlY = midY + ny * bend
+      val steps = if (isMain) 12 else 10
+      val coords = (0 to steps).map { i =>
+        val t = i.toDouble / steps
+        val one = 1.0 - t
+        val x = one * one * startX + 2 * one * t * ctrlX + t * t * endX
+        val y = one * one * startY + 2 * one * t * ctrlY + t * t * endY
+        new Coordinate(x, y)
+      }.toArray
+      RoadCurve(start, end, isMain, geometryFactory.createLineString(coords))
+    }
 
   private def buildRoadEdgesForPoints(points: List[Point], seatIndex: Int): List[(Point, Point, Boolean)] = {
     if (points.isEmpty) return Nil
