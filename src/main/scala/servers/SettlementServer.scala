@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ThreadLocalRandom
 import javax.imageio.ImageIO
-import org.locationtech.jts.geom.{Coordinate, Envelope, Geometry, GeometryFactory, LineString, Polygon}
+import org.locationtech.jts.geom.{Coordinate, Envelope, Geometry, GeometryFactory, LineString, MultiPolygon, Polygon}
 import org.locationtech.jts.geom.util.AffineTransformation
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder
@@ -1170,7 +1170,8 @@ final case class SettlementServer(
         Point(mapPadding, mapHeight - mapPadding),
       )
       val outlinePoints = if (settlement.layout.outline.size >= 3) settlement.layout.outline else fallbackOutline
-      val outlinePath = polygonPath(mapX, mapY, outlinePoints, new Random(settlement.layout.seed + 7))
+      val outlinePolygon = outlinePolygonForRender(settlement.districts, outlinePoints)
+      val outlinePath = pathFromPolygon(mapX, mapY, outlinePolygon)
 
       g.setColor(new Color(235, 222, 198))
       g.fill(outlinePath)
@@ -1178,7 +1179,7 @@ final case class SettlementServer(
       val oldClip = g.getClip
       g.setClip(outlinePath)
       drawGrid(g, mapX, mapY, mapWidth, mapHeight, settlement.layout.gridSize)
-      drawDistricts(g, mapX, mapY, settlement, outlinePath, new Random(settlement.layout.seed + 19))
+      drawDistricts(g, mapX, mapY, settlement, new Random(settlement.layout.seed + 19))
       g.setClip(oldClip)
       drawOutline(g, outlinePath)
       drawTitle(g, settlement)
@@ -1353,18 +1354,22 @@ final case class SettlementServer(
     mapX: Int,
     mapY: Int,
     settlement: Settlement,
-    outlinePath: Path2D,
     rand: Random,
   ): Unit = {
     settlement.districts.zipWithIndex.foreach { case (district, idx) =>
-      val path   = polygonPath(mapX, mapY, roughenBoundary(district.boundary, rand), rand)
-      val style = districtStyleFor(district, idx, settlement.layout.seed)
-      g.setColor(style.fill)
-      g.fill(path)
-      drawTextureInBounds(g, path, style.pattern, style.fill)
-      g.setColor(new Color(90, 70, 50, 180))
-      g.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
-      g.draw(path)
+      if (district.boundary.size >= 3) {
+        val polys = geometryToPolygons(polygonFrom(district.boundary))
+        val style = districtStyleFor(district, idx, settlement.layout.seed)
+        polys.foreach { poly =>
+          val path = pathFromPolygon(mapX, mapY, poly)
+          g.setColor(style.fill)
+          g.fill(path)
+          drawTextureInBounds(g, path, style.pattern, style.fill)
+          g.setColor(new Color(90, 70, 50, 180))
+          g.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+          g.draw(path)
+        }
+      }
     }
 
     val roadEdges = buildRoadEdges(settlement.districts)
@@ -2215,6 +2220,39 @@ final case class SettlementServer(
       path.closePath()
     }
     path
+  }
+
+  private def pathFromPolygon(mapX: Int, mapY: Int, polygon: Polygon): Path2D = {
+    val path = new Path2D.Double()
+    val coords = polygon.getExteriorRing.getCoordinates
+    if (coords.nonEmpty) {
+      path.moveTo(mapX + coords.head.x, mapY + coords.head.y)
+      coords.tail.foreach { c =>
+        path.lineTo(mapX + c.x, mapY + c.y)
+      }
+      path.closePath()
+    }
+    path
+  }
+
+  private def geometryToPolygons(geom: Geometry): List[Polygon] =
+    geom match {
+      case polygon: Polygon => List(polygon)
+      case multi: MultiPolygon =>
+        (0 until multi.getNumGeometries).toList
+          .map(multi.getGeometryN)
+          .collect { case poly: Polygon => poly }
+      case _ => Nil
+    }
+
+  private def outlinePolygonForRender(districts: List[District], fallback: List[Point]): Polygon = {
+    val districtPolys = districts.flatMap { district =>
+      if (district.boundary.size >= 3) Some(polygonFrom(district.boundary)) else None
+    }
+    if (districtPolys.nonEmpty) {
+      val union = geometryFactory.createGeometryCollection(districtPolys.toArray).union()
+      geometryToPolygons(union).sortBy(_.getArea).lastOption.getOrElse(polygonFrom(fallback))
+    } else polygonFrom(fallback)
   }
 
 }
