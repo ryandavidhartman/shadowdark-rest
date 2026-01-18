@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ThreadLocalRandom
 import javax.imageio.ImageIO
-import org.locationtech.jts.geom.{Coordinate, Envelope, GeometryFactory, LineString, Polygon}
+import org.locationtech.jts.geom.{Coordinate, Envelope, Geometry, GeometryFactory, LineString, Polygon}
 import org.locationtech.jts.geom.util.AffineTransformation
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder
@@ -586,9 +586,7 @@ final case class SettlementServer(
     if (boundary.size < 3 || targetCount <= 0) List.empty
     else {
       val districtPoly = polygonFrom(boundary)
-      val usable = Option(districtPoly.buffer(-10)).filterNot(_.isEmpty).getOrElse(districtPoly)
-      val envelope = usable.getEnvelopeInternal
-      val centroid = usable.getCentroid.getCoordinate
+      val baseUsable: Geometry = Option(districtPoly.buffer(-10)).filterNot(_.isEmpty).getOrElse(districtPoly)
 
       val buildings = scala.collection.mutable.ListBuffer.empty[Polygon]
       val footprints = scala.collection.mutable.ListBuffer.empty[List[Point]]
@@ -604,8 +602,17 @@ final case class SettlementServer(
 
       val roadBuffer = 14.0
       val roadsInDistrict = roadCurves.filter { curve =>
-        curve.line.intersects(usable) || curve.line.distance(usable) <= roadBuffer
+        curve.line.intersects(baseUsable) || curve.line.distance(baseUsable) <= roadBuffer
       }
+      val carvedUsable = roadsInDistrict.foldLeft(baseUsable) { (acc, curve) =>
+        val buffer = if (curve.isMain) roadBuffer + 4.0 else roadBuffer
+        val cut = curve.line.buffer(buffer)
+        val diff = acc.difference(cut)
+        if (diff.isEmpty) acc else diff
+      }
+      val usable = if (carvedUsable.isEmpty) baseUsable else carvedUsable
+      val envelope = usable.getEnvelopeInternal
+      val centroid = usable.getCentroid.getCoordinate
 
       def pickRoadAnchor(): Option[(Point, Point, Boolean)] = {
         if (roadAnchors.isEmpty) None
