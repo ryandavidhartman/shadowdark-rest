@@ -595,6 +595,9 @@ final case class SettlementServer(
       val plazasByCoord = plazas.map { plaza =>
         (plaza, geometryFactory.createPoint(toCoordinate(plaza.center)))
       }
+      val plazaBuffers = plazas.map { plaza =>
+        geometryFactory.createPoint(toCoordinate(plaza.center)).buffer(plaza.radius + 6.0)
+      }
 
       val roadLines = roadAnchors.map { case (start, end, isMain) =>
         val coords = Array(toCoordinate(start), toCoordinate(end))
@@ -617,31 +620,44 @@ final case class SettlementServer(
         val height = 16 + rand.nextInt(30)
         val baseX = envelope.getMinX + rand.nextDouble() * math.max(1.0, envelope.getWidth - width)
         val baseY = envelope.getMinY + rand.nextDouble() * math.max(1.0, envelope.getHeight - height)
-        val alignToRoad = roadAnchors.nonEmpty && rand.nextDouble() < 0.7
-        val (x, y, angle) = pickRoadAnchor() match {
-          case Some((start, end, _)) if alignToRoad =>
-            val t = 0.2 + rand.nextDouble() * 0.7
-            val lineX = start.x + (end.x - start.x) * t
-            val lineY = start.y + (end.y - start.y) * t
-            val dx = end.x - start.x
-            val dy = end.y - start.y
-            val len = math.max(1.0, math.hypot(dx.toDouble, dy.toDouble))
-            val nx = -dy / len
-            val ny = dx / len
-            val lane = if (rand.nextBoolean()) 1.0 else -1.0
-            val corridor = 16.0 + rand.nextDouble() * 12.0
-            val px = lineX
-            val py = lineY
-            val angle = math.atan2(dy.toDouble, dx.toDouble) + (rand.nextDouble() - 0.5) * 0.08
-            val offsetX = px + nx * corridor * lane
-            val offsetY = py + ny * corridor * lane
-            (offsetX, offsetY, angle)
-          case _ =>
-            val mix = if (rand.nextDouble() < 0.6) 0.6 + rand.nextDouble() * 0.3 else 0.25 + rand.nextDouble() * 0.35
-            val px = centroid.x * mix + baseX * (1.0 - mix)
-            val py = centroid.y * mix + baseY * (1.0 - mix)
-            val angle = (rand.nextDouble() - 0.5) * 0.35
-            (px, py, angle)
+        val plazaGuided = plazas.nonEmpty && rand.nextDouble() < 0.6
+        val alignToRoad = !plazaGuided && roadAnchors.nonEmpty && rand.nextDouble() < 0.7
+        val (x, y, angle) = if (plazaGuided) {
+          val plaza = plazas(rand.nextInt(plazas.length))
+          val theta = rand.nextDouble() * math.Pi * 2
+          val distance = plaza.radius + 10.0 + rand.nextDouble() * 18.0
+          val px = plaza.center.x + math.cos(theta) * distance
+          val py = plaza.center.y + math.sin(theta) * distance
+          val angle = math.atan2(plaza.center.y - py, plaza.center.x - px) + (rand.nextDouble() - 0.5) * 0.25
+          (px, py, angle)
+        } else {
+          pickRoadAnchor() match {
+            case Some((start, end, _)) if alignToRoad =>
+              val t = 0.2 + rand.nextDouble() * 0.7
+              val lineX = start.x + (end.x - start.x) * t
+              val lineY = start.y + (end.y - start.y) * t
+              val dx = end.x - start.x
+              val dy = end.y - start.y
+              val len = math.max(1.0, math.hypot(dx.toDouble, dy.toDouble))
+              val nx = -dy / len
+              val ny = dx / len
+              val lane = if (rand.nextBoolean()) 1.0 else -1.0
+              val corridor = 16.0 + rand.nextDouble() * 12.0
+              val px = lineX
+              val py = lineY
+              val angle = math.atan2(dy.toDouble, dx.toDouble) + (rand.nextDouble() - 0.5) * 0.08
+              val offsetX = px + nx * corridor * lane
+              val offsetY = py + ny * corridor * lane
+              (offsetX, offsetY, angle)
+            case _ =>
+              val mix =
+                if (rand.nextDouble() < 0.6) 0.6 + rand.nextDouble() * 0.3
+                else 0.25 + rand.nextDouble() * 0.35
+              val px = centroid.x * mix + baseX * (1.0 - mix)
+              val py = centroid.y * mix + baseY * (1.0 - mix)
+              val angle = (rand.nextDouble() - 0.5) * 0.35
+              (px, py, angle)
+          }
         }
         val rectCoords = Array(
           new Coordinate(x, y),
@@ -659,8 +675,9 @@ final case class SettlementServer(
         val nearPlaza = plazasByCoord.exists { case (plaza, point) =>
           point.distance(rotated.getCentroid) <= (plaza.radius + 14)
         }
+        val intersectsPlaza = plazaBuffers.exists(_.intersects(rotated))
         val nearRoad = roadLines.exists { case (line, _) => line.distance(rotated) < roadBuffer }
-        if (within && !overlaps && !nearPlaza && !nearRoad) {
+        if (within && !overlaps && !nearRoad && !intersectsPlaza && (!nearPlaza || plazaGuided)) {
           val rotatedPolygon = rotated.asInstanceOf[Polygon]
           buildings += rotatedPolygon
           val coords = rotatedPolygon.getExteriorRing.getCoordinates.toList.dropRight(1).map(toPoint _)
@@ -907,6 +924,7 @@ final case class SettlementServer(
                            case points if points.size >= 3 => points
                            case _                           => roughenBoundary(maskPoints, new Random(seed + 17))
                          }
+                         val outlinePolygon = polygonFrom(outline)
                          val roadEdgesForPoints = buildRoadEdgesForPoints(points, seatIndex)
                          val districtTypeAssignments =
                            if (dieRolls.size < districtTypes.length)
@@ -937,12 +955,23 @@ final case class SettlementServer(
                              } else {
                                List.empty
                              }
-                           val area = polygonFrom(boundary).getArea
-                           val buildingTarget = math.max(8, math.min(40, (area / 5500).toInt))
+                           val districtPolygon = polygonFrom(boundary)
+                           val area = districtPolygon.getArea
                            val roadAnchors = roadEdgesForPoints.collect {
                              case (start, end, isMain) if start == point => (start, end, isMain)
                              case (start, end, isMain) if end == point   => (end, start, isMain)
                            }
+                           val baseTarget = math.max(6, math.min(50, (area / 5200).toInt))
+                           val mainRoadCount = roadAnchors.count(_._3)
+                           val roadBias = 1.0 + math.min(0.45, mainRoadCount * 0.15)
+                           val hubBias = (if (idx + 1 == seatIndex) 0.2 else 0.0) + (if (plazas.nonEmpty) 0.15 else 0.0)
+                           val edgeDistance = {
+                             val centerPoint = geometryFactory.createPoint(districtPolygon.getCentroid.getCoordinate)
+                             outlinePolygon.getExteriorRing.distance(centerPoint)
+                           }
+                           val edgeFactor = math.max(0.0, math.min(1.0, (edgeDistance - 20.0) / 120.0))
+                           val edgeBias = 0.7 + 0.3 * edgeFactor
+                           val buildingTarget = math.max(6, math.min(50, (baseTarget * roadBias * (1.0 + hubBias) * edgeBias).round.toInt))
                            val footprints = generateBuildingFootprints(boundary, rand, buildingTarget, roadAnchors, plazas)
                            val baseBuildings = footprints.map { footprint =>
                              buildingId += 1
@@ -1298,6 +1327,13 @@ final case class SettlementServer(
       }
     }
 
+    ringDistricts match {
+      case Nil => ()
+      case _ =>
+        val farthest = ringDistricts.maxBy(other => distance(seat.position, other.position))
+        addEdge(seat, farthest, main = true)
+    }
+
     districts.foreach { district =>
       val neighbor = districts
         .filterNot(_.id == district.id)
@@ -1343,6 +1379,13 @@ final case class SettlementServer(
       sorted.zip(sorted.tail :+ sorted.head).foreach { case ((_, aIdx), (_, bIdx)) =>
         addEdge(aIdx, bIdx, main = true)
       }
+    }
+
+    ringPoints match {
+      case Nil => ()
+      case _ =>
+        val (farthest, farthestIdx) = ringPoints.maxBy { case (point, _) => distance(seat, point) }
+        addEdge(seatIndex - 1, farthestIdx, main = true)
     }
 
     points.indices.foreach { idx =>
@@ -1395,9 +1438,26 @@ final case class SettlementServer(
   ): Unit = {
     if (roadEdges.isEmpty) return
 
+    val districts = roadEdges.flatMap { case (a, b, _) => List(a, b) }
+    val uniqueDistricts = districts.groupBy(_.id).values.map(_.head).toList
+    val spineKeyOpt = districts.find(_.seatOfGovernment).flatMap { seat =>
+      districts.filterNot(_.id == seat.id) match {
+        case Nil => None
+        case others =>
+          val farthest = others.maxBy(other => distance(seat.position, other.position))
+          val key = if (seat.id < farthest.id) (seat.id, farthest.id) else (farthest.id, seat.id)
+          Some(key)
+      }
+    }
+
     roadEdges.foreach { case (a, b, isMain) =>
-      val stroke = if (isMain) 3.0f else 1.3f
-      val color = if (isMain) new Color(110, 88, 66, 220) else new Color(130, 106, 82, 180)
+      val key = if (a.id < b.id) (a.id, b.id) else (b.id, a.id)
+      val isSpine = spineKeyOpt.contains(key)
+      val stroke = if (isSpine) 4.2f else if (isMain) 3.0f else 1.3f
+      val color =
+        if (isSpine) new Color(95, 72, 52, 230)
+        else if (isMain) new Color(110, 88, 66, 220)
+        else new Color(130, 106, 82, 180)
       g.setColor(color)
       g.setStroke(new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
 
@@ -1419,6 +1479,35 @@ final case class SettlementServer(
       path.moveTo(startX, startY)
       path.quadTo(ctrlX, ctrlY, endX, endY)
       g.draw(path)
+    }
+
+    val plazaColor = new Color(135, 112, 88, 125)
+    val plazaStroke = new BasicStroke(1.1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
+    uniqueDistricts.foreach { district =>
+      district.plazas.foreach { plaza =>
+        val startX = mapX + jitter(district.position.x, rand)
+        val startY = mapY + jitter(district.position.y, rand)
+        val endX = mapX + plaza.center.x
+        val endY = mapY + plaza.center.y
+        val dx = endX - startX
+        val dy = endY - startY
+        val dist = math.hypot(dx, dy)
+        if (dist > 12.0) {
+          val midX = (startX + endX) / 2.0
+          val midY = (startY + endY) / 2.0
+          val nx = -dy / dist
+          val ny = dx / dist
+          val bend = (rand.nextDouble() - 0.5) * 2 * 18.0
+          val ctrlX = midX + nx * bend
+          val ctrlY = midY + ny * bend
+          val path = new Path2D.Double()
+          path.moveTo(startX, startY)
+          path.quadTo(ctrlX, ctrlY, endX, endY)
+          g.setColor(plazaColor)
+          g.setStroke(plazaStroke)
+          g.draw(path)
+        }
+      }
     }
   }
 
