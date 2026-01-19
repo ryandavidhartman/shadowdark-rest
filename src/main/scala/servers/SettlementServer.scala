@@ -2255,6 +2255,50 @@ final case class SettlementServer(
     val maxWidth = pageW - 20
     val availableHeight = pageY + pageH - 12 - bodyStartY
 
+    val tablePadding = 6
+    val rowPadding = 4
+    val columnGap = 8
+    val labelWidth = 140
+
+    def poiTableRows(poi: PointOfInterest): List[(String, String)] = {
+      val kindLabel = if (poi.kind.nonEmpty) s" (${poi.kind})" else ""
+      val baseRows = List("POI" -> s"${poi.id}. ${poi.name}$kindLabel")
+      val tavernRows = poi.tavern.toList.flatMap { t =>
+        val drinksLine =
+          if (t.drinks.nonEmpty)
+            s"${t.drinks.map(d => s"${d.name} (${d.cost}, ${d.effect})").mkString(", ")}"
+          else
+            ""
+        val foodLine =
+          if (t.food.nonEmpty)
+            s"${t.food.map(f => s"${f.name} (${f.cost})").mkString(", ")}"
+          else
+            ""
+        List(
+          "Tavern" -> s"${t.name} - ${t.knownFor}",
+          "Drinks" -> drinksLine,
+          "Food" -> foodLine,
+        ).filterNot(_._2.isEmpty)
+      }
+      val shopRows = poi.shop.toList.flatMap { s =>
+        List(
+          "Shop" -> s"${s.name} (${s.shopType}) - ${s.knownFor}",
+          "Customers" -> s.interestingCustomer,
+        )
+      }
+      val npcRows = poi.npc.toList.flatMap { npc =>
+        val bg = npc.background.getOrElse("Unknown background")
+        val personality = npc.personality.getOrElse("No personality")
+        List(
+          "NPC" -> s"${npc.name} (${npc.ancestry})",
+          "Details" -> s"${npc.age}, ${npc.alignment}, ${npc.wealth}",
+          "Notes" -> s"${npc.appearance}; ${npc.mannerism}; ${npc.secret}",
+          "Background" -> s"$bg; Personality: $personality",
+        )
+      }
+      baseRows ++ tavernRows ++ shopRows ++ npcRows
+    }
+
     def estimateHeight(fontSize: Int): Int = {
       val font = new Font("Serif", Font.PLAIN, fontSize)
       val metrics = g.getFontMetrics(font)
@@ -2264,20 +2308,21 @@ final case class SettlementServer(
         val seatLabel = if (district.seatOfGovernment) " (Seat)" else ""
         val header = s"${district.id}. ${district.districtType} (${district.alignment})$seatLabel"
         val headerLines = countWrappedLines(header, metrics, maxWidth)
-        val poiLines = district.pointsOfInterest.foldLeft(0) { (poiAcc, poi) =>
-          val detail = poi.tavern.map(t => s"${t.name} - ${t.knownFor}")
-            .orElse(poi.shop.map(s => s"${s.name} - ${s.knownFor}"))
-          val baseLine = detail.map(d => s"  ${poi.id}. ${poi.name}: $d").getOrElse(s"  ${poi.id}. ${poi.name}")
-          val npcLine = poi.npc.map { npc =>
-            val bg = npc.background.getOrElse("Unknown background")
-            val personality = npc.personality.getOrElse("No personality")
-            s"      NPC: ${npc.name} (${npc.ancestry}), $bg, $personality"
+        val headerHeight = headerLines * lineHeight
+        val poiHeight = district.pointsOfInterest.foldLeft(0) { (poiAcc, poi) =>
+          val innerWidth = maxWidth - (tablePadding * 2)
+          val valueWidth = math.max(40, innerWidth - labelWidth - columnGap)
+          val rows = poiTableRows(poi)
+          val rowHeights = rows.map { case (label, value) =>
+            val labelLines = countWrappedLines(label, metrics, labelWidth)
+            val valueLines = countWrappedLines(value, metrics, valueWidth)
+            val lines = math.max(labelLines, valueLines)
+            lines * lineHeight + (rowPadding * 2)
           }
-          val baseLines = countWrappedLines(baseLine, metrics, maxWidth)
-          val npcLines = npcLine.map(line => countWrappedLines(line, metrics, maxWidth)).getOrElse(0)
-          poiAcc + baseLines + npcLines
+          val tableHeight = (tablePadding * 2) + rowHeights.sum + math.max(0, rows.size - 1)
+          poiAcc + tableHeight
         }
-        acc + (headerLines + poiLines) * lineHeight + spacing
+        acc + headerHeight + poiHeight + spacing
       }
     }
 
@@ -2298,20 +2343,45 @@ final case class SettlementServer(
         cursorY = drawWrappedText(g, header, pageX + 10, cursorY, maxWidth, lineHeight)
         g.setFont(bodyFont)
         district.pointsOfInterest.foreach { poi =>
-          val detail = poi.tavern.map(t => s"${t.name} - ${t.knownFor}")
-            .orElse(poi.shop.map(s => s"${s.name} - ${s.knownFor}"))
-          val baseLine = detail.map(d => s"  ${poi.id}. ${poi.name}: $d").getOrElse(s"  ${poi.id}. ${poi.name}")
-          cursorY = drawWrappedText(g, baseLine, pageX + 10, cursorY, maxWidth, lineHeight)
-          val npcLine = poi.npc.map { npc =>
-            val bg = npc.background.getOrElse("Unknown background")
-            val personality = npc.personality.getOrElse("No personality")
-            s"      NPC: ${npc.name} (${npc.ancestry}), $bg, $personality"
+          val rows = poiTableRows(poi)
+          val tableX = pageX + 10
+          val tableWidth = maxWidth
+          val innerWidth = tableWidth - (tablePadding * 2)
+          val valueWidth = math.max(40, innerWidth - labelWidth - columnGap)
+          val rowHeights = rows.map { case (label, value) =>
+            val labelLines = countWrappedLines(label, metrics, labelWidth)
+            val valueLines = countWrappedLines(value, metrics, valueWidth)
+            val lines = math.max(labelLines, valueLines)
+            lines * lineHeight + (rowPadding * 2)
           }
-          npcLine.foreach { line =>
-            cursorY = drawWrappedText(g, line, pageX + 10, cursorY, maxWidth, lineHeight)
+          val tableHeight = (tablePadding * 2) + rowHeights.sum + math.max(0, rows.size - 1)
+
+          g.setColor(new Color(246, 240, 222, 230))
+          g.fillRect(tableX, cursorY, tableWidth, tableHeight)
+          g.setColor(new Color(90, 70, 50))
+          g.setStroke(new BasicStroke(1.4f))
+          g.drawRect(tableX, cursorY, tableWidth, tableHeight)
+
+          val labelX = tableX + tablePadding
+          val valueX = labelX + labelWidth + columnGap
+          val columnLineX = labelX + labelWidth + (columnGap / 2)
+          g.drawLine(columnLineX, cursorY, columnLineX, cursorY + tableHeight)
+
+          var rowY = cursorY + tablePadding
+          rows.zip(rowHeights).foreach { case ((label, value), rowHeight) =>
+            val contentY = rowY + rowPadding + metrics.getAscent
+            drawWrappedText(g, label, labelX, contentY, labelWidth, lineHeight)
+            drawWrappedText(g, value, valueX, contentY, valueWidth, lineHeight)
+            rowY += rowHeight
+            if (rowY < cursorY + tableHeight - tablePadding + 1) {
+              g.drawLine(tableX, rowY, tableX + tableWidth, rowY)
+              rowY += 1
+            }
           }
+
+          cursorY += tableHeight
+          cursorY += spacing
         }
-        cursorY += spacing
       }
     }
   }
