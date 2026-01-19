@@ -826,12 +826,28 @@ final case class SettlementServer(
     kind: String,
     shopType: Option[String],
   ): Option[Background] = {
-    val keywords = backgroundKeywordsFor(poiName, kind, shopType)
+    val combined = s"$poiName ${shopType.getOrElse("")}".toLowerCase
+    val nameTagged = backgrounds.filter { bg =>
+      bg.poiNames.exists(_.exists(tag => combined.contains(tag.toLowerCase)))
+    }
+    val kindTagged = backgrounds.filter { bg =>
+      bg.poiKinds.exists(_.exists(_.equalsIgnoreCase(kind)))
+    }
+    val taggedCandidates =
+      if (nameTagged.nonEmpty) nameTagged
+      else if (kindTagged.nonEmpty) kindTagged
+      else Nil
+
     val candidates =
-      if (keywords.nonEmpty)
-        backgrounds.filter(bg => keywords.exists(k => bg.name.toLowerCase.contains(k)))
-      else
-        backgrounds
+      if (taggedCandidates.nonEmpty) taggedCandidates
+      else {
+        val keywords = backgroundKeywordsFor(poiName, kind, shopType)
+        if (keywords.nonEmpty)
+          backgrounds.filter(bg => keywords.exists(k => bg.name.toLowerCase.contains(k)))
+        else
+          backgrounds
+      }
+
     pickOne(candidates)
   }
 

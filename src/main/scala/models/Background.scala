@@ -14,6 +14,8 @@ final case class Background(
   range: BackgroundRange,
   possessions: String,
   details: String,
+  poiKinds: Option[List[String]],
+  poiNames: Option[List[String]],
 )
 
 object Background {

@@ -6,7 +6,15 @@
       "max": 7
     },
     "possessions": "Staff; Oil, 1 flask",
-    "details": "You brewed volatile draughts for coin and questions you'd rather not answer."
+    "details": "You brewed volatile draughts for coin and questions you'd rather not answer.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "apothecary",
+      "wizard",
+      "tower"
+    ]
   },
   {
     "name": "Animal trainer",
@@ -24,7 +32,14 @@
       "max": 21
     },
     "possessions": "Cudgel (as staff); Steel vial",
-    "details": "You traded in remedies, rumors, and the bitter taste of truth."
+    "details": "You traded in remedies, rumors, and the bitter taste of truth.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "apothecary",
+      "market"
+    ]
   },
   {
     "name": "Armorer",
@@ -33,7 +48,10 @@
       "max": 28
     },
     "possessions": "Hammer (as club); Iron helmet",
-    "details": "You hammered plate and patch; few know steel's moods like you."
+    "details": "You hammered plate and patch; few know steel's moods like you.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Artisan",
@@ -42,7 +60,11 @@
       "max": 35
     },
     "possessions": "Staff; Clay, 1 lb.",
-    "details": "Craft scarred your hands and honed your will."
+    "details": "Craft scarred your hands and honed your will.",
+    "poiNames": [
+      "guild",
+      "guildhouse"
+    ]
   },
   {
     "name": "Astrologer",
@@ -51,7 +73,14 @@
       "max": 40
     },
     "possessions": "Dagger; Spyglass",
-    "details": "You sell hope and doom to those who can't tell the difference."
+    "details": "You sell hope and doom to those who can't tell the difference.",
+    "poiNames": [
+      "library",
+      "university",
+      "wizard",
+      "tower",
+      "fortune"
+    ]
   },
   {
     "name": "Attendant",
@@ -60,7 +89,13 @@
       "max": 70
     },
     "possessions": "Dagger; Silver comb",
-    "details": "You served your betters in silence and learned more than they guessed."
+    "details": "You served your betters in silence and learned more than they guessed.",
+    "poiNames": [
+      "castle",
+      "manor",
+      "royal",
+      "bathhouse"
+    ]
   },
   {
     "name": "Banished",
@@ -87,7 +122,13 @@
       "max": 91
     },
     "possessions": "Razor (as dagger); Scissors",
-    "details": "Steel, steadiness, and secrets-your daily tools."
+    "details": "Steel, steadiness, and secrets-your daily tools.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "bathhouse"
+    ]
   },
   {
     "name": "Barkeep",
@@ -96,7 +137,14 @@
       "max": 98
     },
     "possessions": "Club; Tankard",
-    "details": "Heard more secrets over ale than most priests in confession."
+    "details": "Heard more secrets over ale than most priests in confession.",
+    "poiKinds": [
+      "tavern"
+    ],
+    "poiNames": [
+      "tavern",
+      "inn"
+    ]
   },
   {
     "name": "Barrister",
@@ -105,7 +153,13 @@
       "max": 105
     },
     "possessions": "Quill (as dart); Book",
-    "details": "You twist words until truth gives up."
+    "details": "You twist words until truth gives up.",
+    "poiNames": [
+      "guild",
+      "watch",
+      "guard",
+      "castle"
+    ]
   },
   {
     "name": "Beadle",
@@ -114,7 +168,13 @@
       "max": 117
     },
     "possessions": "Staff; Holy symbol",
-    "details": "You keep order with ceremony and a firm hand."
+    "details": "You keep order with ceremony and a firm hand.",
+    "poiNames": [
+      "temple",
+      "chapel",
+      "shrine",
+      "holy"
+    ]
   },
   {
     "name": "Beekeeper",
@@ -141,7 +201,10 @@
       "max": 143
     },
     "possessions": "Hammer (as club); Steel tongs",
-    "details": "You forged strength from fire and long nights."
+    "details": "You forged strength from fire and long nights.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Bonepicker",
@@ -159,7 +222,11 @@
       "max": 157
     },
     "possessions": "Awl (as dagger); Glue pot",
-    "details": "You learned that even lies can be bound in leather."
+    "details": "You learned that even lies can be bound in leather.",
+    "poiNames": [
+      "library",
+      "university"
+    ]
   },
   {
     "name": "Butcher",
@@ -168,7 +235,10 @@
       "max": 164
     },
     "possessions": "Cleaver (as axe); Side of beef",
-    "details": "You've seen life's end one cut at a time."
+    "details": "You've seen life's end one cut at a time.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Caravan guard",
@@ -177,7 +247,13 @@
       "max": 176
     },
     "possessions": "Short sword; Linen, 1 yard",
-    "details": "You've stood watch in the rain and seen too much blood."
+    "details": "You've stood watch in the rain and seen too much blood.",
+    "poiNames": [
+      "watch",
+      "guard",
+      "garrison",
+      "castle"
+    ]
   },
   {
     "name": "Cartographer",
@@ -186,7 +262,12 @@
       "max": 183
     },
     "possessions": "Dagger; Map case and quill",
-    "details": "You draw the world to remember where you've already bled."
+    "details": "You draw the world to remember where you've already bled.",
+    "poiNames": [
+      "market",
+      "library",
+      "university"
+    ]
   },
   {
     "name": "Chandler",
@@ -195,7 +276,10 @@
       "max": 190
     },
     "possessions": "Scissors (as dagger); Candles, 20",
-    "details": "You poured light for those who feared the dark."
+    "details": "You poured light for those who feared the dark.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Charcoal-Burner",
@@ -213,7 +297,10 @@
       "max": 204
     },
     "possessions": "Chisel (as dagger); Wood, 10 lbs.",
-    "details": "You built what others hide their treasures in."
+    "details": "You built what others hide their treasures in.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Chirurgeon",
@@ -231,7 +318,10 @@
       "max": 219
     },
     "possessions": "Awl (as dagger); Shoehorn",
-    "details": "You mend what others wear out-boots, tempers, and patience."
+    "details": "You mend what others wear out-boots, tempers, and patience.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Confidence artist",
@@ -240,7 +330,12 @@
       "max": 227
     },
     "possessions": "Dagger; Quality cloak",
-    "details": "You lie smoother than silk and quicker than regret."
+    "details": "You lie smoother than silk and quicker than regret.",
+    "poiNames": [
+      "black market",
+      "illicit",
+      "safehouse"
+    ]
   },
   {
     "name": "Cooper",
@@ -249,7 +344,10 @@
       "max": 235
     },
     "possessions": "Crowbar (as club); Barrel",
-    "details": "You know how to bend wood and make it hold."
+    "details": "You know how to bend wood and make it hold.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Costermonger",
@@ -258,7 +356,13 @@
       "max": 243
     },
     "possessions": "Knife (as dagger); Fruit",
-    "details": "You've peddled wares and rumors in equal measure."
+    "details": "You've peddled wares and rumors in equal measure.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "market"
+    ]
   },
   {
     "name": "Cult Initiate",
@@ -267,7 +371,14 @@
       "max": 248
     },
     "possessions": "Club; Small toolkit",
-    "details": "You know blasphemous secrets and rituals."
+    "details": "You know blasphemous secrets and rituals.",
+    "poiNames": [
+      "temple",
+      "chapel",
+      "shrine",
+      "holy",
+      "forbidden"
+    ]
   },
   {
     "name": "Cutpurse",
@@ -276,7 +387,12 @@
       "max": 260
     },
     "possessions": "Dagger; Small chest",
-    "details": "You live by your wits and the weight of other people's purses."
+    "details": "You live by your wits and the weight of other people's purses.",
+    "poiNames": [
+      "black market",
+      "illicit",
+      "safehouse"
+    ]
   },
   {
     "name": "Ditch Digger",
@@ -294,7 +410,16 @@
       "max": 298
     },
     "possessions": "Dagger; Bells and ribbons",
-    "details": "You learned grace before you learned caution."
+    "details": "You learned grace before you learned caution.",
+    "poiKinds": [
+      "tavern"
+    ],
+    "poiNames": [
+      "tavern",
+      "inn",
+      "theater",
+      "coliseum"
+    ]
   },
   {
     "name": "Dock worker",
@@ -312,7 +437,10 @@
       "max": 336
     },
     "possessions": "Staff; Fabric, 3 yards",
-    "details": "You know which dyes fade fast and which kill slow."
+    "details": "You know which dyes fade fast and which kill slow.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Falconer",
@@ -348,7 +476,11 @@
       "max": 387
     },
     "possessions": "Dagger; Tarot deck",
-    "details": "You sell hope to fools and hear too much truth."
+    "details": "You sell hope to fools and hear too much truth.",
+    "poiNames": [
+      "fortune",
+      "market"
+    ]
   },
   {
     "name": "Gambler",
@@ -357,7 +489,14 @@
       "max": 395
     },
     "possessions": "Club; Dice",
-    "details": "You live by chance, lie by instinct, and die by odds."
+    "details": "You live by chance, lie by instinct, and die by odds.",
+    "poiKinds": [
+      "tavern"
+    ],
+    "poiNames": [
+      "tavern",
+      "inn"
+    ]
   },
   {
     "name": "Gravedigger's Apprentice",
@@ -366,7 +505,12 @@
       "max": 403
     },
     "possessions": "Shovel (as staff); Lantern",
-    "details": "You dug beside the dead until they stopped frightening you."
+    "details": "You dug beside the dead until they stopped frightening you.",
+    "poiNames": [
+      "graveyard",
+      "grave",
+      "cemetery"
+    ]
   },
   {
     "name": "Glassblower",
@@ -375,7 +519,10 @@
       "max": 411
     },
     "possessions": "Hammer (as club); Glass beads",
-    "details": "You shaped beauty that shatters at a breath."
+    "details": "You shaped beauty that shatters at a breath.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Glove maker",
@@ -384,7 +531,10 @@
       "max": 419
     },
     "possessions": "Awl (as dagger); Gloves, 4 pairs",
-    "details": "You stitched fine seams while plotting your escape."
+    "details": "You stitched fine seams while plotting your escape.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Grave digger",
@@ -393,7 +543,12 @@
       "max": 427
     },
     "possessions": "Shovel (as staff); Trowel",
-    "details": "You handle death calmly-it's the living that cause trouble."
+    "details": "You handle death calmly-it's the living that cause trouble.",
+    "poiNames": [
+      "graveyard",
+      "grave",
+      "cemetery"
+    ]
   },
   {
     "name": "Guild beggar",
@@ -402,7 +557,11 @@
       "max": 457
     },
     "possessions": "Sling; Crutches",
-    "details": "You learned the city's back ways and how to sleep with one eye open."
+    "details": "You learned the city's back ways and how to sleep with one eye open.",
+    "poiNames": [
+      "guild",
+      "guildhouse"
+    ]
   },
   {
     "name": "Hearth Keeper",
@@ -420,7 +579,10 @@
       "max": 473
     },
     "possessions": "Scissors (as dagger); Fine suits, 3 sets",
-    "details": "From long years as a haberdasher, you've learned how to endure and adapt."
+    "details": "From long years as a haberdasher, you've learned how to endure and adapt.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Healer",
@@ -429,7 +591,13 @@
       "max": 503
     },
     "possessions": "Club; Holy water, 1 vial",
-    "details": "You've bound wounds and brewed cures from roots and chance."
+    "details": "You've bound wounds and brewed cures from roots and chance.",
+    "poiNames": [
+      "temple",
+      "chapel",
+      "shrine",
+      "apothecary"
+    ]
   },
   {
     "name": "Herbalist",
@@ -438,7 +606,14 @@
       "max": 511
     },
     "possessions": "Club; Herbs, 1 lb.",
-    "details": "You know plants, medicines, and poisons."
+    "details": "You know plants, medicines, and poisons.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "apothecary",
+      "market"
+    ]
   },
   {
     "name": "Herder",
@@ -483,7 +658,16 @@
       "max": 573
     },
     "possessions": "Dart; Silk clothes",
-    "details": "You mask fear with laughter and hide truth in jokes."
+    "details": "You mask fear with laughter and hide truth in jokes.",
+    "poiKinds": [
+      "tavern"
+    ],
+    "poiNames": [
+      "tavern",
+      "inn",
+      "theater",
+      "coliseum"
+    ]
   },
   {
     "name": "Jeweler",
@@ -492,7 +676,10 @@
       "max": 581
     },
     "possessions": "Dagger; Gem worth 20 gp",
-    "details": "You can easily appraise value and authenticity."
+    "details": "You can easily appraise value and authenticity.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Jailer",
@@ -501,7 +688,12 @@
       "max": 589
     },
     "possessions": "Club; Set of keys",
-    "details": "You've watched men rot and wondered which deserved it."
+    "details": "You've watched men rot and wondered which deserved it.",
+    "poiNames": [
+      "watch",
+      "guard",
+      "garrison"
+    ]
   },
   {
     "name": "Locksmith",
@@ -510,7 +702,10 @@
       "max": 597
     },
     "possessions": "Dagger; Lockpicks",
-    "details": "Knows every secret a keyhole can tell."
+    "details": "Knows every secret a keyhole can tell.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Mariner",
@@ -528,7 +723,13 @@
       "max": 613
     },
     "possessions": "Club; Begging Bowl",
-    "details": "You beg from saints, sinners, and anything that listens."
+    "details": "You beg from saints, sinners, and anything that listens.",
+    "poiNames": [
+      "temple",
+      "chapel",
+      "shrine",
+      "holy"
+    ]
   },
   {
     "name": "Mercenary",
@@ -546,7 +747,14 @@
       "max": 651
     },
     "possessions": "Dagger; 4 gp, 14 sp, 27 cp",
-    "details": "You've learned the worth of words and the price of everything else."
+    "details": "You've learned the worth of words and the price of everything else.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "market",
+      "guild"
+    ]
   },
   {
     "name": "Miller/baker",
@@ -555,7 +763,10 @@
       "max": 659
     },
     "possessions": "Club; Flour, 1 lb.",
-    "details": "You measure life in turns of the wheel and handfuls of grain."
+    "details": "You measure life in turns of the wheel and handfuls of grain.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Miner",
@@ -573,7 +784,16 @@
       "max": 675
     },
     "possessions": "Dagger; Instrument (simple)",
-    "details": "You've traveled far with your charm and talent."
+    "details": "You've traveled far with your charm and talent.",
+    "poiKinds": [
+      "tavern"
+    ],
+    "poiNames": [
+      "tavern",
+      "inn",
+      "theater",
+      "coliseum"
+    ]
   },
   {
     "name": "Mortician",
@@ -582,7 +802,12 @@
       "max": 683
     },
     "possessions": "Razor (as dagger); Embalming salts",
-    "details": "You dress the dead better than the living."
+    "details": "You dress the dead better than the living.",
+    "poiNames": [
+      "graveyard",
+      "grave",
+      "cemetery"
+    ]
   },
   {
     "name": "Moneylender",
@@ -591,7 +816,11 @@
       "max": 691
     },
     "possessions": "Short sword; 5 gp, 10 sp, 200 cp",
-    "details": "You trade in trust, and collect what's left of it."
+    "details": "You trade in trust, and collect what's left of it.",
+    "poiNames": [
+      "market",
+      "guild"
+    ]
   },
   {
     "name": "Mushroom-farmer",
@@ -618,7 +847,12 @@
       "max": 712
     },
     "possessions": "Longsword; Gold ring worth 10 gp",
-    "details": "A famous name has opened many doors for you."
+    "details": "A famous name has opened many doors for you.",
+    "poiNames": [
+      "castle",
+      "manor",
+      "royal"
+    ]
   },
   {
     "name": "Noble (Disgraced)",
@@ -627,7 +861,12 @@
       "max": 717
     },
     "possessions": "Dagger; Tattered seal",
-    "details": "You learned grace, deceit, and how to bow without kneeling."
+    "details": "You learned grace, deceit, and how to bow without kneeling.",
+    "poiNames": [
+      "castle",
+      "manor",
+      "royal"
+    ]
   },
   {
     "name": "Orphan",
@@ -654,7 +893,12 @@
       "max": 741
     },
     "possessions": "Short sword; Leather armor",
-    "details": "Faces blur on the road, but yours is remembered by the wrong people."
+    "details": "Faces blur on the road, but yours is remembered by the wrong people.",
+    "poiNames": [
+      "black market",
+      "illicit",
+      "safehouse"
+    ]
   },
   {
     "name": "Painter",
@@ -690,7 +934,14 @@
       "max": 770
     },
     "possessions": "Short sword; Tarnished holy symbol",
-    "details": "You chase legends for gold, glory, or ghosts that won't rest."
+    "details": "You chase legends for gold, glory, or ghosts that won't rest.",
+    "poiNames": [
+      "temple",
+      "chapel",
+      "shrine",
+      "holy",
+      "relic"
+    ]
   },
   {
     "name": "Rope maker",
@@ -699,7 +950,10 @@
       "max": 778
     },
     "possessions": "Knife (as dagger); Rope, 100'",
-    "details": "You know every knot that binds, breaks, or saves a life."
+    "details": "You know every knot that binds, breaks, or saves a life.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Runesmith",
@@ -708,7 +962,11 @@
       "max": 786
     },
     "possessions": "Hammer (as club); Engraver's chisel",
-    "details": "You carve words of power that remember more than you do."
+    "details": "You carve words of power that remember more than you do.",
+    "poiNames": [
+      "wizard",
+      "tower"
+    ]
   },
   {
     "name": "Sage",
@@ -717,7 +975,12 @@
       "max": 794
     },
     "possessions": "Dagger; Parchment and quill pen",
-    "details": "Your past as a sage still echoes in every choice you make."
+    "details": "Your past as a sage still echoes in every choice you make.",
+    "poiNames": [
+      "library",
+      "lecture",
+      "university"
+    ]
   },
   {
     "name": "Sailor",
@@ -735,7 +998,12 @@
       "max": 818
     },
     "possessions": "Dagger; Ink and quill",
-    "details": "You know much about ancient history and lore."
+    "details": "You know much about ancient history and lore.",
+    "poiNames": [
+      "library",
+      "lecture",
+      "university"
+    ]
   },
   {
     "name": "Scout",
@@ -753,7 +1021,12 @@
       "max": 834
     },
     "possessions": "Dart; Parchment, 10 sheets",
-    "details": "You've copied more lies and legends than you can count."
+    "details": "You've copied more lies and legends than you can count.",
+    "poiNames": [
+      "library",
+      "lecture",
+      "university"
+    ]
   },
   {
     "name": "Scribe (Itinerant)",
@@ -762,7 +1035,12 @@
       "max": 842
     },
     "possessions": "Dagger; Journal and quill",
-    "details": "Wanders with words, binding strangers' tales into their own."
+    "details": "Wanders with words, binding strangers' tales into their own.",
+    "poiNames": [
+      "library",
+      "lecture",
+      "university"
+    ]
   },
   {
     "name": "Shaman",
@@ -771,7 +1049,15 @@
       "max": 847
     },
     "possessions": "Mace; Bone fetish",
-    "details": "Spirits whisper truths no one else dares hear."
+    "details": "Spirits whisper truths no one else dares hear.",
+    "poiNames": [
+      "temple",
+      "chapel",
+      "shrine",
+      "holy",
+      "witch",
+      "warlock"
+    ]
   },
   {
     "name": "Slave",
@@ -789,7 +1075,12 @@
       "max": 863
     },
     "possessions": "Sling; Waterproof sack",
-    "details": "You know which tides hide the truth and which wash it clean."
+    "details": "You know which tides hide the truth and which wash it clean.",
+    "poiNames": [
+      "black market",
+      "illicit",
+      "safehouse"
+    ]
   },
   {
     "name": "Soldier",
@@ -798,7 +1089,13 @@
       "max": 893
     },
     "possessions": "Spear; Shield",
-    "details": "You served as a fighter in an organized way."
+    "details": "You served as a fighter in an organized way.",
+    "poiNames": [
+      "watch",
+      "guard",
+      "garrison",
+      "castle"
+    ]
   },
   {
     "name": "Spy",
@@ -816,7 +1113,12 @@
       "max": 906
     },
     "possessions": "Longsword; Steel helmet",
-    "details": "You once dreamed of knighthood; now you dream of survival."
+    "details": "You once dreamed of knighthood; now you dream of survival.",
+    "poiNames": [
+      "castle",
+      "manor",
+      "royal"
+    ]
   },
   {
     "name": "Stonemason",
@@ -825,7 +1127,10 @@
       "max": 914
     },
     "possessions": "Hammer; Fine stone, 10 lbs.",
-    "details": "You built walls meant to outlast men."
+    "details": "You built walls meant to outlast men.",
+    "poiKinds": [
+      "shop"
+    ]
   },
   {
     "name": "Tax collector",
@@ -843,7 +1148,13 @@
       "max": 930
     },
     "possessions": "Club; Small toolkit",
-    "details": "You have connections, contacts, and debts."
+    "details": "You have connections, contacts, and debts.",
+    "poiNames": [
+      "black market",
+      "illicit",
+      "safehouse",
+      "guild"
+    ]
   },
   {
     "name": "Torchbearer",
@@ -861,7 +1172,14 @@
       "max": 946
     },
     "possessions": "Short sword; 20 sp",
-    "details": "You earned your keep on the road and know a fair deal when you see one."
+    "details": "You earned your keep on the road and know a fair deal when you see one.",
+    "poiKinds": [
+      "shop"
+    ],
+    "poiNames": [
+      "market",
+      "guild"
+    ]
   },
   {
     "name": "Trapper",
@@ -897,6 +1215,9 @@
       "max": 1000
     },
     "possessions": "Club; Pushcart***",
-    "details": "You built what carries burdens when legs give out."
+    "details": "You built what carries burdens when legs give out.",
+    "poiKinds": [
+      "shop"
+    ]
   }
 ]
