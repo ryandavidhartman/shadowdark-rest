@@ -107,3 +107,23 @@
 - District types are unique when the settlement has fewer than eight districts.
 - Legend formatting improved with bold district headers and spacing; keyed index runs on its own page.
 - POI markers now stay anchored to their assigned building footprints.
+
+## Dungeon Endpoints Plan (Draft)
+- Endpoints: add `/dungeons/random` (JSON) and `/dungeons/random.pdf` (PDF) following the settlement route/server pattern.
+- Models: define `Dungeon`, `DungeonRoom`, `DungeonLayout`, and content detail types to capture site size/type, danger level, room type + detail rolls, and boss room.
+- Generation flow:
+  - Roll site size (Small 5d10, Medium 8d10, Large 12d10) and site type (Cave/Tomb/Deep tunnels/Ruins).
+  - Roll room types (d10) for each die; highest roll identifies the objective/boss room.
+  - Roll details per room type using the provided tables (including double rolls where specified).
+  - Roll overall danger level (Unsafe/Risky/Deadly).
+  - Compute room positions from die “drop” points, build outline, and connect rooms with walls/passages by site type.
+- PDF output: render dungeon map page with grid overlay plus keyed index page with full room content details.
+- Visual styles: use distinct room/corridor styles per site type (Cave/Tomb/Deep tunnels/Ruins).
+
+## Dungeon Endpoints Progress (WIP)
+- Implemented models + JSON codecs in `src/main/scala/models/Dungeon.scala`.
+- Added `DungeonServer` with random generation, layout, grid overlay, site-type styles, and PDF output in `src/main/scala/servers/DungeonServer.scala`.
+- Added `/dungeons/random` and `/dungeons/random.pdf` routes in `src/main/scala/routes/DungeonRoute.scala`; wired into `src/main/scala/Main.scala`.
+- Compile passes; warnings only.
+- Next improvements: major visual styling pass (room shapes, corridor styles, textures, map framing, legend layout) to move beyond placeholder visuals.
+- Routes: `DungeonRoute` wired in `Main.scala`; new `DungeonServer` with `randomDungeon` and `renderDungeonPdf`.
