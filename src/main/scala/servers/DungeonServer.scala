@@ -134,18 +134,225 @@ final case class DungeonServer() {
         val h = 50 + rand.nextInt(70)
         (w, h)
       case "Tomb" =>
-        val w = 50 + rand.nextInt(60)
-        val h = 40 + rand.nextInt(50)
+        val w = 80 + rand.nextInt(90)
+        val h = 70 + rand.nextInt(80)
         (w, h)
       case "Deep tunnels" =>
         val w = 80 + rand.nextInt(90)
         val h = 30 + rand.nextInt(30)
         (w, h)
       case _ =>
-        val w = 55 + rand.nextInt(70)
-        val h = 45 + rand.nextInt(70)
+        val w = 75 + rand.nextInt(85)
+        val h = 60 + rand.nextInt(80)
         (w, h)
     }
+  }
+
+  private final case class RoomRect(x: Int, y: Int, width: Int, height: Int) {
+    def center: Point = Point(x + width / 2, y + height / 2)
+  }
+
+  private final case class FloorCell(rect: RoomRect, isHall: Boolean)
+
+  private def floorPlanBounds(): RoomRect = {
+    val margin = mapPadding + 20
+    RoomRect(margin, margin, mapWidth - margin * 2, mapHeight - margin * 2)
+  }
+
+  private def floorPlanFootprint(rand: Random): (List[RoomRect], List[Point]) = {
+    val bounds = floorPlanBounds()
+    val cutW = (bounds.width * (0.28 + rand.nextDouble() * 0.18)).toInt
+    val cutH = (bounds.height * (0.28 + rand.nextDouble() * 0.18)).toInt
+    val x = bounds.x
+    val y = bounds.y
+    val w = bounds.width
+    val h = bounds.height
+    rand.nextInt(4) match {
+      case 0 =>
+        val rects = List(
+          RoomRect(x, y, w - cutW, h),
+          RoomRect(x + w - cutW, y, cutW, h - cutH),
+        )
+        val outline = List(
+          Point(x, y),
+          Point(x + w, y),
+          Point(x + w, y + h - cutH),
+          Point(x + w - cutW, y + h - cutH),
+          Point(x + w - cutW, y + h),
+          Point(x, y + h),
+        )
+        (rects, outline)
+      case 1 =>
+        val rects = List(
+          RoomRect(x + cutW, y, w - cutW, h),
+          RoomRect(x, y, cutW, h - cutH),
+        )
+        val outline = List(
+          Point(x, y),
+          Point(x + w, y),
+          Point(x + w, y + h),
+          Point(x + cutW, y + h),
+          Point(x + cutW, y + h - cutH),
+          Point(x, y + h - cutH),
+        )
+        (rects, outline)
+      case 2 =>
+        val rects = List(
+          RoomRect(x, y, w - cutW, h),
+          RoomRect(x + w - cutW, y + cutH, cutW, h - cutH),
+        )
+        val outline = List(
+          Point(x, y),
+          Point(x + w, y),
+          Point(x + w, y + cutH),
+          Point(x + w - cutW, y + cutH),
+          Point(x + w - cutW, y + h),
+          Point(x, y + h),
+        )
+        (rects, outline)
+      case _ =>
+        val rects = List(
+          RoomRect(x + cutW, y, w - cutW, h),
+          RoomRect(x, y + cutH, cutW, h - cutH),
+        )
+        val outline = List(
+          Point(x, y),
+          Point(x + w, y),
+          Point(x + w, y + h - cutH),
+          Point(x + cutW, y + h - cutH),
+          Point(x + cutW, y + h),
+          Point(x, y + h),
+        )
+        (rects, outline)
+    }
+  }
+
+  private def splitRectOnce(rect: RoomRect, rand: Random, minSize: Int): Option[(RoomRect, RoomRect)] = {
+    val canSplitHoriz = rect.height >= minSize * 2
+    val canSplitVert = rect.width >= minSize * 2
+    if (!canSplitHoriz && !canSplitVert) None
+    else {
+      val splitHoriz =
+        if (canSplitHoriz && !canSplitVert) true
+        else if (!canSplitHoriz && canSplitVert) false
+        else if (rect.width > rect.height * 1.25) false
+        else if (rect.height > rect.width * 1.25) true
+        else rand.nextBoolean()
+
+      if (splitHoriz) {
+        val splitY = rect.y + minSize + rand.nextInt(math.max(1, rect.height - minSize * 2))
+        val top = RoomRect(rect.x, rect.y, rect.width, splitY - rect.y)
+        val bottom = RoomRect(rect.x, splitY, rect.width, rect.y + rect.height - splitY)
+        Some((top, bottom))
+      } else {
+        val splitX = rect.x + minSize + rand.nextInt(math.max(1, rect.width - minSize * 2))
+        val left = RoomRect(rect.x, rect.y, splitX - rect.x, rect.height)
+        val right = RoomRect(splitX, rect.y, rect.x + rect.width - splitX, rect.height)
+        Some((left, right))
+      }
+    }
+  }
+
+  private def splitToTargetCount(
+    rects: List[RoomRect],
+    rand: Random,
+    minSize: Int,
+    target: Int,
+  ): List[RoomRect] = {
+    val rooms = scala.collection.mutable.ListBuffer(rects: _*)
+    var guard = 0
+    while (rooms.size < target && guard < 400) {
+      guard += 1
+      val candidates = rooms.zipWithIndex.filter { case (rect, _) =>
+        rect.width >= minSize * 2 || rect.height >= minSize * 2
+      }
+      if (candidates.isEmpty) {
+        guard = 999
+      } else {
+        val (rect, idx) = candidates.maxBy { case (r, _) => r.width * r.height }
+        splitRectOnce(rect, rand, minSize) match {
+          case Some((a, b)) =>
+            rooms.remove(idx)
+            rooms += a
+            rooms += b
+          case None =>
+            guard = 999
+        }
+      }
+    }
+    rooms.toList
+  }
+
+  private def addHallways(
+    rects: List[RoomRect],
+    rand: Random,
+    minRoom: Int,
+    hallwayWidth: Int,
+  ): List[FloorCell] = {
+    rects.flatMap { rect =>
+      if (rand.nextDouble() > 0.35) List(FloorCell(rect, isHall = false))
+      else {
+        val canSplitVert = rect.width >= hallwayWidth + minRoom * 2
+        val canSplitHoriz = rect.height >= hallwayWidth + minRoom * 2
+        if (!canSplitVert && !canSplitHoriz) List(FloorCell(rect, isHall = false))
+        else {
+          val splitVert =
+            if (canSplitVert && !canSplitHoriz) true
+            else if (!canSplitVert && canSplitHoriz) false
+            else rand.nextBoolean()
+
+          if (splitVert) {
+            val available = rect.width - hallwayWidth - minRoom * 2
+            val hallX = rect.x + minRoom + rand.nextInt(math.max(1, available + 1))
+            val left = RoomRect(rect.x, rect.y, hallX - rect.x, rect.height)
+            val hall = RoomRect(hallX, rect.y, hallwayWidth, rect.height)
+            val right = RoomRect(hallX + hallwayWidth, rect.y, rect.x + rect.width - (hallX + hallwayWidth), rect.height)
+            List(
+              FloorCell(left, isHall = false),
+              FloorCell(hall, isHall = true),
+              FloorCell(right, isHall = false),
+            )
+          } else {
+            val available = rect.height - hallwayWidth - minRoom * 2
+            val hallY = rect.y + minRoom + rand.nextInt(math.max(1, available + 1))
+            val top = RoomRect(rect.x, rect.y, rect.width, hallY - rect.y)
+            val hall = RoomRect(rect.x, hallY, rect.width, hallwayWidth)
+            val bottom = RoomRect(rect.x, hallY + hallwayWidth, rect.width, rect.y + rect.height - (hallY + hallwayWidth))
+            List(
+              FloorCell(top, isHall = false),
+              FloorCell(hall, isHall = true),
+              FloorCell(bottom, isHall = false),
+            )
+          }
+        }
+      }
+    }
+  }
+
+  private def floorPlanLayout(siteType: String, size: DungeonSize, seed: Long): (List[FloorCell], List[Point]) = {
+    val rand = new Random(seed ^ 0x6a09e667L)
+    val minSize = siteType match {
+      case "Tomb" => 120
+      case _ => 110
+    }
+    val baseRooms = size.name match {
+      case "Small" => 5
+      case "Medium" => 8
+      case _ => 12
+    }
+    val targetRooms = math.max(3, baseRooms + rand.nextInt(3) - 1)
+    val (footprintRects, outline) = floorPlanFootprint(rand)
+    val rects = splitToTargetCount(footprintRects, rand, minSize, targetRooms)
+    val minRoom = siteType match {
+      case "Tomb" => 70
+      case _ => 60
+    }
+    val hallwayWidth = siteType match {
+      case "Tomb" => 26
+      case _ => 22
+    }
+    val cells = addHallways(rects, rand, minRoom, hallwayWidth)
+    (cells, outline)
   }
 
   private def placeRooms(
@@ -156,7 +363,14 @@ final case class DungeonServer() {
   ): List[DungeonRoom] = {
     val rand = new Random(seed)
     val placed = scala.collection.mutable.ListBuffer.empty[DungeonRoom]
-    val padding = 12
+    val padding = siteType match {
+      case "Tomb" | "Ruins" => 4
+      case _ => 12
+    }
+    val maxAttempts = siteType match {
+      case "Tomb" | "Ruins" => 120
+      case _ => 60
+    }
     val minX = mapPadding + 30
     val minY = mapPadding + 30
     val maxX = mapWidth - mapPadding - 30
@@ -174,7 +388,7 @@ final case class DungeonServer() {
       var attempts = 0
       var chosenX = minX + rand.nextInt(math.max(1, maxX - minX))
       var chosenY = minY + rand.nextInt(math.max(1, maxY - minY))
-      while (attempts < 60 && overlaps(chosenX, chosenY, w, h)) {
+      while (attempts < maxAttempts && overlaps(chosenX, chosenY, w, h)) {
         attempts += 1
         chosenX = minX + rand.nextInt(math.max(1, maxX - minX))
         chosenY = minY + rand.nextInt(math.max(1, maxY - minY))
@@ -283,18 +497,68 @@ final case class DungeonServer() {
       val size = sizeForRoll(rollDie(6))
       val siteType = siteTypeForRoll(rollDie(6))
       val danger = dangerForRoll(rollDie(6))
-      val roomRolls = (1 to size.diceCount).toList.map { _ =>
-        val roll = rollDie(10)
-        val roomType = roomTypeForRoll(roll)
-        (roll, roomType, detailsForRoom(roomType))
-      }
-      val highestRoll = roomRolls.map(_._1).max
-      val objectiveIndex = roomRolls.indexWhere(_._1 == highestRoll)
-      val roomsPlaced = placeRooms(size.diceCount, siteType, seed, roomRolls).map { room =>
-        if (room.id == objectiveIndex + 1) room.copy(objectiveRoom = true) else room
-      }
-      val corridors = buildCorridors(roomsPlaced)
-      val outline = expandHull(convexHull(roomsPlaced.map(_.position)), 35)
+      val (roomsPlaced, outline, floorPlanCorridors) =
+        if (siteType == "Tomb" || siteType == "Ruins") {
+          val (cells, floorOutline) = floorPlanLayout(siteType, size, seed)
+          val nonHallCount = cells.count(!_.isHall)
+          val roomRolls = (1 to nonHallCount).toList.map { _ =>
+            val roll = rollDie(10)
+            val roomType = roomTypeForRoll(roll)
+            (roll, roomType, detailsForRoom(roomType))
+          }
+          val objectiveIndex =
+            if (roomRolls.isEmpty) -1 else roomRolls.indexWhere(_._1 == roomRolls.map(_._1).max)
+          var nonHallIndex = 0
+          val placed = cells.zipWithIndex.map { case (cell, idx) =>
+            if (cell.isHall) {
+              DungeonRoom(
+                id = idx + 1,
+                roll = 0,
+                roomType = "Hallway",
+                details = Nil,
+                position = cell.rect.center,
+                width = cell.rect.width,
+                height = cell.rect.height,
+                objectiveRoom = false,
+              )
+            } else {
+              val (roll, roomType, details) = roomRolls(nonHallIndex)
+              val isObjective = nonHallIndex == objectiveIndex
+              nonHallIndex += 1
+            DungeonRoom(
+              id = idx + 1,
+              roll = roll,
+              roomType = roomType,
+              details = details,
+              position = cell.rect.center,
+              width = cell.rect.width,
+              height = cell.rect.height,
+              objectiveRoom = isObjective,
+            )
+            }
+          }
+          val corridors = buildFloorPlanCorridors(placed.map(room => RoomRect(
+            room.position.x - room.width / 2,
+            room.position.y - room.height / 2,
+            room.width,
+            room.height,
+          )))
+          (placed, floorOutline, corridors)
+        } else {
+          val roomRolls = (1 to size.diceCount).toList.map { _ =>
+            val roll = rollDie(10)
+            val roomType = roomTypeForRoll(roll)
+            (roll, roomType, detailsForRoom(roomType))
+          }
+          val highestRoll = roomRolls.map(_._1).max
+          val objectiveIndex = roomRolls.indexWhere(_._1 == highestRoll)
+          val placed = placeRooms(size.diceCount, siteType, seed, roomRolls).map { room =>
+            if (room.id == objectiveIndex + 1) room.copy(objectiveRoom = true) else room
+          }
+          val hull = expandHull(convexHull(placed.map(_.position)), 35)
+          (placed, hull, buildCorridors(placed))
+        }
+      val corridors = floorPlanCorridors
       val entranceCount = size.name match {
         case "Small" => 1
         case "Medium" => 2
@@ -361,7 +625,8 @@ final case class DungeonServer() {
         else defaultOutline()
       val outlinePath = polygonPath(mapX, mapY, outlinePoints)
 
-      g.setColor(style.wallFill)
+      val baseFill = if (style.floorPlan) style.openFill else style.wallFill
+      g.setColor(baseFill)
       g.fill(outlinePath)
 
       val oldClip = g.getClip
@@ -374,7 +639,7 @@ final case class DungeonServer() {
       drawEntranceMarker(g, mapX, mapY, dungeon, style)
       g.setClip(oldClip)
 
-      g.setColor(style.corridorStroke)
+      g.setColor(if (style.floorPlan) style.roomStroke else style.corridorStroke)
       g.setStroke(new BasicStroke(2.6f))
       g.draw(outlinePath)
       drawDungeonTitle(g, dungeon)
@@ -423,6 +688,7 @@ final case class DungeonServer() {
           corridorWidth = 4.2f,
           corridorDash = None,
           roomStrokeDash = None,
+          floorPlan = false,
         )
       case "Tomb" =>
         DungeonStyle(
@@ -434,10 +700,11 @@ final case class DungeonServer() {
           roomStroke = new Color(110, 102, 95),
           corridorStroke = new Color(95, 88, 82),
           roomCorner = 4,
-          roomStrokeWidth = 2.0f,
+          roomStrokeWidth = 2.4f,
           corridorWidth = 3.2f,
           corridorDash = None,
           roomStrokeDash = None,
+          floorPlan = true,
         )
       case "Deep tunnels" =>
         DungeonStyle(
@@ -453,6 +720,7 @@ final case class DungeonServer() {
           corridorWidth = 4.6f,
           corridorDash = None,
           roomStrokeDash = None,
+          floorPlan = false,
         )
       case _ =>
         DungeonStyle(
@@ -464,10 +732,11 @@ final case class DungeonServer() {
           roomStroke = new Color(120, 104, 88),
           corridorStroke = new Color(105, 90, 76),
           roomCorner = 6,
-          roomStrokeWidth = 2.0f,
+          roomStrokeWidth = 2.2f,
           corridorWidth = 3.4f,
           corridorDash = Some(Array(6f, 4f)),
           roomStrokeDash = Some(Array(10f, 6f)),
+          floorPlan = true,
         )
     }
 
@@ -494,6 +763,7 @@ final case class DungeonServer() {
   }
 
   private def drawCorridors(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon, style: DungeonStyle): Unit = {
+    if (style.floorPlan) return
     val rand = new Random(dungeon.layout.seed ^ 0x3f62a9c5)
     dungeon.corridors.zipWithIndex.foreach { case (corridor, idx) =>
       val localRand = new Random(rand.nextLong() ^ (idx.toLong << 16))
@@ -1067,6 +1337,34 @@ final case class DungeonServer() {
     }
   }
 
+  private def buildFloorPlanCorridors(rects: List[RoomRect]): List[DungeonCorridor] = {
+    val corridors = scala.collection.mutable.ListBuffer.empty[DungeonCorridor]
+    val count = rects.size
+    def overlap(aStart: Int, aEnd: Int, bStart: Int, bEnd: Int): Int =
+      math.min(aEnd, bEnd) - math.max(aStart, bStart)
+
+    (0 until count).foreach { i =>
+      val a = rects(i)
+      val aRight = a.x + a.width
+      val aBottom = a.y + a.height
+      (i + 1 until count).foreach { j =>
+        val b = rects(j)
+        val bRight = b.x + b.width
+        val bBottom = b.y + b.height
+        val sharedVertical = (aRight == b.x || bRight == a.x)
+        val sharedHorizontal = (aBottom == b.y || bBottom == a.y)
+        if (sharedVertical) {
+          val overlapY = overlap(a.y, aBottom, b.y, bBottom)
+          if (overlapY >= 12) corridors += DungeonCorridor(a.center, b.center)
+        } else if (sharedHorizontal) {
+          val overlapX = overlap(a.x, aRight, b.x, bRight)
+          if (overlapX >= 12) corridors += DungeonCorridor(a.center, b.center)
+        }
+      }
+    }
+    corridors.toList
+  }
+
   private final case class DungeonStyle(
     backgroundTop: Color,
     backgroundBottom: Color,
@@ -1080,6 +1378,7 @@ final case class DungeonServer() {
     corridorWidth: Float,
     corridorDash: Option[Array[Float]],
     roomStrokeDash: Option[Array[Float]],
+    floorPlan: Boolean,
   )
 }
 

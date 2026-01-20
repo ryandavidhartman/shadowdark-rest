@@ -125,5 +125,7 @@
 - Added `DungeonServer` with random generation, layout, grid overlay, site-type styles, and PDF output in `src/main/scala/servers/DungeonServer.scala`.
 - Added `/dungeons/random` and `/dungeons/random.pdf` routes in `src/main/scala/routes/DungeonRoute.scala`; wired into `src/main/scala/Main.scala`.
 - Compile passes; warnings only.
-- Next improvements: major visual styling pass (room shapes, corridor styles, textures, map framing, legend layout) to move beyond placeholder visuals.
+- Entrance markers and multiple entrances are implemented; `DungeonLayout` now stores `entrances: List[Point]`.
+- Tomb/Ruins now use a BSP-style floor plan layout (non-rectangular footprints with hallways) and target a rolled room count (Small ~5, Medium ~8, Large ~12; hallways excluded).
+- Next improvements: refine floor-plan hall placement and tune visual clarity (wall weights, markers, legend layout).
 - Routes: `DungeonRoute` wired in `Main.scala`; new `DungeonServer` with `randomDungeon` and `renderDungeonPdf`.
