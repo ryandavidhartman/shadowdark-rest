@@ -29,6 +29,7 @@ final case class DungeonLayout(
   height: Int,
   gridSize: Int,
   outline: List[Point],
+  entrances: List[Point],
   seed: Long,
 )
 

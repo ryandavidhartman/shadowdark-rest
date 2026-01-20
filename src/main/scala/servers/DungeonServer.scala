@@ -1,7 +1,7 @@
 package servers
 
 import java.awt.{BasicStroke, Color, Font, GradientPaint, Graphics2D, RenderingHints}
-import java.awt.geom.{Path2D, Rectangle2D}
+import java.awt.geom.{Arc2D, Path2D, Rectangle2D, RoundRectangle2D}
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ThreadLocalRandom
@@ -259,6 +259,23 @@ final case class DungeonServer() {
     }
   }
 
+  private def defaultOutline(): List[Point] =
+    List(
+      Point(mapPadding, mapPadding),
+      Point(mapWidth - mapPadding, mapPadding),
+      Point(mapWidth - mapPadding, mapHeight - mapPadding),
+      Point(mapPadding, mapHeight - mapPadding),
+    )
+
+  private def chooseEntrances(rooms: List[DungeonRoom], outline: List[Point], count: Int): List[Point] = {
+    val outlinePoints = if (outline.size >= 3) outline else defaultOutline()
+    val sortedRooms = rooms.sortBy(room => outlinePoints.map(p => distance(room.position, p)).minOption.getOrElse(Double.MaxValue))
+    val needed = math.max(1, math.min(count, sortedRooms.size))
+    sortedRooms.take(needed).flatMap { room =>
+      outlinePoints.minByOption(p => distance(room.position, p))
+    }
+  }
+
   def randomDungeon: Task[Dungeon] =
     ZIO.attempt {
       val seed = rng.nextLong()
@@ -278,6 +295,12 @@ final case class DungeonServer() {
       }
       val corridors = buildCorridors(roomsPlaced)
       val outline = expandHull(convexHull(roomsPlaced.map(_.position)), 35)
+      val entranceCount = size.name match {
+        case "Small" => 1
+        case "Medium" => 2
+        case _ => 3
+      }
+      val entrances = chooseEntrances(roomsPlaced, outline, entranceCount)
       val name = s"${siteType} Dungeon"
       Dungeon(
         name = name,
@@ -291,6 +314,7 @@ final case class DungeonServer() {
           height = mapHeight,
           gridSize = gridSize,
           outline = outline,
+          entrances = entrances,
           seed = seed,
         ),
       )
@@ -327,31 +351,30 @@ final case class DungeonServer() {
     val image = baseDungeonImage()
     val g = image.createGraphics()
     try {
+      val style = dungeonStyle(dungeon.siteType)
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      paintBackground(g)
+      paintBackground(g, style)
       val mapX = pageMargin
       val mapY = pageMargin
       val outlinePoints =
         if (dungeon.layout.outline.size >= 3) dungeon.layout.outline
-        else List(
-          Point(mapPadding, mapPadding),
-          Point(mapWidth - mapPadding, mapPadding),
-          Point(mapWidth - mapPadding, mapHeight - mapPadding),
-          Point(mapPadding, mapHeight - mapPadding),
-        )
+        else defaultOutline()
       val outlinePath = polygonPath(mapX, mapY, outlinePoints)
 
-      g.setColor(new Color(234, 221, 196))
+      g.setColor(style.wallFill)
       g.fill(outlinePath)
 
       val oldClip = g.getClip
       g.setClip(outlinePath)
-      drawGrid(g, mapX, mapY, mapWidth, mapHeight, dungeon.layout.gridSize)
-      drawCorridors(g, mapX, mapY, dungeon)
-      drawRooms(g, mapX, mapY, dungeon)
+      drawCorridors(g, mapX, mapY, dungeon, style)
+      drawRooms(g, mapX, mapY, dungeon, style)
+      drawGrid(g, mapX, mapY, mapWidth, mapHeight, dungeon.layout.gridSize, style.gridColor)
+      drawDoorMarkers(g, mapX, mapY, dungeon, style)
+      drawStairs(g, mapX, mapY, dungeon, style)
+      drawEntranceMarker(g, mapX, mapY, dungeon, style)
       g.setClip(oldClip)
 
-      g.setColor(new Color(90, 70, 50))
+      g.setColor(style.corridorStroke)
       g.setStroke(new BasicStroke(2.6f))
       g.draw(outlinePath)
       drawDungeonTitle(g, dungeon)
@@ -363,8 +386,9 @@ final case class DungeonServer() {
     val image = baseDungeonImage()
     val g = image.createGraphics()
     try {
+      val style = dungeonStyle(dungeon.siteType)
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      paintBackground(g)
+      paintBackground(g, style)
       val legendX = pageMargin
       val legendY = pageMargin
       val legendW = pageWidth - (pageMargin * 2)
@@ -378,10 +402,8 @@ final case class DungeonServer() {
   private def baseDungeonImage(): BufferedImage =
     new BufferedImage(pageWidth, pageHeight, BufferedImage.TYPE_INT_ARGB)
 
-  private def paintBackground(g: Graphics2D): Unit = {
-    val parchmentTop = new Color(245, 231, 204)
-    val parchmentBottom = new Color(230, 214, 183)
-    g.setPaint(new GradientPaint(0f, 0f, parchmentTop, 0f, pageHeight.toFloat, parchmentBottom))
+  private def paintBackground(g: Graphics2D, style: DungeonStyle): Unit = {
+    g.setPaint(new GradientPaint(0f, 0f, style.backgroundTop, 0f, pageHeight.toFloat, style.backgroundBottom))
     g.fillRect(0, 0, pageWidth, pageHeight)
   }
 
@@ -389,48 +411,76 @@ final case class DungeonServer() {
     siteType match {
       case "Cave" =>
         DungeonStyle(
-          roomFill = new Color(210, 190, 165),
-          roomStroke = new Color(80, 60, 45),
-          corridorStroke = new Color(90, 70, 50),
+          backgroundTop = new Color(241, 226, 197),
+          backgroundBottom = new Color(222, 203, 174),
+          gridColor = new Color(160, 140, 110, 40),
+          wallFill = new Color(70, 55, 42),
+          openFill = new Color(214, 197, 172),
+          roomStroke = new Color(110, 90, 70),
+          corridorStroke = new Color(95, 75, 58),
           roomCorner = 24,
           roomStrokeWidth = 2.2f,
           corridorWidth = 4.2f,
           corridorDash = None,
+          roomStrokeDash = None,
         )
       case "Tomb" =>
         DungeonStyle(
-          roomFill = new Color(212, 206, 196),
-          roomStroke = new Color(70, 60, 55),
-          corridorStroke = new Color(70, 60, 55),
+          backgroundTop = new Color(236, 233, 225),
+          backgroundBottom = new Color(214, 209, 198),
+          gridColor = new Color(150, 150, 145, 45),
+          wallFill = new Color(58, 53, 50),
+          openFill = new Color(216, 210, 200),
+          roomStroke = new Color(110, 102, 95),
+          corridorStroke = new Color(95, 88, 82),
           roomCorner = 4,
           roomStrokeWidth = 2.0f,
           corridorWidth = 3.2f,
           corridorDash = None,
+          roomStrokeDash = None,
         )
       case "Deep tunnels" =>
         DungeonStyle(
-          roomFill = new Color(220, 205, 182),
-          roomStroke = new Color(85, 70, 55),
-          corridorStroke = new Color(85, 70, 55),
+          backgroundTop = new Color(238, 225, 200),
+          backgroundBottom = new Color(216, 198, 172),
+          gridColor = new Color(150, 135, 110, 40),
+          wallFill = new Color(62, 54, 46),
+          openFill = new Color(220, 205, 182),
+          roomStroke = new Color(120, 100, 78),
+          corridorStroke = new Color(105, 86, 68),
           roomCorner = 8,
           roomStrokeWidth = 1.8f,
           corridorWidth = 4.6f,
           corridorDash = None,
+          roomStrokeDash = None,
         )
       case _ =>
         DungeonStyle(
-          roomFill = new Color(224, 210, 190),
-          roomStroke = new Color(90, 75, 60),
-          corridorStroke = new Color(90, 75, 60),
+          backgroundTop = new Color(242, 229, 205),
+          backgroundBottom = new Color(223, 205, 180),
+          gridColor = new Color(165, 145, 120, 45),
+          wallFill = new Color(65, 57, 48),
+          openFill = new Color(226, 212, 192),
+          roomStroke = new Color(120, 104, 88),
+          corridorStroke = new Color(105, 90, 76),
           roomCorner = 6,
           roomStrokeWidth = 2.0f,
           corridorWidth = 3.4f,
           corridorDash = Some(Array(6f, 4f)),
+          roomStrokeDash = Some(Array(10f, 6f)),
         )
     }
 
-  private def drawGrid(g: Graphics2D, mapX: Int, mapY: Int, mapWidth: Int, mapHeight: Int, gridSize: Int): Unit = {
-    g.setColor(new Color(185, 170, 140, 60))
+  private def drawGrid(
+    g: Graphics2D,
+    mapX: Int,
+    mapY: Int,
+    mapWidth: Int,
+    mapHeight: Int,
+    gridSize: Int,
+    gridColor: Color,
+  ): Unit = {
+    g.setColor(gridColor)
     var x = mapX
     while (x <= mapX + mapWidth) {
       g.drawLine(x, mapY, x, mapY + mapHeight)
@@ -443,35 +493,126 @@ final case class DungeonServer() {
     }
   }
 
-  private def drawCorridors(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon): Unit = {
-    val style = dungeonStyle(dungeon.siteType)
-    val stroke = style.corridorDash match {
-      case Some(dash) => new BasicStroke(style.corridorWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, dash, 0f)
-      case None => new BasicStroke(style.corridorWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
-    }
-    g.setStroke(stroke)
-    g.setColor(style.corridorStroke)
-    dungeon.corridors.foreach { corridor =>
-      g.drawLine(mapX + corridor.start.x, mapY + corridor.start.y, mapX + corridor.end.x, mapY + corridor.end.y)
+  private def drawCorridors(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon, style: DungeonStyle): Unit = {
+    val rand = new Random(dungeon.layout.seed ^ 0x3f62a9c5)
+    dungeon.corridors.zipWithIndex.foreach { case (corridor, idx) =>
+      val localRand = new Random(rand.nextLong() ^ (idx.toLong << 16))
+      val path = corridorPath(corridor, mapX, mapY, dungeon.siteType, localRand)
+      dungeon.siteType match {
+        case "Cave" =>
+          g.setStroke(new BasicStroke(style.corridorWidth + 3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+          g.setColor(style.corridorStroke)
+          g.draw(path)
+          g.setStroke(new BasicStroke(style.corridorWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+          g.setColor(style.openFill)
+          g.draw(path)
+        case "Ruins" =>
+          g.setStroke(new BasicStroke(style.corridorWidth + 2.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER))
+          g.setColor(style.corridorStroke)
+          g.draw(path)
+          val dashStroke = style.corridorDash match {
+            case Some(dash) => new BasicStroke(style.corridorWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
+            case None => new BasicStroke(style.corridorWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER)
+          }
+          g.setStroke(dashStroke)
+          g.setColor(style.openFill)
+          g.draw(path)
+        case "Tomb" =>
+          g.setStroke(new BasicStroke(style.corridorWidth + 2.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER))
+          g.setColor(style.corridorStroke)
+          g.draw(path)
+          g.setStroke(new BasicStroke(style.corridorWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER))
+          g.setColor(style.openFill)
+          g.draw(path)
+        case "Deep tunnels" =>
+          g.setStroke(new BasicStroke(style.corridorWidth + 2.2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+          g.setColor(style.corridorStroke)
+          g.draw(path)
+          g.setStroke(new BasicStroke(style.corridorWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+          g.setColor(style.openFill)
+          g.draw(path)
+        case _ =>
+          val baseStroke = style.corridorDash match {
+            case Some(dash) => new BasicStroke(style.corridorWidth + 1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, dash, 0f)
+            case None => new BasicStroke(style.corridorWidth + 1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
+          }
+          g.setStroke(baseStroke)
+          g.setColor(style.corridorStroke)
+          g.draw(path)
+          g.setStroke(new BasicStroke(style.corridorWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
+          g.setColor(style.openFill)
+          g.draw(path)
+      }
     }
   }
 
-  private def drawRooms(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon): Unit = {
-    val style = dungeonStyle(dungeon.siteType)
+  private def drawRooms(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon, style: DungeonStyle): Unit = {
+    val rand = new Random(dungeon.layout.seed ^ 0x9e3779b9L)
     dungeon.rooms.foreach { room =>
+      val localRand = new Random(rand.nextLong() ^ room.id.toLong)
       val x = mapX + room.position.x - room.width / 2
       val y = mapY + room.position.y - room.height / 2
-      val shape =
-        if (style.roomCorner > 0)
-          new java.awt.geom.RoundRectangle2D.Double(x.toDouble, y.toDouble, room.width.toDouble, room.height.toDouble, style.roomCorner, style.roomCorner)
-        else
-          new Rectangle2D.Double(x.toDouble, y.toDouble, room.width.toDouble, room.height.toDouble)
+      val shape = roomShape(room, dungeon.siteType, x, y, localRand, style)
 
-      g.setColor(style.roomFill)
+      g.setColor(style.openFill)
       g.fill(shape)
+      applyRoomTexture(g, room, dungeon.siteType, x, y, localRand)
       g.setColor(style.roomStroke)
-      g.setStroke(new BasicStroke(style.roomStrokeWidth))
+      val stroke = style.roomStrokeDash match {
+        case Some(dash) => new BasicStroke(style.roomStrokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
+        case None => new BasicStroke(style.roomStrokeWidth)
+      }
+      g.setStroke(stroke)
       g.draw(shape)
+
+      if (dungeon.siteType == "Tomb" && room.width > 14 && room.height > 14) {
+        val inset = 6
+        val inner = new Rectangle2D.Double(
+          (x + inset).toDouble,
+          (y + inset).toDouble,
+          (room.width - inset * 2).toDouble,
+          (room.height - inset * 2).toDouble,
+        )
+        g.setColor(new Color(170, 162, 155))
+        g.setStroke(new BasicStroke(1.2f))
+        g.draw(inner)
+
+        val tileStep = 12
+        g.setColor(new Color(185, 176, 168, 120))
+        var tx = x + inset + tileStep
+        while (tx < x + room.width - inset) {
+          g.drawLine(tx, y + inset, tx, y + room.height - inset)
+          tx += tileStep
+        }
+        var ty = y + inset + tileStep
+        while (ty < y + room.height - inset) {
+          g.drawLine(x + inset, ty, x + room.width - inset, ty)
+          ty += tileStep
+        }
+      }
+
+      if (dungeon.siteType == "Ruins") {
+        val breaks = 3 + localRand.nextInt(4)
+        g.setColor(style.openFill)
+        (0 until breaks).foreach { _ =>
+          val side = localRand.nextInt(4)
+          val size = 6 + localRand.nextInt(8)
+          side match {
+            case 0 =>
+              val bx = x + 4 + localRand.nextInt(math.max(1, room.width - 8))
+              g.fillRect(bx, y - 2, size, 6)
+            case 1 =>
+              val bx = x + 4 + localRand.nextInt(math.max(1, room.width - 8))
+              g.fillRect(bx, y + room.height - 4, size, 6)
+            case 2 =>
+              val by = y + 4 + localRand.nextInt(math.max(1, room.height - 8))
+              g.fillRect(x - 2, by, 6, size)
+            case _ =>
+              val by = y + 4 + localRand.nextInt(math.max(1, room.height - 8))
+              g.fillRect(x + room.width - 4, by, 6, size)
+          }
+        }
+      }
 
       val label = room.id.toString
       val font = new Font("Serif", Font.BOLD, 16)
@@ -510,9 +651,14 @@ final case class DungeonServer() {
     val maxWidth = legendW - 20
     val availableHeight = legendY + legendH - 12 - bodyStartY
 
+    val entranceRoomIds = dungeon.layout.entrances.flatMap { entrance =>
+      dungeon.rooms.minByOption(room => distance(room.position, entrance)).map(_.id)
+    }.toSet
+
     def roomLines(room: DungeonRoom): List[String] = {
       val objective = if (room.objectiveRoom) " (Objective)" else ""
-      val baseLine = s"${room.id}. ${room.roomType}$objective"
+      val entranceLabel = if (entranceRoomIds.contains(room.id)) " (Entrance)" else ""
+      val baseLine = s"${room.id}. ${room.roomType}$objective$entranceLabel"
       val detailLines = room.details.map(detail => s"  - $detail")
       baseLine :: detailLines
     }
@@ -615,14 +761,325 @@ final case class DungeonServer() {
     path
   }
 
+  private def corridorPath(
+    corridor: DungeonCorridor,
+    mapX: Int,
+    mapY: Int,
+    siteType: String,
+    rand: Random,
+  ): Path2D = {
+    val sx = mapX + corridor.start.x
+    val sy = mapY + corridor.start.y
+    val ex = mapX + corridor.end.x
+    val ey = mapY + corridor.end.y
+    val dx = ex - sx
+    val dy = ey - sy
+    val length = math.max(1.0, math.hypot(dx.toDouble, dy.toDouble))
+    val nx = -dy / length
+    val ny = dx / length
+    val path = new Path2D.Double()
+    path.moveTo(sx, sy)
+    siteType match {
+      case "Cave" =>
+        val steps = 4 + rand.nextInt(4)
+        (1 until steps).foreach { step =>
+          val t = step.toDouble / steps.toDouble
+          val jitter = (rand.nextDouble() * 2.0 - 1.0) * 34.0
+          val px = sx + dx * t + nx * jitter
+          val py = sy + dy * t + ny * jitter
+          path.lineTo(px, py)
+        }
+        path.lineTo(ex, ey)
+      case "Deep tunnels" =>
+        val steps = 3 + rand.nextInt(3)
+        (1 until steps).foreach { step =>
+          val t = step.toDouble / steps.toDouble
+          val jitter = (rand.nextDouble() * 2.0 - 1.0) * 20.0
+          val px = sx + dx * t + nx * jitter
+          val py = sy + dy * t + ny * jitter
+          path.lineTo(px, py)
+        }
+        path.lineTo(ex, ey)
+      case "Tomb" | "Ruins" =>
+        val bendHorizontalFirst = rand.nextBoolean()
+        val midX = if (bendHorizontalFirst) ex else sx
+        val midY = if (bendHorizontalFirst) sy else ey
+        path.lineTo(midX, midY)
+        path.lineTo(ex, ey)
+      case _ =>
+        val baseOffset = siteType match {
+          case "Ruins" => 10.0
+          case _ => 0.0
+        }
+        val offset = (rand.nextDouble() * 2.0 - 1.0) * baseOffset
+        val midX = (sx + ex) / 2.0 + nx * offset
+        val midY = (sy + ey) / 2.0 + ny * offset
+        if (baseOffset > 0.1) path.quadTo(midX, midY, ex, ey)
+        else path.lineTo(ex, ey)
+    }
+    path
+  }
+
+  private def drawDoorMarkers(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon, style: DungeonStyle): Unit = {
+    val roomByPoint = dungeon.rooms.map(room => (room.position.x, room.position.y) -> room).toMap
+    dungeon.corridors.foreach { corridor =>
+      val maybeStart = roomByPoint.get((corridor.start.x, corridor.start.y))
+      val maybeEnd = roomByPoint.get((corridor.end.x, corridor.end.y))
+      for {
+        startRoom <- maybeStart
+        endRoom <- maybeEnd
+      } {
+        drawDoorMarker(g, mapX, mapY, startRoom, endRoom.position, dungeon.siteType, style)
+        drawDoorMarker(g, mapX, mapY, endRoom, startRoom.position, dungeon.siteType, style)
+      }
+    }
+  }
+
+  private def drawDoorMarker(
+    g: Graphics2D,
+    mapX: Int,
+    mapY: Int,
+    room: DungeonRoom,
+    otherRoomPos: Point,
+    siteType: String,
+    style: DungeonStyle,
+  ): Unit = {
+    val start = Point(mapX + room.position.x, mapY + room.position.y)
+    val end = Point(mapX + otherRoomPos.x, mapY + otherRoomPos.y)
+    val roomRect = new Rectangle2D.Double(
+      (mapX + room.position.x - room.width / 2).toDouble,
+      (mapY + room.position.y - room.height / 2).toDouble,
+      room.width.toDouble,
+      room.height.toDouble,
+    )
+    val hit = lineRectIntersection(start, end, roomRect)
+    hit.foreach { p =>
+      val angle = math.atan2((end.y - start.y).toDouble, (end.x - start.x).toDouble)
+      val markerW = 10.0
+      val markerH = 4.0
+      val oldTransform = g.getTransform
+      g.translate(p.x, p.y)
+      g.rotate(angle)
+      siteType match {
+        case "Cave" | "Deep tunnels" =>
+          val arch = new Arc2D.Double(-markerW / 2, -markerH, markerW, markerH * 2, 0, 180, Arc2D.OPEN)
+          g.setColor(style.roomStroke)
+          g.setStroke(new BasicStroke(1.2f))
+          g.draw(arch)
+        case _ =>
+          val door = new Rectangle2D.Double(-markerW / 2, -markerH / 2, markerW, markerH)
+          g.setColor(style.openFill)
+          g.fill(door)
+          g.setColor(style.roomStroke)
+          g.setStroke(new BasicStroke(1.2f))
+          g.draw(door)
+      }
+      g.setTransform(oldTransform)
+    }
+  }
+
+  private def lineRectIntersection(a: Point, b: Point, rect: Rectangle2D): Option[Point] = {
+    val ax = a.x.toDouble
+    val ay = a.y.toDouble
+    val bx = b.x.toDouble
+    val by = b.y.toDouble
+    if (ax == bx && ay == by) return None
+
+    val sides = List(
+      (rect.getMinX, rect.getMinY, rect.getMaxX, rect.getMinY),
+      (rect.getMaxX, rect.getMinY, rect.getMaxX, rect.getMaxY),
+      (rect.getMaxX, rect.getMaxY, rect.getMinX, rect.getMaxY),
+      (rect.getMinX, rect.getMaxY, rect.getMinX, rect.getMinY),
+    )
+
+    def segmentIntersection(
+      x1: Double,
+      y1: Double,
+      x2: Double,
+      y2: Double,
+      x3: Double,
+      y3: Double,
+      x4: Double,
+      y4: Double,
+    ): Option[(Double, Double, Double)] = {
+      val denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1)
+      if (math.abs(denom) < 0.0001) None
+      else {
+        val ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom
+        val ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom
+        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+          val ix = x1 + ua * (x2 - x1)
+          val iy = y1 + ua * (y2 - y1)
+          Some((ua, ix, iy))
+        } else None
+      }
+    }
+
+    val hits = sides.flatMap { case (x1, y1, x2, y2) =>
+      segmentIntersection(ax, ay, bx, by, x1, y1, x2, y2).map { case (t, ix, iy) =>
+        (t, Point(ix.round.toInt, iy.round.toInt))
+      }
+    }
+    hits.sortBy(_._1).headOption.map(_._2)
+  }
+
+  private def drawStairs(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon, style: DungeonStyle): Unit = {
+    val room = dungeon.rooms.find(_.objectiveRoom).orElse(dungeon.rooms.headOption)
+    room.foreach { target =>
+      val center = Point(mapX + target.position.x, mapY + target.position.y)
+      val nearest = dungeon.corridors
+        .flatMap(corridor => List(corridor.start, corridor.end))
+        .minByOption(p => distance(target.position, p))
+        .map(p => Point(mapX + p.x, mapY + p.y))
+        .getOrElse(Point(center.x + target.width / 4, center.y))
+      val angle = math.atan2((nearest.y - center.y).toDouble, (nearest.x - center.x).toDouble)
+      val offset = math.max(8.0, math.min(target.width, target.height) / 3.0)
+      val stairCenter = Point(
+        (center.x + math.cos(angle) * offset).round.toInt,
+        (center.y + math.sin(angle) * offset).round.toInt,
+      )
+
+      val stepCount = 5
+      val stepGap = 3
+      val maxWidth = 16
+      val oldTransform = g.getTransform
+      g.translate(stairCenter.x, stairCenter.y)
+      g.rotate(angle)
+      g.setColor(style.roomStroke)
+      g.setStroke(new BasicStroke(1.4f))
+      (0 until stepCount).foreach { idx =>
+        val y = idx * stepGap
+        val width = maxWidth - idx * 2
+        g.drawLine(-width / 2, y, width / 2, y)
+      }
+      g.setTransform(oldTransform)
+    }
+  }
+
+  private def drawEntranceMarker(g: Graphics2D, mapX: Int, mapY: Int, dungeon: Dungeon, style: DungeonStyle): Unit = {
+    dungeon.layout.entrances.foreach { entrance =>
+      val room = dungeon.rooms.minByOption(r => distance(r.position, entrance))
+      room.foreach { target =>
+        val roomCenter = Point(mapX + target.position.x, mapY + target.position.y)
+        val entrancePoint = Point(mapX + entrance.x, mapY + entrance.y)
+        val angle = math.atan2((entrancePoint.y - roomCenter.y).toDouble, (entrancePoint.x - roomCenter.x).toDouble)
+        val inset = 8.0
+        val drawPoint = Point(
+          (entrancePoint.x - math.cos(angle) * inset).round.toInt,
+          (entrancePoint.y - math.sin(angle) * inset).round.toInt,
+        )
+        val markerW = 18.0
+        val markerH = 6.0
+        val oldTransform = g.getTransform
+        g.translate(drawPoint.x, drawPoint.y)
+        g.rotate(angle)
+        dungeon.siteType match {
+          case "Cave" | "Deep tunnels" =>
+            val arch = new Arc2D.Double(-markerW / 2, -markerH, markerW, markerH * 2, 0, 180, Arc2D.OPEN)
+            g.setColor(style.openFill)
+            g.setStroke(new BasicStroke(2.8f))
+            g.draw(arch)
+            g.setColor(style.roomStroke)
+            g.setStroke(new BasicStroke(1.6f))
+            g.draw(arch)
+            g.fillOval(-3, -3, 6, 6)
+          case _ =>
+            val door = new Rectangle2D.Double(-markerW / 2, -markerH / 2, markerW, markerH)
+            g.setColor(style.openFill)
+            g.fill(door)
+            g.setColor(style.roomStroke)
+            g.setStroke(new BasicStroke(2.6f))
+            g.draw(door)
+            g.fillOval(-3, -3, 6, 6)
+        }
+        g.setTransform(oldTransform)
+      }
+    }
+  }
+
+  private def roomShape(
+    room: DungeonRoom,
+    siteType: String,
+    x: Int,
+    y: Int,
+    rand: Random,
+    style: DungeonStyle,
+  ): java.awt.Shape = {
+    siteType match {
+      case "Cave" =>
+        val cx = x + room.width / 2.0
+        val cy = y + room.height / 2.0
+        val rx = room.width / 2.0
+        val ry = room.height / 2.0
+        val points = 12
+        val path = new Path2D.Double()
+        (0 until points).foreach { i =>
+          val angle = i * (Math.PI * 2 / points)
+          val jitterX = 0.8 + rand.nextDouble() * 0.4
+          val jitterY = 0.8 + rand.nextDouble() * 0.4
+          val px = cx + Math.cos(angle) * rx * jitterX
+          val py = cy + Math.sin(angle) * ry * jitterY
+          if (i == 0) path.moveTo(px, py) else path.lineTo(px, py)
+        }
+        path.closePath()
+        path
+      case "Deep tunnels" =>
+        val corner = math.min(room.width, room.height).toDouble * 0.65
+        new RoundRectangle2D.Double(x.toDouble, y.toDouble, room.width.toDouble, room.height.toDouble, corner, corner)
+      case "Tomb" =>
+        new Rectangle2D.Double(x.toDouble, y.toDouble, room.width.toDouble, room.height.toDouble)
+      case "Ruins" =>
+        new Rectangle2D.Double(x.toDouble, y.toDouble, room.width.toDouble, room.height.toDouble)
+      case _ =>
+        new RoundRectangle2D.Double(x.toDouble, y.toDouble, room.width.toDouble, room.height.toDouble, style.roomCorner, style.roomCorner)
+    }
+  }
+
+  private def applyRoomTexture(
+    g: Graphics2D,
+    room: DungeonRoom,
+    siteType: String,
+    x: Int,
+    y: Int,
+    rand: Random,
+  ): Unit = {
+    siteType match {
+      case "Cave" =>
+        val dots = math.max(6, (room.width * room.height) / 1200)
+        g.setColor(new Color(150, 130, 105, 80))
+        (0 until dots).foreach { _ =>
+          val radius = 2 + rand.nextInt(4)
+          val dx = x + 6 + rand.nextInt(math.max(1, room.width - 12))
+          val dy = y + 6 + rand.nextInt(math.max(1, room.height - 12))
+          g.fillOval(dx, dy, radius, radius)
+        }
+      case "Ruins" =>
+        val rubble = math.max(4, (room.width * room.height) / 1800)
+        g.setColor(new Color(150, 140, 125, 100))
+        (0 until rubble).foreach { _ =>
+          val w = 4 + rand.nextInt(8)
+          val h = 2 + rand.nextInt(6)
+          val dx = x + 4 + rand.nextInt(math.max(1, room.width - 8))
+          val dy = y + 4 + rand.nextInt(math.max(1, room.height - 8))
+          g.fillRect(dx, dy, w, h)
+        }
+      case _ => ()
+    }
+  }
+
   private final case class DungeonStyle(
-    roomFill: Color,
+    backgroundTop: Color,
+    backgroundBottom: Color,
+    gridColor: Color,
+    wallFill: Color,
+    openFill: Color,
     roomStroke: Color,
     corridorStroke: Color,
     roomCorner: Int,
     roomStrokeWidth: Float,
     corridorWidth: Float,
     corridorDash: Option[Array[Float]],
+    roomStrokeDash: Option[Array[Float]],
   )
 }
 
