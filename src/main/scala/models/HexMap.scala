@@ -14,6 +14,12 @@ final case class HexPointOfInterest(
   cataclysm: Option[String],
 )
 
+final case class HexOverlay(
+  kind: String,
+  orientation: String,
+  baseTerrain: String,
+)
+
 final case class HexCell(
   id: Int,
   column: Int,
@@ -21,6 +27,7 @@ final case class HexCell(
   terrain: String,
   terrainStep: Int,
   pointOfInterest: Option[HexPointOfInterest],
+  overlay: Option[HexOverlay],
 )
 
 final case class HexMap(
@@ -36,6 +43,8 @@ object HexMap {
   implicit val layoutDecoder: JsonDecoder[HexMapLayout] = DeriveJsonDecoder.gen[HexMapLayout]
   implicit val poiEncoder: JsonEncoder[HexPointOfInterest] = DeriveJsonEncoder.gen[HexPointOfInterest]
   implicit val poiDecoder: JsonDecoder[HexPointOfInterest] = DeriveJsonDecoder.gen[HexPointOfInterest]
+  implicit val overlayEncoder: JsonEncoder[HexOverlay] = DeriveJsonEncoder.gen[HexOverlay]
+  implicit val overlayDecoder: JsonDecoder[HexOverlay] = DeriveJsonDecoder.gen[HexOverlay]
   implicit val cellEncoder: JsonEncoder[HexCell] = DeriveJsonEncoder.gen[HexCell]
   implicit val cellDecoder: JsonDecoder[HexCell] = DeriveJsonDecoder.gen[HexCell]
   implicit val mapEncoder: JsonEncoder[HexMap] = DeriveJsonEncoder.gen[HexMap]

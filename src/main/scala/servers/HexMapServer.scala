@@ -1,10 +1,12 @@
 package servers
 
 import java.awt.{BasicStroke, Color, Font, GradientPaint, Graphics2D, RenderingHints}
+import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ThreadLocalRandom
-import models.{HexCell, HexMap, HexMapLayout, HexPointOfInterest}
+import javax.imageio.ImageIO
+import models.{HexCell, HexMap, HexMapLayout, HexOverlay, HexPointOfInterest}
 import org.apache.pdfbox.pdmodel.{PDDocument, PDPage}
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory
@@ -82,6 +84,39 @@ final case class HexMapServer() {
     "Pestilence",
     "Magical disaster",
   )
+  private val riverOrientations = Vector("N-S", "E-W", "NE-SW", "NW-SE")
+  private val coastOrientations = Vector("N", "NE", "SE", "S", "SW", "NW")
+  private val terrainTextures = Map(
+    "Arctic" -> "images/arctic.png",
+    "Desert" -> "images/grassland.png",
+    "Swamp" -> "images/swamp.png",
+    "Taiga" -> "images/taiga.png",
+    "Grassland" -> "images/grassland.png",
+    "Forest" -> "images/forest.png",
+    "Jungle" -> "images/forest.png",
+    "Mountain" -> "images/mountain.png",
+    "Ocean" -> "images/ocean.png",
+  )
+  private val overlayTextures = Map(
+    "River" -> "images/river_OVERLAY.png",
+    "Coast" -> "images/coast_OVERLAY.png",
+  )
+  private val terrainFillColors = Map(
+    "Desert" -> new Color(222, 201, 140),
+    "Arctic" -> new Color(210, 230, 238),
+    "Swamp" -> new Color(116, 134, 92),
+    "Taiga" -> new Color(150, 174, 130),
+    "Grassland" -> new Color(164, 188, 115),
+    "Jungle" -> new Color(88, 140, 84),
+    "Forest" -> new Color(110, 160, 120),
+    "River/coast" -> new Color(120, 170, 205),
+    "Ocean" -> new Color(88, 130, 178),
+    "Mountain" -> new Color(150, 150, 150),
+  )
+  private lazy val terrainTextureCache: Map[String, BufferedImage] =
+    terrainTextures.flatMap { case (terrain, path) => loadImage(path, trim = true).map(terrain -> _) }
+  private lazy val overlayTextureCache: Map[String, BufferedImage] =
+    overlayTextures.flatMap { case (overlay, path) => loadImage(path, trim = false).map(overlay -> _) }
 
   def randomMap: Task[HexMap] =
     ZIO.attempt {
@@ -204,13 +239,25 @@ final case class HexMapServer() {
           ),
         )
       } else None
+    val terrain = terrainName(step, climate)
+    val overlay =
+      if (terrain == "River/coast") {
+        val baseTerrain = randomLandTerrain(climate)
+        val isRiver = rollDie(2) == 1
+        val orientation =
+          if (isRiver) riverOrientations(rollDie(riverOrientations.size) - 1)
+          else coastOrientations(rollDie(coastOrientations.size) - 1)
+        val kind = if (isRiver) "River" else "Coast"
+        Some(HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain))
+      } else None
     HexCell(
       id = hexId,
       column = column,
       row = row,
-      terrain = terrainName(step, climate),
+      terrain = terrain,
       terrainStep = step,
       pointOfInterest = poi,
+      overlay = overlay,
     )
   }
 
@@ -263,13 +310,15 @@ final case class HexMapServer() {
         val centerX = startX + hexWidth * (colOffset + (if (isOddRow) 0.5 else 0.0)) + hexWidth / 2.0
         val centerY = startY + size * 1.5 * rowOffset + size
         val polygon = hexPolygon(centerX, centerY, size)
-        g.setColor(terrainColor(hex.terrain))
-        g.fill(polygon)
-        drawTerrainPattern(g, polygon, hex.terrain, size)
+        val baseTerrain = hex.overlay.map(_.baseTerrain).getOrElse(hex.terrain)
+        drawTerrainTexture(g, polygon, baseTerrain)
+        hex.overlay.foreach { overlay =>
+          drawTerrainOverlay(g, polygon, overlay)
+        }
         g.setColor(new Color(60, 55, 50))
         g.setStroke(new BasicStroke(2.0f))
         g.draw(polygon)
-        drawHexIcon(g, hex, centerX, centerY, size)
+        drawPoiMarker(g, hex, centerX, centerY, size)
       }
 
       drawHexMapLegend(g, map)
@@ -307,158 +356,271 @@ final case class HexMapServer() {
     new java.awt.Polygon(xs, ys, 6)
   }
 
-  private def terrainColor(terrain: String): Color =
-    terrain match {
-      case "Desert" => new Color(222, 201, 140)
-      case "Arctic" => new Color(210, 230, 238)
-      case "Swamp" => new Color(116, 134, 92)
-      case "Taiga" => new Color(150, 174, 130)
-      case "Grassland" => new Color(164, 188, 115)
-      case "Jungle" => new Color(88, 140, 84)
-      case "Forest" => new Color(110, 160, 120)
-      case "River/coast" => new Color(120, 170, 205)
-      case "Ocean" => new Color(88, 130, 178)
-      case "Mountain" => new Color(150, 150, 150)
-      case _ => new Color(190, 190, 190)
-    }
-
-  private def drawHexIcon(g: Graphics2D, hex: HexCell, centerX: Double, centerY: Double, size: Double): Unit = {
-    g.setColor(new Color(40, 35, 30))
-    val iconSize = size * 0.6
-    val x = centerX - iconSize / 2.0
-    val y = centerY - iconSize / 2.0
-    hex.terrain match {
-      case "Mountain" =>
-        val peak = new java.awt.Polygon(
-          Array(centerX.toInt, (x + iconSize * 0.2).toInt, (x + iconSize * 0.8).toInt),
-          Array((y + iconSize * 0.1).toInt, (y + iconSize * 0.9).toInt, (y + iconSize * 0.9).toInt),
-          3,
-        )
-        g.setStroke(new BasicStroke(2.4f))
-        g.draw(peak)
-      case "Ocean" =>
-        drawWaveIcon(g, x, y, iconSize)
-      case "River/coast" =>
-        drawWaveIcon(g, x, y, iconSize * 0.8)
-      case "Desert" | "Arctic" =>
-        g.setStroke(new BasicStroke(2.0f))
-        g.drawArc((x + iconSize * 0.1).toInt, (y + iconSize * 0.4).toInt, (iconSize * 0.6).toInt, (iconSize * 0.4).toInt, 0, 180)
-        g.drawArc((x + iconSize * 0.3).toInt, (y + iconSize * 0.2).toInt, (iconSize * 0.6).toInt, (iconSize * 0.4).toInt, 0, 180)
-      case "Swamp" | "Taiga" =>
-        g.setStroke(new BasicStroke(2.0f))
-        val baseX = centerX - iconSize * 0.2
-        g.drawLine(baseX.toInt, (y + iconSize * 0.8).toInt, baseX.toInt, (y + iconSize * 0.3).toInt)
-        g.drawLine((baseX + iconSize * 0.2).toInt, (y + iconSize * 0.8).toInt, (baseX + iconSize * 0.2).toInt, (y + iconSize * 0.25).toInt)
-        g.drawLine((baseX + iconSize * 0.4).toInt, (y + iconSize * 0.8).toInt, (baseX + iconSize * 0.4).toInt, (y + iconSize * 0.35).toInt)
-      case "Grassland" =>
-        g.setStroke(new BasicStroke(2.0f))
-        g.drawLine((x + iconSize * 0.2).toInt, (y + iconSize * 0.8).toInt, (x + iconSize * 0.35).toInt, (y + iconSize * 0.4).toInt)
-        g.drawLine((x + iconSize * 0.5).toInt, (y + iconSize * 0.85).toInt, (x + iconSize * 0.55).toInt, (y + iconSize * 0.35).toInt)
-        g.drawLine((x + iconSize * 0.75).toInt, (y + iconSize * 0.8).toInt, (x + iconSize * 0.7).toInt, (y + iconSize * 0.3).toInt)
-      case "Jungle" | "Forest" =>
-        val canopy = new java.awt.geom.Ellipse2D.Double(x + iconSize * 0.15, y + iconSize * 0.2, iconSize * 0.7, iconSize * 0.5)
-        g.setStroke(new BasicStroke(2.0f))
-        g.draw(canopy)
-        g.drawLine(centerX.toInt, (y + iconSize * 0.7).toInt, centerX.toInt, (y + iconSize * 0.9).toInt)
-      case _ =>
-        ()
-    }
-
-    hex.pointOfInterest.foreach { _ =>
-      val poiSize = Math.max(10, (size * 0.22).toInt)
-      g.setColor(new Color(150, 30, 30))
-      g.fillOval((centerX - poiSize / 2.0).toInt, (centerY - size * 0.62).toInt, poiSize, poiSize)
-      g.setColor(Color.WHITE)
-      g.setFont(new Font("Serif", Font.BOLD, Math.max(10, poiSize - 2)))
-      g.drawString("!", (centerX - 3).toFloat, (centerY - size * 0.62 + poiSize - 2).toFloat)
+  private def loadImage(path: String, trim: Boolean): Option[BufferedImage] = {
+    val stream = Option(getClass.getClassLoader.getResourceAsStream(path))
+    stream.flatMap { input =>
+      try Option(ImageIO.read(input)).map(image => if (trim) trimTransparent(image) else image)
+      finally input.close()
     }
   }
 
-  private def drawTerrainPattern(g: Graphics2D, polygon: java.awt.Polygon, terrain: String, size: Double): Unit = {
-    val bounds = polygon.getBounds
-    val oldClip = g.getClip
-    g.setClip(polygon)
-    terrain match {
-      case "Desert" =>
-        g.setColor(new Color(150, 120, 70, 110))
-        val step = Math.max(8, (size * 0.35).toInt)
-        var x = bounds.x
-        while (x < bounds.x + bounds.width) {
-          var y = bounds.y
-          while (y < bounds.y + bounds.height) {
-            g.fillOval(x, y, 2, 2)
-            y += step
-          }
-          x += step
+  private def trimTransparent(image: BufferedImage): BufferedImage = {
+    val width = image.getWidth
+    val height = image.getHeight
+    var minX = width
+    var minY = height
+    var maxX = -1
+    var maxY = -1
+    var y = 0
+    while (y < height) {
+      var x = 0
+      while (x < width) {
+        val alpha = (image.getRGB(x, y) >> 24) & 0xff
+        if (alpha != 0) {
+          if (x < minX) minX = x
+          if (y < minY) minY = y
+          if (x > maxX) maxX = x
+          if (y > maxY) maxY = y
         }
-      case "Arctic" =>
-        g.setColor(new Color(160, 180, 190, 110))
-        g.setStroke(new BasicStroke(1.2f))
-        val step = Math.max(10, (size * 0.45).toInt)
-        var x = bounds.x - bounds.height
-        while (x < bounds.x + bounds.width + bounds.height) {
-          g.drawLine(x, bounds.y + bounds.height, x + bounds.height, bounds.y)
-          x += step
-        }
-      case "Swamp" | "Taiga" =>
-        g.setColor(new Color(80, 100, 70, 110))
-        g.setStroke(new BasicStroke(1.3f))
-        val step = Math.max(10, (size * 0.4).toInt)
-        var x = bounds.x + 4
-        while (x < bounds.x + bounds.width) {
-          g.drawLine(x, bounds.y + 4, x, bounds.y + bounds.height - 4)
-          x += step
-        }
-      case "Grassland" =>
-        g.setColor(new Color(110, 130, 80, 110))
-        g.setStroke(new BasicStroke(1.4f))
-        val step = Math.max(9, (size * 0.35).toInt)
-        var y = bounds.y + 6
-        while (y < bounds.y + bounds.height) {
-          g.drawLine(bounds.x + 6, y, bounds.x + bounds.width - 6, y)
-          y += step
-        }
-      case "Jungle" | "Forest" =>
-        g.setColor(new Color(70, 100, 70, 110))
-        val step = Math.max(10, (size * 0.35).toInt)
-        var x = bounds.x
-        while (x < bounds.x + bounds.width) {
-          var y = bounds.y
-          while (y < bounds.y + bounds.height) {
-            g.fillOval(x, y, 4, 4)
-            y += step
-          }
-          x += step
-        }
-      case "River/coast" | "Ocean" =>
-        g.setColor(new Color(70, 110, 150, 120))
-        g.setStroke(new BasicStroke(1.4f))
-        val step = Math.max(10, (size * 0.4).toInt)
-        var y = bounds.y + 6
-        while (y < bounds.y + bounds.height) {
-          g.drawArc(bounds.x + 6, y, bounds.width - 12, step, 0, 180)
-          y += step
-        }
-      case "Mountain" =>
-        g.setColor(new Color(120, 120, 120, 140))
-        g.setStroke(new BasicStroke(1.4f))
-        val step = Math.max(10, (size * 0.4).toInt)
-        var x = bounds.x + 4
-        while (x < bounds.x + bounds.width) {
-          g.drawLine(x, bounds.y + bounds.height - 6, x + step / 2, bounds.y + 6)
-          x += step
-        }
-      case _ =>
-        ()
+        x += 1
+      }
+      y += 1
     }
-    g.setClip(oldClip)
+    if (maxX < minX || maxY < minY) image
+    else {
+      val trimmed = image.getSubimage(minX, minY, maxX - minX + 1, maxY - minY + 1)
+      val copy = new BufferedImage(trimmed.getWidth, trimmed.getHeight, BufferedImage.TYPE_INT_ARGB)
+      val g = copy.createGraphics()
+      try g.drawImage(trimmed, 0, 0, null)
+      finally g.dispose()
+      copy
+    }
   }
 
-  private def drawWaveIcon(g: Graphics2D, x: Double, y: Double, size: Double): Unit = {
-    g.setStroke(new BasicStroke(2.2f))
-    val top = y + size * 0.35
-    g.drawArc(x.toInt, top.toInt, (size * 0.9).toInt, (size * 0.35).toInt, 0, 180)
-    g.drawArc((x + size * 0.1).toInt, (top + size * 0.2).toInt, (size * 0.8).toInt, (size * 0.35).toInt, 0, 180)
+  private def drawTerrainTexture(g: Graphics2D, polygon: java.awt.Polygon, terrain: String): Boolean = {
+    terrainTextureCache.get(terrain) match {
+      case Some(texture) =>
+        val bounds = polygon.getBounds
+        val oldClip = g.getClip
+        g.setClip(polygon)
+        if (texture.getColorModel.hasAlpha) {
+          g.setColor(terrainFillColors.getOrElse(terrain, new Color(190, 190, 190)))
+          g.fillPolygon(polygon)
+        }
+        g.drawImage(texture, bounds.x, bounds.y, bounds.width, bounds.height, null)
+        g.setClip(oldClip)
+        true
+      case None =>
+        false
+    }
+  }
+
+  private def drawTerrainOverlay(g: Graphics2D, polygon: java.awt.Polygon, overlay: HexOverlay): Unit = {
+    overlayTextureCache.get(overlay.kind).foreach { image =>
+      val bounds = polygon.getBounds
+      val oldClip = g.getClip
+      val oldTransform = g.getTransform
+      val rotation = overlayRotationDegrees(overlay)
+      val centerX = bounds.getCenterX
+      val centerY = bounds.getCenterY
+      val baseScale = Math.max(bounds.getWidth / image.getWidth, bounds.getHeight / image.getHeight)
+      val scale = baseScale * overlayScaleMultiplier(overlay.kind)
+      g.setClip(polygon)
+      val transform = new AffineTransform(oldTransform)
+      transform.translate(centerX, centerY)
+      transform.rotate(Math.toRadians(rotation))
+      transform.scale(scale, scale)
+      transform.translate(-image.getWidth / 2.0, -image.getHeight / 2.0)
+      g.setTransform(transform)
+      g.drawImage(image, 0, 0, null)
+      g.setTransform(oldTransform)
+      g.setClip(oldClip)
+    }
+  }
+
+  private def overlayRotationDegrees(overlay: HexOverlay): Double =
+    overlay.kind match {
+      case "River" =>
+        overlay.orientation match {
+          case "N-S" => 0.0
+          case "E-W" => 90.0
+          case "NE-SW" => 60.0
+          case "NW-SE" => -60.0
+          case _ => 0.0
+        }
+      case "Coast" =>
+        overlay.orientation match {
+          case "N" => 0.0
+          case "NE" => 60.0
+          case "SE" => 120.0
+          case "S" => 180.0
+          case "SW" => 240.0
+          case "NW" => 300.0
+          case _ => 0.0
+        }
+      case _ => 0.0
+    }
+
+  private def overlayScaleMultiplier(kind: String): Double =
+    kind match {
+      case "River" => 1.2
+      case "Coast" => 1.05
+      case _ => 1.0
+    }
+
+  private def drawPoiMarker(g: Graphics2D, hex: HexCell, centerX: Double, centerY: Double, size: Double): Unit = {
+    hex.pointOfInterest.foreach { poi =>
+      val poiSize = Math.max(12, (size * 0.28).toInt)
+      val iconX = (centerX - poiSize / 2.0).toInt
+      val iconY = (centerY - size * 0.62).toInt
+      val style = poiMarkerStyle(poi.location, poi.development)
+      g.setColor(style.color)
+      style.draw(g, iconX, iconY, poiSize)
+    }
+  }
+
+  private final case class PoiMarkerStyle(color: Color, draw: (Graphics2D, Int, Int, Int) => Unit)
+
+  private def poiMarkerStyle(location: String, development: String): PoiMarkerStyle = {
+    val loc = location.toLowerCase
+    val dev = development.toLowerCase
+    if (loc.contains("temple") || loc.contains("holy shrine")) {
+      PoiMarkerStyle(new Color(200, 160, 70), drawCross)
+    } else if (loc.contains("barrow") || loc.contains("dolmens")) {
+      PoiMarkerStyle(new Color(120, 120, 120), drawCairn)
+    } else if (loc.contains("village") || loc.contains("town") || loc.contains("city")) {
+      PoiMarkerStyle(new Color(35, 30, 25), drawHouse)
+    } else if (loc.contains("keep") || loc.contains("tower")) {
+      PoiMarkerStyle(new Color(80, 80, 80), drawTower)
+    } else if (loc.contains("ravine")) {
+      PoiMarkerStyle(new Color(120, 90, 60), drawRavine)
+    } else if (loc.contains("cave")) {
+      PoiMarkerStyle(new Color(90, 70, 55), drawCave)
+    } else if (loc.contains("natural landmark")) {
+      PoiMarkerStyle(new Color(110, 85, 60), drawRock)
+    } else if (loc.contains("monster")) {
+      PoiMarkerStyle(new Color(160, 40, 30), drawStar)
+    } else if (loc.contains("hermit")) {
+      PoiMarkerStyle(new Color(100, 70, 50), drawHut)
+    } else if (loc.contains("barbarian")) {
+      PoiMarkerStyle(new Color(180, 110, 50), drawTent)
+    } else if (dev.contains("disaster") || dev.contains("cataclysm")) {
+      PoiMarkerStyle(new Color(190, 60, 40), drawFlame)
+    } else if (dev.contains("oracle") || dev.contains("cult") || dev.contains("wizards")) {
+      PoiMarkerStyle(new Color(120, 80, 150), drawEye)
+    } else if (dev.contains("dragon") || dev.contains("treasure") || dev.contains("plane")) {
+      PoiMarkerStyle(new Color(50, 130, 140), drawGem)
+    } else {
+      PoiMarkerStyle(new Color(150, 30, 30), drawDot)
+    }
+  }
+
+  private def drawDot(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    g.fillOval(x, y, size, size)
+  }
+
+  private def drawCross(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val bar = Math.max(2, size / 5)
+    g.fillRect(x + size / 2 - bar / 2, y + size / 6, bar, size * 2 / 3)
+    g.fillRect(x + size / 6, y + size / 2 - bar / 2, size * 2 / 3, bar)
+  }
+
+  private def drawCairn(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val r = size / 5
+    g.fillOval(x + size / 2 - r, y + size / 6, r * 2, r * 2)
+    g.fillOval(x + size / 2 - (r + 2), y + size / 2 - r, (r + 2) * 2, (r + 2) * 2)
+    g.fillOval(x + size / 2 - (r + 4), y + size * 2 / 3 - r, (r + 4) * 2, (r + 4) * 2)
+  }
+
+  private def drawHouse(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val roof = new java.awt.Polygon(
+      Array(x + size / 2, x + size - 2, x + 2),
+      Array(y + 2, y + size / 2, y + size / 2),
+      3,
+    )
+    g.fillPolygon(roof)
+    g.fillRect(x + size / 5, y + size / 2, size * 3 / 5, size / 2)
+  }
+
+  private def drawTower(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    g.fillRect(x + size / 3, y + size / 5, size / 3, size * 3 / 5)
+    g.fillRect(x + size / 4, y + size / 5 - size / 10, size / 2, size / 6)
+  }
+
+  private def drawRock(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val rock = new java.awt.Polygon(
+      Array(x + size / 5, x + size * 4 / 5, x + size - 2, x + size / 3),
+      Array(y + size * 2 / 3, y + size * 2 / 3, y + size / 3, y + size / 5),
+      4,
+    )
+    g.fillPolygon(rock)
+  }
+
+  private def drawRavine(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    g.setStroke(new BasicStroke(Math.max(2.0f, size / 10.0f)))
+    g.drawLine(x + size / 3, y + size / 6, x + size * 2 / 3, y + size * 5 / 6)
+  }
+
+  private def drawCave(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    g.fillOval(x + size / 4, y + size / 3, size / 2, size / 2)
+  }
+
+  private def drawStar(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val r = size / 2
+    val cx = x + r
+    val cy = y + r
+    val points = new java.awt.Polygon()
+    var i = 0
+    while (i < 10) {
+      val angle = Math.toRadians(-90 + i * 36)
+      val radius = if (i % 2 == 0) r else r / 2
+      points.addPoint((cx + Math.cos(angle) * radius).toInt, (cy + Math.sin(angle) * radius).toInt)
+      i += 1
+    }
+    g.fillPolygon(points)
+  }
+
+  private def drawHut(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    g.fillOval(x + size / 4, y + size / 2, size / 2, size / 3)
+    val roof = new java.awt.Polygon(
+      Array(x + size / 2, x + size * 3 / 4, x + size / 4),
+      Array(y + size / 3, y + size / 2, y + size / 2),
+      3,
+    )
+    g.fillPolygon(roof)
+  }
+
+  private def drawTent(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val tent = new java.awt.Polygon(
+      Array(x + size / 2, x + size - 2, x + 2),
+      Array(y + 2, y + size - 2, y + size - 2),
+      3,
+    )
+    g.fillPolygon(tent)
+  }
+
+  private def drawFlame(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val flame = new java.awt.Polygon(
+      Array(x + size / 2, x + size * 3 / 4, x + size * 2 / 3, x + size / 2, x + size / 3, x + size / 4),
+      Array(y + 2, y + size / 3, y + size * 2 / 3, y + size - 2, y + size * 2 / 3, y + size / 3),
+      6,
+    )
+    g.fillPolygon(flame)
+  }
+
+  private def drawEye(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    g.setStroke(new BasicStroke(Math.max(2.0f, size / 12.0f)))
+    g.drawOval(x + size / 6, y + size / 3, size * 2 / 3, size / 3)
+    g.fillOval(x + size / 2 - size / 10, y + size / 2 - size / 10, size / 5, size / 5)
+  }
+
+  private def drawGem(g: Graphics2D, x: Int, y: Int, size: Int): Unit = {
+    val gem = new java.awt.Polygon(
+      Array(x + size / 2, x + size - 2, x + size / 2, x + 2),
+      Array(y + 2, y + size / 2, y + size - 2, y + size / 2),
+      4,
+    )
+    g.fillPolygon(gem)
   }
 
   private def drawHexMapLegend(g: Graphics2D, map: HexMap): Unit = {
@@ -478,19 +640,25 @@ final case class HexMapServer() {
     g.setFont(new Font("Serif", Font.PLAIN, 14))
     g.drawString(s"Climate: ${map.climate}", x + 16, y + 54)
     g.drawString(s"Danger: ${map.dangerLevel}", x + 16, y + 74)
-    g.drawString("POI: red marker", x + 16, y + 94)
+    g.drawString("POI: icon", x + 16, y + 94)
     val legendStartY = y + 120
     terrainNames.zipWithIndex.foreach { case (terrain, idx) =>
       val rowY = legendStartY + idx * rowHeight
       val hexCenterX = x + 28
       val hexCenterY = rowY + 8
       val polygon = hexPolygon(hexCenterX, hexCenterY, 10)
-      g.setColor(terrainColor(terrain))
-      g.fill(polygon)
-      drawTerrainPattern(g, polygon, terrain, 10)
+      val baseTerrain = legendBaseTerrain(terrain, map.climate)
+      drawTerrainTexture(g, polygon, baseTerrain)
+      if (terrain == "River/coast") {
+        val overlay = HexOverlay(
+          kind = "Coast",
+          orientation = "N",
+          baseTerrain = baseTerrain,
+        )
+        drawTerrainOverlay(g, polygon, overlay)
+      }
       g.setColor(new Color(60, 55, 50))
       g.draw(polygon)
-      drawHexIcon(g, HexCell(0, 0, 0, terrain, 0, None), hexCenterX, hexCenterY, 10)
       g.setColor(new Color(40, 35, 30))
       g.setFont(new Font("Serif", Font.PLAIN, 13))
       g.drawString(terrain, x + 50, rowY + 12)
@@ -501,6 +669,17 @@ final case class HexMapServer() {
     val names = terrainSteps.map { case (warm, cold) => if (climate == "Warm") warm else cold }
     names.toList
   }
+
+  private def randomLandTerrain(climate: String): String = {
+    val land = terrainSteps.map { case (warm, cold) => if (climate == "Warm") warm else cold }
+      .filterNot(name => name == "River/coast" || name == "Ocean")
+    land(rollDie(land.size) - 1)
+  }
+
+  private def legendBaseTerrain(terrain: String, climate: String): String =
+    if (terrain == "River/coast") {
+      if (climate == "Warm") "Grassland" else "Taiga"
+    } else terrain
 }
 
 object HexMapServer {
