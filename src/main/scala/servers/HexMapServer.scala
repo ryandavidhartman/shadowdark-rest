@@ -449,22 +449,23 @@ final case class HexMapServer() {
           case _ => 0.0
         }
       case "Coast" =>
+        val baseOffset = -90.0
         overlay.orientation match {
-          case "N" => 0.0
-          case "NE" => 60.0
-          case "SE" => 120.0
-          case "S" => 180.0
-          case "SW" => 240.0
-          case "NW" => 300.0
-          case _ => 0.0
+          case "N" => 0.0 + baseOffset
+          case "NE" => 60.0 + baseOffset
+          case "SE" => 120.0 + baseOffset
+          case "S" => 180.0 + baseOffset
+          case "SW" => 240.0 + baseOffset
+          case "NW" => 300.0 + baseOffset
+          case _ => baseOffset
         }
       case _ => 0.0
     }
 
   private def overlayScaleMultiplier(kind: String): Double =
     kind match {
-      case "River" => 1.2
-      case "Coast" => 1.05
+      case "River" => 1.28
+      case "Coast" => 1.22
       case _ => 1.0
     }
 

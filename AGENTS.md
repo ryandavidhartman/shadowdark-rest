@@ -129,3 +129,17 @@
 - Tomb/Ruins now use a BSP-style floor plan layout (non-rectangular footprints with hallways) and target a rolled room count (Small ~5, Medium ~8, Large ~12; hallways excluded).
 - Next improvements: refine floor-plan hall placement and tune visual clarity (wall weights, markers, legend layout).
 - Routes: `DungeonRoute` wired in `Main.scala`; new `DungeonServer` with `randomDungeon` and `renderDungeonPdf`.
+
+## Hex Map Work Notes (WIP)
+- Files touched: `src/main/scala/servers/HexMapServer.scala`, `src/main/scala/models/HexMap.scala`.
+- Added `HexOverlay` and `HexCell.overlay` for river/coast metadata; JSON codecs updated in `src/main/scala/models/HexMap.scala`.
+- Terrain rendering now uses texture images from `src/main/resources/images` (no abstract patterns/icons).
+- River/coast handling: `HexCell` stores `overlay.kind` (`River` or `Coast`), `orientation`, and `baseTerrain` for the texture to draw underneath.
+- River orientation options: `N-S`, `E-W`, `NE-SW`, `NW-SE`. Coast orientation options: `N`, `NE`, `SE`, `S`, `SW`, `NW`.
+- Coast overlay base orientation changed: new `coast_OVERLAY.png` has ocean on west and coastline N-S; rotation mapping applies a -90 deg offset.
+- Overlay scaling uses aspect-preserving cover with multipliers: `River` 1.28, `Coast` 1.22 (tune as needed).
+- Base textures are trimmed on load; overlays are not trimmed. Ocean and other textures with alpha get a solid under-fill color before drawing.
+- POI markers now use simple icon glyphs based on location/development (temple cross, house, tower, cairn, rock, ravine, cave, star, hut, tent, flame, eye, gem); legend label changed to "POI: icon".
+- Images trimmed via `convert -trim +repage`; only `ocean.png` was re-trimmed after replacement. `magick` not available; `convert` is used.
+- Current issues: river overlay still short on one side; coast overlay still missing some corners. Likely needs more overlay scale multiplier or different scaling strategy.
+- To reproduce visuals: run server and view `/hexes/random.pdf`, or inspect generated PDFs in repo root (`random*.pdf`).
