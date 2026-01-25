@@ -473,6 +473,7 @@ final case class HexMapServer() {
     overlay.kind match {
       case "River" =>
         overlay.orientation match {
+          case "N-S" | "E-W" => 1.10
           case "NE-SW" | "NW-SE" => 1.12
           case _ => 1.0
         }

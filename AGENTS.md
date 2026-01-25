@@ -142,4 +142,5 @@
 - POI markers now use simple icon glyphs based on location/development (temple cross, house, tower, cairn, rock, ravine, cave, star, hut, tent, flame, eye, gem); legend label changed to "POI: icon".
 - Images trimmed via `convert -trim +repage`; only `ocean.png` was re-trimmed after replacement. `magick` not available; `convert` is used.
 - Current issues: river overlay still short on one side; coast overlay still missing some corners. Likely needs more overlay scale multiplier or different scaling strategy.
+- Update: river overlay scaling adjusted so diagonal and N/S/E/W orientations fill the hex correctly; remaining issues are coast overlay corner gaps.
 - To reproduce visuals: run server and view `/hexes/random.pdf`, or inspect generated PDFs in repo root (`random*.pdf`).
