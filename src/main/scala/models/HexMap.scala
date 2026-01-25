@@ -12,6 +12,8 @@ final case class HexPointOfInterest(
   location: String,
   development: String,
   cataclysm: Option[String],
+  offsetX: Double,
+  offsetY: Double,
 )
 
 final case class HexOverlay(

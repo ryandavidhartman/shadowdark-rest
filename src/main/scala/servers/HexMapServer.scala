@@ -21,6 +21,7 @@ final case class HexMapServer() {
   private val mapWidth = pageWidth - (pageMargin * 2)
   private val mapHeight = pageHeight - (pageMargin * 2)
   private val sqrt3 = Math.sqrt(3.0)
+  private val poiInsetFactor = 0.7
   private val terrainSteps = Vector(
     ("Desert", "Arctic"),
     ("Swamp", "Taiga"),
@@ -123,13 +124,21 @@ final case class HexMapServer() {
       val climate = climateForRoll(rollDie(2))
       val danger  = dangerForRoll(rollDie(6))
       val step    = terrainStepForRoll(roll2d6())
-      val hex     = buildHex(0, 0, step, climate, 1, 1)
+      val centerHex = buildHex(0, 0, step, climate, 1, 1)
+      val neighborOffsets = neighborOffsetsFor(0)
+      val (neighborHexes, _, _) = neighborOffsets.foldLeft((List.empty[HexCell], 2, 2)) {
+        case ((hexes, nextId, nextPoiId), (col, row)) =>
+          val nextStep = nextTerrainStep(step)
+          val hex = buildHex(col, row, nextStep, climate, nextId, nextPoiId)
+          (hexes :+ hex, nextId + 1, nextPoiId + 1)
+      }
+      val hexes = centerHex +: neighborHexes
       HexMap(
         name = "Overland Hex Map",
         climate = climate,
         dangerLevel = danger,
-        layout = HexMapLayout(columns = 1, rows = 1),
-        hexes = List(hex),
+        layout = layoutFor(hexes),
+        hexes = hexes,
       )
     }
 
@@ -230,12 +239,15 @@ final case class HexMapServer() {
         val development = poiDevelopments(rollDie(20) - 1)
         val cataclysm =
           if (development.startsWith("Disaster!")) Some(cataclysms(rollDie(8) - 1)) else None
+        val (offsetX, offsetY) = randomPoiOffset()
         Some(
           HexPointOfInterest(
             id = nextPoiId,
             location = location,
             development = development,
             cataclysm = cataclysm,
+            offsetX = offsetX,
+            offsetY = offsetY,
           ),
         )
       } else None
@@ -287,6 +299,29 @@ final case class HexMapServer() {
     }
   }
 
+  private def neighborOffsetsFor(row: Int): List[(Int, Int)] = {
+    val odd = row % 2 != 0
+    if (odd) {
+      List(
+        (1, 0),
+        (-1, 0),
+        (1, -1),
+        (0, -1),
+        (1, 1),
+        (0, 1),
+      )
+    } else {
+      List(
+        (1, 0),
+        (-1, 0),
+        (0, -1),
+        (-1, -1),
+        (0, 1),
+        (-1, 1),
+      )
+    }
+  }
+
   private def renderHexMapImage(map: HexMap): BufferedImage = {
     val image = new BufferedImage(pageWidth, pageHeight, BufferedImage.TYPE_INT_ARGB)
     val g = image.createGraphics()
@@ -306,7 +341,7 @@ final case class HexMapServer() {
       map.hexes.foreach { hex =>
         val colOffset = hex.column - minCol
         val rowOffset = hex.row - minRow
-        val isOddRow = rowOffset % 2 != 0
+        val isOddRow = hex.row % 2 != 0
         val centerX = startX + hexWidth * (colOffset + (if (isOddRow) 0.5 else 0.0)) + hexWidth / 2.0
         val centerY = startY + size * 1.5 * rowOffset + size
         val polygon = hexPolygon(centerX, centerY, size)
@@ -483,12 +518,39 @@ final case class HexMapServer() {
   private def drawPoiMarker(g: Graphics2D, hex: HexCell, centerX: Double, centerY: Double, size: Double): Unit = {
     hex.pointOfInterest.foreach { poi =>
       val poiSize = Math.max(12, (size * 0.28).toInt)
-      val iconX = (centerX - poiSize / 2.0).toInt
-      val iconY = (centerY - size * 0.62).toInt
+      val poiCenterX = centerX + (poi.offsetX * size)
+      val poiCenterY = centerY + (poi.offsetY * size)
+      val iconX = (poiCenterX - poiSize / 2.0).toInt
+      val iconY = (poiCenterY - poiSize / 2.0).toInt
       val style = poiMarkerStyle(poi.location, poi.development)
       g.setColor(style.color)
       style.draw(g, iconX, iconY, poiSize)
     }
+  }
+
+  private def randomPoiOffset(): (Double, Double) = {
+    val size = poiInsetFactor
+    val halfWidth = sqrt3 * size / 2.0
+    val minX = -halfWidth
+    val maxX = halfWidth
+    val minY = -size
+    val maxY = size
+    var x = 0.0
+    var y = 0.0
+    var attempts = 0
+    while (attempts < 40) {
+      x = rng.nextDouble(minX, maxX)
+      y = rng.nextDouble(minY, maxY)
+      if (isInsideHex(x, y, size)) return (x, y)
+      attempts += 1
+    }
+    (0.0, 0.0)
+  }
+
+  private def isInsideHex(x: Double, y: Double, size: Double): Boolean = {
+    val ax = Math.abs(x)
+    val ay = Math.abs(y)
+    ax <= (sqrt3 * size / 2.0) && ay <= size && (ax / sqrt3 + ay) <= size
   }
 
   private final case class PoiMarkerStyle(color: Color, draw: (Graphics2D, Int, Int, Int) => Unit)
