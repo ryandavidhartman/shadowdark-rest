@@ -1,5 +1,12 @@
 # Repository Guidelines
 
+## AGENTS.md Maintenance (For AI Agents)
+- Keep this document up to date as work progresses; treat it as shared operational memory for future AI sessions.
+- When you change behavior, data flow, or asset handling, add concise notes (what changed, where, and why).
+- For WIP areas, record current rules, constraints, and known issues so another agent can continue without re-discovering context.
+- Prefer adding new bullets to existing sections (e.g., Hex Map Work Notes) instead of creating redundant sections.
+- If you undo or replace an approach, note it explicitly to avoid confusion later.
+
 ## Project Structure & Module Organization
 - Standard sbt layout: app code in `src/main/scala`, tests in `src/test/scala`, shared configs/assets in `src/main/resources`.
 - Core models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, AC/HP, gear, talents/features/spells/languages), `CharacterClass` + supporting types (`ClassFeature`, `Talent`, `Spellcasting`, etc.), `Background`, `Personality`, `Title`, `Monster`, `Deity`, `Language`, `LanguageEntry`, `Spell`, `Item`, `NpcQuality`, `SettlementName`, `Settlement`.
@@ -137,10 +144,29 @@
 - River/coast handling: `HexCell` stores `overlay.kind` (`River` or `Coast`), `orientation`, and `baseTerrain` for the texture to draw underneath.
 - River orientation options: `N-S`, `E-W`, `NE-SW`, `NW-SE`. Coast orientation options: `N`, `NE`, `SE`, `S`, `SW`, `NW`.
 - Coast overlay base orientation changed: new `coast_OVERLAY.png` has ocean on west and coastline N-S; rotation mapping applies a -90 deg offset.
-- Overlay scaling uses aspect-preserving cover with multipliers: `River` 1.28, `Coast` 1.22 (tune as needed).
+- Overlay scaling uses aspect-preserving cover with multipliers: `River` 1.28, `Coast` 1.22 (tune as needed). Orientation boost: `N-S`/`E-W` 1.10, diagonals 1.12.
 - Base textures are trimmed on load; overlays are not trimmed. Ocean and other textures with alpha get a solid under-fill color before drawing.
 - POI markers now use simple icon glyphs based on location/development (temple cross, house, tower, cairn, rock, ravine, cave, star, hut, tent, flame, eye, gem); legend label changed to "POI: icon".
 - Images trimmed via `convert -trim +repage`; only `ocean.png` was re-trimmed after replacement. `magick` not available; `convert` is used.
-- Current issues: river overlay still short on one side; coast overlay still missing some corners. Likely needs more overlay scale multiplier or different scaling strategy.
-- Update: river overlay scaling adjusted so diagonal and N/S/E/W orientations fill the hex correctly; remaining issues are coast overlay corner gaps.
+- Updates:
+  - River overlay scaling tuned so diagonal + N/S/E/W orientations fill the hex.
+  - POI markers store per-hex random offsets (`offsetX`, `offsetY`) and render inside a padded hex region.
+  - `randomMap` now generates the center hex plus the 6 neighbors; layout derived from those 7 hexes.
+  - Neighbor placement fixed for odd-r row offsets (parity based on absolute row).
+  - Added `RiverCorner` overlay kind + rotations; `river_CORNER.png` is WIP for 60-degree bend connections.
+  - Added `river_CORNER_guide.png` (hex outline + centerline + NE edge midpoint) for asset alignment.
+- Code detail:
+  - `randomMap` builds 7 hexes with `allowOverlay = false`, then calls `applyRiverCoastOverlays` to assign overlays based on neighbor terrain.
+  - `buildHex` now has `allowOverlay` flag; overlay selection is skipped during the first pass.
+  - `applyRiverCoastOverlays`:
+    - `coastCoords` = River/coast hexes adjacent to Ocean; `riverCoords` = remaining River/coast hexes.
+    - Coasts only when adjacent to Ocean; otherwise rivers orient by neighbor directions or random axis.
+  - `riverOverlayForNeighborDirs` uses `RiverCorner` only when exactly two adjacent river directions are present (uses `cornerOrientationForDirs`).
+  - `riverOrientationForNeighborDirs` picks axis with 2+ matches, else 1-match axis, else random.
+  - `nextMap` does not currently re-run `applyRiverCoastOverlays` on the whole map; it just appends one hex.
+- Current river/coast issues:
+  - Initial 7-hex generation assigns overlays in a second pass (`applyRiverCoastOverlays`) based on neighbor terrain.
+  - Coast overlays only appear when a River/coast hex is adjacent to Ocean; Ocean is currently disallowed unless the center hex is Ocean, so coasts are rare in the initial 7.
+  - Rivers can be isolated when only one River/coast tile is rolled; no enforcement of contiguous river clusters yet.
+  - `river_CORNER.png` is still being iterated; current simple bend image is correct directionally (N→center→NE) but not yet styled to match `river_OVERLAY.png`.
 - To reproduce visuals: run server and view `/hexes/random.pdf`, or inspect generated PDFs in repo root (`random*.pdf`).

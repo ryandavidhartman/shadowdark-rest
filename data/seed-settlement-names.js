@@ -4,7 +4,7 @@
 /* global Mongo, ObjectId */
 const fs = require('fs');
 
-const positionalArgs = process.argv.slice(2).filter(a => !a.startsWith('--'));
+const positionalArgs = process.argv.slice(2).filter(a => !a.startIsWith('--'));
 const uriArg = positionalArgs.find(a => a.startsWith('mongodb'));
 const dbArg = positionalArgs.find(a => a.startsWith('db='));
 const collectionArg = positionalArgs.find(a => a.startsWith('collection='));

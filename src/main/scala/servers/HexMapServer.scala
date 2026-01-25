@@ -22,6 +22,7 @@ final case class HexMapServer() {
   private val mapHeight = pageHeight - (pageMargin * 2)
   private val sqrt3 = Math.sqrt(3.0)
   private val poiInsetFactor = 0.7
+  private val hexDirections = List("N", "NE", "SE", "S", "SW", "NW")
   private val terrainSteps = Vector(
     ("Desert", "Arctic"),
     ("Swamp", "Taiga"),
@@ -100,6 +101,7 @@ final case class HexMapServer() {
   )
   private val overlayTextures = Map(
     "River" -> "images/river_OVERLAY.png",
+    "RiverCorner" -> "images/river_CORNER.png",
     "Coast" -> "images/coast_OVERLAY.png",
   )
   private val terrainFillColors = Map(
@@ -124,15 +126,16 @@ final case class HexMapServer() {
       val climate = climateForRoll(rollDie(2))
       val danger  = dangerForRoll(rollDie(6))
       val step    = terrainStepForRoll(roll2d6())
-      val centerHex = buildHex(0, 0, step, climate, 1, 1)
+      val centerHex = buildHex(0, 0, step, climate, 1, 1, allowOverlay = false)
+      val allowOcean = centerHex.terrain == "Ocean"
       val neighborOffsets = neighborOffsetsFor(0)
       val (neighborHexes, _, _) = neighborOffsets.foldLeft((List.empty[HexCell], 2, 2)) {
         case ((hexes, nextId, nextPoiId), (col, row)) =>
-          val nextStep = nextTerrainStep(step)
-          val hex = buildHex(col, row, nextStep, climate, nextId, nextPoiId)
+          val nextStep = nextTerrainStepWithRules(step, climate, allowOcean)
+          val hex = buildHex(col, row, nextStep, climate, nextId, nextPoiId, allowOverlay = false)
           (hexes :+ hex, nextId + 1, nextPoiId + 1)
       }
-      val hexes = centerHex +: neighborHexes
+      val hexes = applyRiverCoastOverlays(centerHex +: neighborHexes, climate)
       HexMap(
         name = "Overland Hex Map",
         climate = climate,
@@ -220,6 +223,103 @@ final case class HexMapServer() {
     }
   }
 
+  private def nextTerrainStepWithRules(currentStep: Int, climate: String, allowOcean: Boolean): Int = {
+    var nextStep = nextTerrainStep(currentStep)
+    var attempts = 0
+    while (!allowOcean && terrainName(nextStep, climate) == "Ocean" && attempts < 12) {
+      nextStep = nextTerrainStep(currentStep)
+      attempts += 1
+    }
+    if (!allowOcean && terrainName(nextStep, climate) == "Ocean") {
+      var fallback = currentStep
+      var guard = 0
+      while (terrainName(fallback, climate) == "Ocean" && guard < terrainSteps.size) {
+        fallback = (fallback + 1) % terrainSteps.size
+        guard += 1
+      }
+      fallback
+    } else {
+      nextStep
+    }
+  }
+
+  private def applyRiverCoastOverlays(hexes: List[HexCell], climate: String): List[HexCell] = {
+    val byCoord = hexes.map(h => (h.column, h.row) -> h).toMap
+    val coastCoords = byCoord.collect {
+      case ((col, row), hex) if hex.terrain == "River/coast" &&
+        hexDirections.exists { direction =>
+          val (ncol, nrow) = neighborCoords(col, row, direction)
+          byCoord.get((ncol, nrow)).exists(_.terrain == "Ocean")
+        } =>
+        (col, row)
+    }.toSet
+    val riverCoords = byCoord.collect {
+      case ((col, row), hex) if hex.terrain == "River/coast" && !coastCoords.contains((col, row)) =>
+        (col, row)
+    }.toSet
+    hexes.map { hex =>
+      if (hex.terrain != "River/coast") hex
+      else {
+        val oceanDirs = hexDirections.filter { direction =>
+          val (col, row) = neighborCoords(hex.column, hex.row, direction)
+          byCoord.get((col, row)).exists(_.terrain == "Ocean")
+        }
+        val riverDirs = hexDirections.filter { direction =>
+          val (col, row) = neighborCoords(hex.column, hex.row, direction)
+          riverCoords.contains((col, row))
+        }
+        val baseTerrain = randomLandTerrain(climate)
+        val overlay =
+          if (oceanDirs.nonEmpty) {
+            val orientation = oceanDirs(rollDie(oceanDirs.size) - 1)
+            HexOverlay(kind = "Coast", orientation = orientation, baseTerrain = baseTerrain)
+          } else if (riverDirs.nonEmpty) {
+            val (kind, orientation) = riverOverlayForNeighborDirs(riverDirs)
+            HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain)
+          } else {
+            val orientation = riverOrientations(rollDie(riverOrientations.size) - 1)
+            HexOverlay(kind = "River", orientation = orientation, baseTerrain = baseTerrain)
+          }
+        hex.copy(overlay = Some(overlay))
+      }
+    }
+  }
+
+  private def riverOverlayForNeighborDirs(directions: List[String]): (String, String) = {
+    val dirSet = directions.toSet
+    val corner = if (dirSet.size == 2) cornerOrientationForDirs(dirSet) else ""
+    if (corner.nonEmpty) ("RiverCorner", corner)
+    else ("River", riverOrientationForNeighborDirs(directions))
+  }
+
+  private def cornerOrientationForDirs(dirSet: Set[String]): String = {
+    val orderedPairs = List(
+      ("N", "NE", "N-NE"),
+      ("NE", "SE", "NE-SE"),
+      ("SE", "S", "SE-S"),
+      ("S", "SW", "S-SW"),
+      ("SW", "NW", "SW-NW"),
+      ("NW", "N", "NW-N"),
+    )
+    orderedPairs.collectFirst {
+      case (a, b, orientation) if dirSet.contains(a) && dirSet.contains(b) => orientation
+    }.getOrElse("")
+  }
+
+  private def riverOrientationForNeighborDirs(directions: List[String]): String = {
+    val counts = Map(
+      "N-S" -> directions.count(dir => dir == "N" || dir == "S"),
+      "NE-SW" -> directions.count(dir => dir == "NE" || dir == "SW"),
+      "NW-SE" -> directions.count(dir => dir == "NW" || dir == "SE"),
+    )
+    val maxCount = counts.values.max
+    val candidates =
+      if (maxCount >= 2) counts.collect { case (axis, count) if count == maxCount => axis }.toVector
+      else counts.collect { case (axis, count) if count == 1 => axis }.toVector
+    if (candidates.nonEmpty) candidates(rollDie(candidates.size) - 1)
+    else riverOrientations(rollDie(riverOrientations.size) - 1)
+  }
+
   private def terrainName(step: Int, climate: String): String = {
     val (warm, cold) = terrainSteps(step)
     if (climate == "Warm") warm else cold
@@ -232,6 +332,7 @@ final case class HexMapServer() {
     climate: String,
     hexId: Int,
     nextPoiId: Int,
+    allowOverlay: Boolean = true,
   ): HexCell = {
     val poi =
       if (rollDie(6) == 1) {
@@ -253,7 +354,7 @@ final case class HexMapServer() {
       } else None
     val terrain = terrainName(step, climate)
     val overlay =
-      if (terrain == "River/coast") {
+      if (allowOverlay && terrain == "River/coast") {
         val baseTerrain = randomLandTerrain(climate)
         val isRiver = rollDie(2) == 1
         val orientation =
@@ -483,6 +584,16 @@ final case class HexMapServer() {
           case "NW-SE" => -60.0
           case _ => 0.0
         }
+      case "RiverCorner" =>
+        overlay.orientation match {
+          case "N-NE" => 0.0
+          case "NE-SE" => 60.0
+          case "SE-S" => 120.0
+          case "S-SW" => 180.0
+          case "SW-NW" => 240.0
+          case "NW-N" => 300.0
+          case _ => 0.0
+        }
       case "Coast" =>
         val baseOffset = -90.0
         overlay.orientation match {
@@ -500,6 +611,7 @@ final case class HexMapServer() {
   private def overlayScaleMultiplier(kind: String): Double =
     kind match {
       case "River" => 1.28
+      case "RiverCorner" => 1.28
       case "Coast" => 1.22
       case _ => 1.0
     }
@@ -512,6 +624,7 @@ final case class HexMapServer() {
           case "NE-SW" | "NW-SE" => 1.12
           case _ => 1.0
         }
+      case "RiverCorner" => 1.10
       case _ => 1.0
     }
 
