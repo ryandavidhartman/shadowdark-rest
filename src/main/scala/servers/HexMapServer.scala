@@ -424,7 +424,7 @@ final case class HexMapServer() {
       val centerX = bounds.getCenterX
       val centerY = bounds.getCenterY
       val baseScale = Math.max(bounds.getWidth / image.getWidth, bounds.getHeight / image.getHeight)
-      val scale = baseScale * overlayScaleMultiplier(overlay.kind)
+      val scale = baseScale * overlayScaleMultiplier(overlay.kind) * overlayOrientationScale(overlay)
       g.setClip(polygon)
       val transform = new AffineTransform(oldTransform)
       transform.translate(centerX, centerY)
@@ -466,6 +466,16 @@ final case class HexMapServer() {
     kind match {
       case "River" => 1.28
       case "Coast" => 1.22
+      case _ => 1.0
+    }
+
+  private def overlayOrientationScale(overlay: HexOverlay): Double =
+    overlay.kind match {
+      case "River" =>
+        overlay.orientation match {
+          case "NE-SW" | "NW-SE" => 1.12
+          case _ => 1.0
+        }
       case _ => 1.0
     }
 
