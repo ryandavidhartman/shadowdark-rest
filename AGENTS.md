@@ -155,6 +155,13 @@
   - Neighbor placement fixed for odd-r row offsets (parity based on absolute row).
   - Added `RiverCorner` overlay kind + rotations; `river_CORNER.png` is WIP for 60-degree bend connections.
   - Added `river_CORNER_guide.png` (hex outline + centerline + NE edge midpoint) for asset alignment.
+  - Isolated river/coast tiles (no river neighbors and no ocean adjacency) now downgrade to land terrain with no overlay.
+  - Single `River/coast` tiles are now preserved (won't be downgraded) to avoid wiping all rivers in small maps.
+  - Initial neighbor generation now allows ocean on a 1-in-6 roll (even if the center hex is not ocean) to increase coast frequency.
+  - Coast overlay rotation base offset flipped (+180 degrees) so coast orientations align with expected ocean-facing edge.
+  - `buildHex` now has a 1-in-10 chance to promote non-ocean land terrain to `River/coast`, increasing river overlay frequency.
+  - River/coast density now caps at 3 tiles for 7-hex maps (and ~35% for larger maps); extras downgrade to land.
+  - Disconnected river components are now trimmed to the single largest connected river cluster (coasts are preserved separately).
 - Code detail:
   - `randomMap` builds 7 hexes with `allowOverlay = false`, then calls `applyRiverCoastOverlays` to assign overlays based on neighbor terrain.
   - `buildHex` now has `allowOverlay` flag; overlay selection is skipped during the first pass.
@@ -163,7 +170,8 @@
     - Coasts only when adjacent to Ocean; otherwise rivers orient by neighbor directions or random axis.
   - `riverOverlayForNeighborDirs` uses `RiverCorner` only when exactly two adjacent river directions are present (uses `cornerOrientationForDirs`).
   - `riverOrientationForNeighborDirs` picks axis with 2+ matches, else 1-match axis, else random.
-  - `nextMap` does not currently re-run `applyRiverCoastOverlays` on the whole map; it just appends one hex.
+- `nextMap` does not currently re-run `applyRiverCoastOverlays` on the whole map; it just appends one hex.
+ - `nextMap` now re-runs `applyRiverCoastOverlays` on the full hex list after adding a hex so river/coast overlays stay consistent as the map grows.
 - Current river/coast issues:
   - Initial 7-hex generation assigns overlays in a second pass (`applyRiverCoastOverlays`) based on neighbor terrain.
   - Coast overlays only appear when a River/coast hex is adjacent to Ocean; Ocean is currently disallowed unless the center hex is Ocean, so coasts are rare in the initial 7.

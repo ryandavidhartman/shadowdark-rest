@@ -131,7 +131,8 @@ final case class HexMapServer() {
       val neighborOffsets = neighborOffsetsFor(0)
       val (neighborHexes, _, _) = neighborOffsets.foldLeft((List.empty[HexCell], 2, 2)) {
         case ((hexes, nextId, nextPoiId), (col, row)) =>
-          val nextStep = nextTerrainStepWithRules(step, climate, allowOcean)
+          val allowNeighborOcean = allowOcean || rollDie(6) == 1
+          val nextStep = nextTerrainStepWithRules(step, climate, allowNeighborOcean)
           val hex = buildHex(col, row, nextStep, climate, nextId, nextPoiId, allowOverlay = false)
           (hexes :+ hex, nextId + 1, nextPoiId + 1)
       }
@@ -158,8 +159,16 @@ final case class HexMapServer() {
           val step = nextTerrainStep(origin.terrainStep)
           val nextId = current.hexes.map(_.id).maxOption.getOrElse(0) + 1
           val nextPoiId = current.hexes.flatMap(_.pointOfInterest.map(_.id)).maxOption.getOrElse(0) + 1
-          val nextHex = buildHex(targetCol, targetRow, step, current.climate, nextId, nextPoiId)
-          val updatedHexes = current.hexes :+ nextHex
+          val nextHex = buildHex(
+            targetCol,
+            targetRow,
+            step,
+            current.climate,
+            nextId,
+            nextPoiId,
+            allowOverlay = false,
+          )
+          val updatedHexes = applyRiverCoastOverlays(current.hexes :+ nextHex, current.climate)
           current.copy(layout = layoutFor(updatedHexes), hexes = updatedHexes)
       }
     }
@@ -257,7 +266,17 @@ final case class HexMapServer() {
       case ((col, row), hex) if hex.terrain == "River/coast" && !coastCoords.contains((col, row)) =>
         (col, row)
     }.toSet
-    hexes.map { hex =>
+    val riverCoordsWithNeighbor =
+      if (riverCoords.size <= 1) riverCoords
+      else {
+        riverCoords.filter { case (col, row) =>
+          hexDirections.exists { direction =>
+            val (ncol, nrow) = neighborCoords(col, row, direction)
+            riverCoords.contains((ncol, nrow))
+          }
+        }
+      }
+    val withOverlays = hexes.map { hex =>
       if (hex.terrain != "River/coast") hex
       else {
         val oceanDirs = hexDirections.filter { direction =>
@@ -266,22 +285,128 @@ final case class HexMapServer() {
         }
         val riverDirs = hexDirections.filter { direction =>
           val (col, row) = neighborCoords(hex.column, hex.row, direction)
-          riverCoords.contains((col, row))
+          riverCoordsWithNeighbor.contains((col, row))
         }
         val baseTerrain = randomLandTerrain(climate)
         val overlay =
           if (oceanDirs.nonEmpty) {
             val orientation = oceanDirs(rollDie(oceanDirs.size) - 1)
-            HexOverlay(kind = "Coast", orientation = orientation, baseTerrain = baseTerrain)
+            Some(HexOverlay(kind = "Coast", orientation = orientation, baseTerrain = baseTerrain))
           } else if (riverDirs.nonEmpty) {
             val (kind, orientation) = riverOverlayForNeighborDirs(riverDirs)
-            HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain)
-          } else {
-            val orientation = riverOrientations(rollDie(riverOrientations.size) - 1)
-            HexOverlay(kind = "River", orientation = orientation, baseTerrain = baseTerrain)
-          }
-        hex.copy(overlay = Some(overlay))
+            Some(HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain))
+          } else None
+        overlay match {
+          case Some(nextOverlay) =>
+            hex.copy(overlay = Some(nextOverlay))
+          case None =>
+            val nextTerrain = baseTerrain
+            val nextStep = terrainStepForTerrain(nextTerrain, climate, hex.terrainStep)
+            hex.copy(terrain = nextTerrain, terrainStep = nextStep, overlay = None)
+        }
       }
+    }
+    val trimmed = trimDisconnectedRivers(withOverlays, climate)
+    limitRiverCoastDensity(trimmed, climate)
+  }
+
+  private def trimDisconnectedRivers(hexes: List[HexCell], climate: String): List[HexCell] = {
+    val byCoord = hexes.map(h => (h.column, h.row) -> h).toMap
+    val coastCoords = byCoord.collect {
+      case ((col, row), hex) if hex.terrain == "River/coast" &&
+        hexDirections.exists { direction =>
+          val (ncol, nrow) = neighborCoords(col, row, direction)
+          byCoord.get((ncol, nrow)).exists(_.terrain == "Ocean")
+        } =>
+        (col, row)
+    }.toSet
+    val riverCoords = byCoord.collect {
+      case ((col, row), hex) if hex.terrain == "River/coast" && !coastCoords.contains((col, row)) =>
+        (col, row)
+    }.toSet
+    val components = connectedComponents(riverCoords)
+    val largest =
+      if (components.isEmpty) Set.empty[(Int, Int)]
+      else {
+        val maxSize = components.map(_.size).max
+        val contenders = components.filter(_.size == maxSize)
+        contenders(rng.nextInt(contenders.size))
+      }
+    val toDowngrade = riverCoords.diff(largest)
+    if (toDowngrade.isEmpty) hexes
+    else {
+      hexes.map { hex =>
+        if (!toDowngrade.contains((hex.column, hex.row))) hex
+        else {
+          val nextTerrain = randomLandTerrain(climate)
+          val nextStep = terrainStepForTerrain(nextTerrain, climate, hex.terrainStep)
+          hex.copy(terrain = nextTerrain, terrainStep = nextStep, overlay = None)
+        }
+      }
+    }
+  }
+
+  private def connectedComponents(coords: Set[(Int, Int)]): List[Set[(Int, Int)]] = {
+    var remaining = coords
+    var components = List.empty[Set[(Int, Int)]]
+    while (remaining.nonEmpty) {
+      val start = remaining.head
+      var queue = List(start)
+      var visited = Set(start)
+      remaining -= start
+      while (queue.nonEmpty) {
+        val current = queue.head
+        queue = queue.tail
+        hexDirections.foreach { direction =>
+          val next = neighborCoords(current._1, current._2, direction)
+          if (remaining.contains(next)) {
+            remaining -= next
+            visited += next
+            queue = next :: queue
+          }
+        }
+      }
+      components = visited :: components
+    }
+    components
+  }
+
+  private def limitRiverCoastDensity(hexes: List[HexCell], climate: String): List[HexCell] = {
+    val maxRiverCoast =
+      if (hexes.size <= 7) 3
+      else Math.max(3, Math.round(hexes.size * 0.35f).toInt)
+    val riverCoast = hexes.filter(_.terrain == "River/coast")
+    if (riverCoast.size <= maxRiverCoast) hexes
+    else {
+      val byCoord = hexes.map(h => (h.column, h.row) -> h).toMap
+      val sorted = riverCoast.sortBy { hex =>
+        val oceanNeighbor = hexDirections.exists { direction =>
+          val (col, row) = neighborCoords(hex.column, hex.row, direction)
+          byCoord.get((col, row)).exists(_.terrain == "Ocean")
+        }
+        val riverNeighbors = hexDirections.count { direction =>
+          val (col, row) = neighborCoords(hex.column, hex.row, direction)
+          byCoord.get((col, row)).exists(_.terrain == "River/coast")
+        }
+        (if (oceanNeighbor) 1 else 0, riverNeighbors, rng.nextInt(1000))
+      }
+      val toDowngrade = sorted.take(riverCoast.size - maxRiverCoast).map(h => (h.column, h.row)).toSet
+      hexes.map { hex =>
+        if (!toDowngrade.contains((hex.column, hex.row))) hex
+        else {
+          val nextTerrain = randomLandTerrain(climate)
+          val nextStep = terrainStepForTerrain(nextTerrain, climate, hex.terrainStep)
+          hex.copy(terrain = nextTerrain, terrainStep = nextStep, overlay = None)
+        }
+      }
+    }
+  }
+
+  private def terrainStepForTerrain(terrain: String, climate: String, fallback: Int): Int = {
+    val names = terrainSteps.map { case (warm, cold) => if (climate == "Warm") warm else cold }
+    names.indexOf(terrain) match {
+      case -1 => fallback
+      case idx => idx
     }
   }
 
@@ -352,7 +477,11 @@ final case class HexMapServer() {
           ),
         )
       } else None
-    val terrain = terrainName(step, climate)
+    val baseTerrain = terrainName(step, climate)
+    val terrain =
+      if (baseTerrain != "Ocean" && baseTerrain != "River/coast" && rollDie(10) == 1) "River/coast"
+      else baseTerrain
+    val terrainStep = if (terrain != baseTerrain) terrainStepForTerrain(terrain, climate, step) else step
     val overlay =
       if (allowOverlay && terrain == "River/coast") {
         val baseTerrain = randomLandTerrain(climate)
@@ -368,7 +497,7 @@ final case class HexMapServer() {
       column = column,
       row = row,
       terrain = terrain,
-      terrainStep = step,
+      terrainStep = terrainStep,
       pointOfInterest = poi,
       overlay = overlay,
     )
@@ -595,7 +724,7 @@ final case class HexMapServer() {
           case _ => 0.0
         }
       case "Coast" =>
-        val baseOffset = -90.0
+        val baseOffset = 90.0
         overlay.orientation match {
           case "N" => 0.0 + baseOffset
           case "NE" => 60.0 + baseOffset
