@@ -57,6 +57,22 @@ final case class HexMapRoute(server: HexMapServer) {
             )
           }
           .mapError(err => Response.internalServerError(err.getMessage)),
+      Method.GET / "hexes" / "random.png" ->
+        Handler
+          .fromFunctionZIO[Request] { _ =>
+            for {
+              map <- server.randomMap
+              png <- server.renderHexMapPng(map)
+            } yield Response(
+              status = Status.Ok,
+              headers = Headers(
+                Header.Custom("Content-Type", "image/png"),
+                Header.Custom("Content-Disposition", "inline; filename=\"random-hex-map.png\""),
+              ),
+              body = Body.fromChunk(Chunk.fromArray(png)),
+            )
+          }
+          .mapError(err => Response.internalServerError(err.getMessage)),
     )
 }
 

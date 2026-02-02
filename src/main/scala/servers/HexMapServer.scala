@@ -1,6 +1,6 @@
 package servers
 
-import java.awt.{BasicStroke, Color, Font, GradientPaint, Graphics2D, RenderingHints}
+import java.awt.{AlphaComposite, BasicStroke, Color, Font, GradientPaint, Graphics2D, RenderingHints}
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
@@ -175,7 +175,12 @@ final case class HexMapServer() {
 
   def renderHexMapPdf(map: HexMap): Task[Array[Byte]] =
     ZIO.attempt {
-      val image = renderHexMapImage(map)
+      val image = renderHexMapImage(
+        map,
+        includeLegend = true,
+        transparentBackground = false,
+        tightCrop = false,
+      )
       val pageSize = new PDRectangle(pageWidth.toFloat, pageHeight.toFloat)
       val document = new PDDocument()
       try {
@@ -191,6 +196,21 @@ final case class HexMapServer() {
           output.toByteArray
         } finally output.close()
       } finally document.close()
+    }
+
+  def renderHexMapPng(map: HexMap): Task[Array[Byte]] =
+    ZIO.attempt {
+      val image = renderHexMapImage(
+        map,
+        includeLegend = false,
+        transparentBackground = true,
+        tightCrop = true,
+      )
+      val output = new ByteArrayOutputStream()
+      try {
+        ImageIO.write(image, "png", output)
+        output.toByteArray
+      } finally output.close()
     }
 
   private def rollDie(sides: Int): Int =
@@ -552,21 +572,36 @@ final case class HexMapServer() {
     }
   }
 
-  private def renderHexMapImage(map: HexMap): BufferedImage = {
-    val image = new BufferedImage(pageWidth, pageHeight, BufferedImage.TYPE_INT_ARGB)
+  private def renderHexMapImage(
+    map: HexMap,
+    includeLegend: Boolean,
+    transparentBackground: Boolean,
+    tightCrop: Boolean,
+  ): BufferedImage = {
+    val (minCol, maxCol, minRow, maxRow) = boundsFor(map.hexes)
+    val columns = maxCol - minCol + 1
+    val rows = maxRow - minRow + 1
+    val size = hexSizeFor(columns, rows)
+    val hexWidth = sqrt3 * size
+    val mapPixelWidth = hexWidth * columns + hexWidth / 2.0
+    val mapPixelHeight = (2.0 * size) + (rows - 1) * size * 1.5
+    val canvasWidth = if (tightCrop) Math.ceil(mapPixelWidth).toInt else pageWidth
+    val canvasHeight = if (tightCrop) Math.ceil(mapPixelHeight).toInt else pageHeight
+    val image = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_ARGB)
     val g = image.createGraphics()
     try {
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-      paintBackground(g)
-      val (minCol, maxCol, minRow, maxRow) = boundsFor(map.hexes)
-      val columns = maxCol - minCol + 1
-      val rows = maxRow - minRow + 1
-      val size = hexSizeFor(columns, rows)
-      val hexWidth = sqrt3 * size
-      val mapPixelWidth = hexWidth * columns + hexWidth / 2.0
-      val mapPixelHeight = (2.0 * size) + (rows - 1) * size * 1.5
-      val startX = pageMargin + (mapWidth - mapPixelWidth) / 2.0
-      val startY = pageMargin + (mapHeight - mapPixelHeight) / 2.0
+      if (transparentBackground) {
+        g.setComposite(AlphaComposite.Clear)
+        g.fillRect(0, 0, canvasWidth, canvasHeight)
+        g.setComposite(AlphaComposite.SrcOver)
+      } else {
+        paintBackground(g)
+      }
+      val startX =
+        if (tightCrop) 0.0 else pageMargin + (mapWidth - mapPixelWidth) / 2.0
+      val startY =
+        if (tightCrop) 0.0 else pageMargin + (mapHeight - mapPixelHeight) / 2.0
 
       map.hexes.foreach { hex =>
         val colOffset = hex.column - minCol
@@ -586,7 +621,9 @@ final case class HexMapServer() {
         drawPoiMarker(g, hex, centerX, centerY, size)
       }
 
-      drawHexMapLegend(g, map)
+      if (includeLegend) {
+        drawHexMapLegend(g, map)
+      }
     } finally g.dispose()
     image
   }
@@ -680,7 +717,11 @@ final case class HexMapServer() {
     }
   }
 
-  private def drawTerrainOverlay(g: Graphics2D, polygon: java.awt.Polygon, overlay: HexOverlay): Unit = {
+  private def drawTerrainOverlay(
+    g: Graphics2D,
+    polygon: java.awt.Polygon,
+    overlay: HexOverlay,
+  ): Unit = {
     overlayTextureCache.get(overlay.kind).foreach { image =>
       val bounds = polygon.getBounds
       val oldClip = g.getClip
@@ -709,8 +750,8 @@ final case class HexMapServer() {
         overlay.orientation match {
           case "N-S" => 0.0
           case "E-W" => 90.0
-          case "NE-SW" => 60.0
-          case "NW-SE" => -60.0
+          case "NE-SW" => -60.0
+          case "NW-SE" => 60.0
           case _ => 0.0
         }
       case "RiverCorner" =>

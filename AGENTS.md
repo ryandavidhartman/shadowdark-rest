@@ -162,6 +162,8 @@
   - `buildHex` now has a 1-in-10 chance to promote non-ocean land terrain to `River/coast`, increasing river overlay frequency.
   - River/coast density now caps at 3 tiles for 7-hex maps (and ~35% for larger maps); extras downgrade to land.
   - Disconnected river components are now trimmed to the single largest connected river cluster (coasts are preserved separately).
+  - Added `/hexes/random.png` route using `HexMapServer.renderHexMapPng` for PNG output; PNG rendering omits the legend, clears to transparent, and tight-crops to the hex bounds.
+  - Adjusted river overlay diagonal rotations (swap NE-SW/NW-SE angles) to better align continuous rivers.
 - Code detail:
   - `randomMap` builds 7 hexes with `allowOverlay = false`, then calls `applyRiverCoastOverlays` to assign overlays based on neighbor terrain.
   - `buildHex` now has `allowOverlay` flag; overlay selection is skipped during the first pass.
