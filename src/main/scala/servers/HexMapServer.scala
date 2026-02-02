@@ -296,6 +296,14 @@ final case class HexMapServer() {
           }
         }
       }
+    val axisByCoord = riverCoordsWithNeighbor.map { case (col, row) =>
+      val dirs = hexDirections.filter { direction =>
+        val (ncol, nrow) = neighborCoords(col, row, direction)
+        riverCoordsWithNeighbor.contains((ncol, nrow))
+      }
+      (col, row) -> riverAxisForDirs(dirs)
+    }.toMap
+    val phaseByCoord = riverPhaseByAxis(riverCoordsWithNeighbor, axisByCoord)
     val withOverlays = hexes.map { hex =>
       if (hex.terrain != "River/coast") hex
       else {
@@ -313,7 +321,12 @@ final case class HexMapServer() {
             val orientation = oceanDirs(rollDie(oceanDirs.size) - 1)
             Some(HexOverlay(kind = "Coast", orientation = orientation, baseTerrain = baseTerrain))
           } else if (riverDirs.nonEmpty) {
-            val (kind, orientation) = riverOverlayForNeighborDirs(riverDirs, hex)
+            val (kind, orientation) = riverOverlayForNeighborDirs(
+              riverDirs,
+              hex,
+              axisByCoord,
+              phaseByCoord,
+            )
             Some(HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain))
           } else None
         overlay match {
@@ -328,6 +341,55 @@ final case class HexMapServer() {
     }
     val trimmed = trimDisconnectedRivers(withOverlays, climate)
     limitRiverCoastDensity(trimmed, climate)
+  }
+
+  private def riverAxisForDirs(directions: List[String]): String = {
+    val counts = Map(
+      "N-S" -> directions.count(dir => dir == "N" || dir == "S"),
+      "NE-SW" -> directions.count(dir => dir == "NE" || dir == "SW"),
+      "NW-SE" -> directions.count(dir => dir == "NW" || dir == "SE"),
+    )
+    val maxCount = counts.values.maxOption.getOrElse(0)
+    val candidates =
+      if (maxCount >= 2) counts.collect { case (axis, count) if count == maxCount => axis }.toVector
+      else counts.collect { case (axis, count) if count == 1 => axis }.toVector
+    if (candidates.nonEmpty) candidates.min
+    else riverOrientations.headOption.getOrElse("N-S")
+  }
+
+  private def riverPhaseByAxis(
+    coords: Set[(Int, Int)],
+    axisByCoord: Map[(Int, Int), String],
+  ): Map[(Int, Int), Boolean] = {
+    val remaining = scala.collection.mutable.Set.from(coords)
+    val phaseByCoord = scala.collection.mutable.Map.empty[(Int, Int), Boolean]
+    def axisDirs(axis: String): List[String] =
+      axis match {
+        case "N-S" => List("N", "S")
+        case "NE-SW" => List("NE", "SW")
+        case "NW-SE" => List("NW", "SE")
+        case _ => Nil
+      }
+    while (remaining.nonEmpty) {
+      val seed = remaining.head
+      remaining.remove(seed)
+      phaseByCoord.update(seed, false)
+      val queue = scala.collection.mutable.Queue(seed)
+      while (queue.nonEmpty) {
+        val (col, row) = queue.dequeue()
+        val axis = axisByCoord.getOrElse((col, row), "N-S")
+        axisDirs(axis).foreach { direction =>
+          val next = neighborCoords(col, row, direction)
+          if (remaining.contains(next) && axisByCoord.get(next).contains(axis)) {
+            remaining.remove(next)
+            val nextPhase = !phaseByCoord.getOrElse((col, row), false)
+            phaseByCoord.update(next, nextPhase)
+            queue.enqueue(next)
+          }
+        }
+      }
+    }
+    phaseByCoord.toMap
   }
 
   private def trimDisconnectedRivers(hexes: List[HexCell], climate: String): List[HexCell] = {
@@ -430,11 +492,21 @@ final case class HexMapServer() {
     }
   }
 
-  private def riverOverlayForNeighborDirs(directions: List[String], hex: HexCell): (String, String) = {
+  private def riverOverlayForNeighborDirs(
+    directions: List[String],
+    hex: HexCell,
+    axisByCoord: Map[(Int, Int), String],
+    phaseByCoord: Map[(Int, Int), Boolean],
+  ): (String, String) = {
     val dirSet = directions.toSet
     val corner = if (dirSet.size == 2) cornerOrientationForDirs(dirSet) else ""
     if (corner.nonEmpty) ("RiverCorner", corner)
-    else ("River", riverOrientationForNeighborDirs(directions, hex))
+    else {
+      val axis = axisByCoord.getOrElse((hex.column, hex.row), riverAxisForDirs(directions))
+      val reverse = phaseByCoord.getOrElse((hex.column, hex.row), false)
+      val orientation = if (reverse) s"$axis-REV" else axis
+      ("River", orientation)
+    }
   }
 
   private def cornerOrientationForDirs(dirSet: Set[String]): String = {
@@ -451,31 +523,7 @@ final case class HexMapServer() {
     }.getOrElse("")
   }
 
-  private def riverOrientationForNeighborDirs(directions: List[String], hex: HexCell): String = {
-    val counts = Map(
-      "N-S" -> directions.count(dir => dir == "N" || dir == "S"),
-      "NE-SW" -> directions.count(dir => dir == "NE" || dir == "SW"),
-      "NW-SE" -> directions.count(dir => dir == "NW" || dir == "SE"),
-    )
-    val maxCount = counts.values.max
-    val candidates =
-      if (maxCount >= 2) counts.collect { case (axis, count) if count == maxCount => axis }.toVector
-      else counts.collect { case (axis, count) if count == 1 => axis }.toVector
-    val axis =
-      if (candidates.nonEmpty) candidates(rollDie(candidates.size) - 1)
-      else riverOrientations(rollDie(riverOrientations.size) - 1)
-    val reverse =
-      axis match {
-        case "N-S" =>
-          if (directions.size == 1) directions.head == "N" else hex.row % 2 == 0
-        case "NE-SW" =>
-          if (directions.size == 1) directions.head == "NE" else hex.column % 2 == 0
-        case "NW-SE" =>
-          if (directions.size == 1) directions.head == "NW" else (hex.column + hex.row) % 2 == 0
-        case _ => false
-      }
-    if (reverse) s"$axis-REV" else axis
-  }
+  
 
   private def terrainName(step: Int, climate: String): String = {
     val (warm, cold) = terrainSteps(step)
