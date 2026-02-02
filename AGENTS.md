@@ -164,6 +164,9 @@
   - Disconnected river components are now trimmed to the single largest connected river cluster (coasts are preserved separately).
   - Added `/hexes/random.png` route using `HexMapServer.renderHexMapPng` for PNG output; PNG rendering omits the legend, clears to transparent, and tight-crops to the hex bounds.
   - Adjusted river overlay diagonal rotations (swap NE-SW/NW-SE angles) to better align continuous rivers.
+  - River straight orientations now include a `-REV` phase (picked by hex parity) to flip the texture 180° for better across-hex continuity.
+  - River orientation scaling now strips the `-REV` suffix so boosted scales still apply to flipped rivers.
+  - River `-REV` phase now uses axis-specific parity (row/column) and single-neighbor direction hints to improve continuity across lines.
 - Code detail:
   - `randomMap` builds 7 hexes with `allowOverlay = false`, then calls `applyRiverCoastOverlays` to assign overlays based on neighbor terrain.
   - `buildHex` now has `allowOverlay` flag; overlay selection is skipped during the first pass.

@@ -313,7 +313,7 @@ final case class HexMapServer() {
             val orientation = oceanDirs(rollDie(oceanDirs.size) - 1)
             Some(HexOverlay(kind = "Coast", orientation = orientation, baseTerrain = baseTerrain))
           } else if (riverDirs.nonEmpty) {
-            val (kind, orientation) = riverOverlayForNeighborDirs(riverDirs)
+            val (kind, orientation) = riverOverlayForNeighborDirs(riverDirs, hex)
             Some(HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain))
           } else None
         overlay match {
@@ -430,11 +430,11 @@ final case class HexMapServer() {
     }
   }
 
-  private def riverOverlayForNeighborDirs(directions: List[String]): (String, String) = {
+  private def riverOverlayForNeighborDirs(directions: List[String], hex: HexCell): (String, String) = {
     val dirSet = directions.toSet
     val corner = if (dirSet.size == 2) cornerOrientationForDirs(dirSet) else ""
     if (corner.nonEmpty) ("RiverCorner", corner)
-    else ("River", riverOrientationForNeighborDirs(directions))
+    else ("River", riverOrientationForNeighborDirs(directions, hex))
   }
 
   private def cornerOrientationForDirs(dirSet: Set[String]): String = {
@@ -451,7 +451,7 @@ final case class HexMapServer() {
     }.getOrElse("")
   }
 
-  private def riverOrientationForNeighborDirs(directions: List[String]): String = {
+  private def riverOrientationForNeighborDirs(directions: List[String], hex: HexCell): String = {
     val counts = Map(
       "N-S" -> directions.count(dir => dir == "N" || dir == "S"),
       "NE-SW" -> directions.count(dir => dir == "NE" || dir == "SW"),
@@ -461,8 +461,20 @@ final case class HexMapServer() {
     val candidates =
       if (maxCount >= 2) counts.collect { case (axis, count) if count == maxCount => axis }.toVector
       else counts.collect { case (axis, count) if count == 1 => axis }.toVector
-    if (candidates.nonEmpty) candidates(rollDie(candidates.size) - 1)
-    else riverOrientations(rollDie(riverOrientations.size) - 1)
+    val axis =
+      if (candidates.nonEmpty) candidates(rollDie(candidates.size) - 1)
+      else riverOrientations(rollDie(riverOrientations.size) - 1)
+    val reverse =
+      axis match {
+        case "N-S" =>
+          if (directions.size == 1) directions.head == "N" else hex.row % 2 == 0
+        case "NE-SW" =>
+          if (directions.size == 1) directions.head == "NE" else hex.column % 2 == 0
+        case "NW-SE" =>
+          if (directions.size == 1) directions.head == "NW" else (hex.column + hex.row) % 2 == 0
+        case _ => false
+      }
+    if (reverse) s"$axis-REV" else axis
   }
 
   private def terrainName(step: Int, climate: String): String = {
@@ -747,13 +759,17 @@ final case class HexMapServer() {
   private def overlayRotationDegrees(overlay: HexOverlay): Double =
     overlay.kind match {
       case "River" =>
-        overlay.orientation match {
+        val (axis, reversed) =
+          if (overlay.orientation.endsWith("-REV")) (overlay.orientation.stripSuffix("-REV"), true)
+          else (overlay.orientation, false)
+        val baseRotation = axis match {
           case "N-S" => 0.0
           case "E-W" => 90.0
           case "NE-SW" => -60.0
           case "NW-SE" => 60.0
           case _ => 0.0
         }
+        if (reversed) baseRotation + 180.0 else baseRotation
       case "RiverCorner" =>
         overlay.orientation match {
           case "N-NE" => 0.0
@@ -789,7 +805,10 @@ final case class HexMapServer() {
   private def overlayOrientationScale(overlay: HexOverlay): Double =
     overlay.kind match {
       case "River" =>
-        overlay.orientation match {
+        val orientation =
+          if (overlay.orientation.endsWith("-REV")) overlay.orientation.stripSuffix("-REV")
+          else overlay.orientation
+        orientation match {
           case "N-S" | "E-W" => 1.10
           case "NE-SW" | "NW-SE" => 1.12
           case _ => 1.0
