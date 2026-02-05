@@ -20,29 +20,33 @@ object RaceRepositoryLive {
     fromRegistries(
       fromProviders(
         Macros.createCodecProviderIgnoreNone[RaceAbility],
-        Macros.createCodecProviderIgnoreNone[Race],
+        Macros.createCodecProviderIgnoreNone[Race]
       ),
-      MongoClient.DEFAULT_CODEC_REGISTRY,
+      MongoClient.DEFAULT_CODEC_REGISTRY
     )
 
   private def loadConfig = ZIO.attempt(ConfigFactory.load())
 
   private def resolveUri(cfg: com.typesafe.config.Config): Task[String] =
-    ZIO.fromOption(
-      List("mongo.uri", "mongodb.uri").collectFirst {
-        case path if cfg.hasPath(path) => cfg.getString(path)
-      },
-    ).orElseFail(new RuntimeException("Missing Mongo URI config (expected mongo.uri or mongodb.uri)"))
+    ZIO
+      .fromOption(
+        List("mongo.uri", "mongodb.uri").collectFirst {
+          case path if cfg.hasPath(path) => cfg.getString(path)
+        }
+      )
+      .orElseFail(new RuntimeException("Missing Mongo URI config (expected mongo.uri or mongodb.uri)"))
 
   private def resolveDatabase(cfg: com.typesafe.config.Config, uri: String): Task[String] =
-    ZIO.succeed {
-      if (cfg.hasPath("mongo.database")) Some(cfg.getString("mongo.database"))
-      else if (cfg.hasPath("mongodb.database")) Some(cfg.getString("mongodb.database"))
-      else {
-        val cs = new ConnectionString(uri)
-        Option(cs.getDatabase)
+    ZIO
+      .succeed {
+        if (cfg.hasPath("mongo.database")) Some(cfg.getString("mongo.database"))
+        else if (cfg.hasPath("mongodb.database")) Some(cfg.getString("mongodb.database"))
+        else {
+          val cs = new ConnectionString(uri)
+          Option(cs.getDatabase)
+        }
       }
-    }.someOrElse("shadowdark")
+      .someOrElse("shadowdark")
 
   private def resolveCollection(cfg: com.typesafe.config.Config): String =
     if (cfg.hasPath("mongo.collection")) cfg.getString("mongo.collection")
@@ -51,17 +55,17 @@ object RaceRepositoryLive {
 
   val layer: ZLayer[Any, Throwable, RaceRepository] = ZLayer.scoped {
     for {
-      cfg        <- loadConfig
-      uri        <- resolveUri(cfg)
-      dbName     <- resolveDatabase(cfg, uri)
+      cfg <- loadConfig
+      uri <- resolveUri(cfg)
+      dbName <- resolveDatabase(cfg, uri)
       collection <- ZIO.attempt(resolveCollection(cfg))
-      client     <- ZIO.fromAutoCloseable(ZIO.attempt(MongoClient(uri)))
-      coll       <- ZIO.attempt {
-                      client
-                        .getDatabase(dbName)
-                        .withCodecRegistry(codecRegistry)
-                        .getCollection[Race](collection)
-                    }
+      client <- ZIO.fromAutoCloseable(ZIO.attempt(MongoClient(uri)))
+      coll <- ZIO.attempt {
+        client
+          .getDatabase(dbName)
+          .withCodecRegistry(codecRegistry)
+          .getCollection[Race](collection)
+      }
     } yield new RaceRepository {
 
       private def fromFuture[A](fa: => scala.concurrent.Future[A]): Task[A] =
@@ -80,7 +84,7 @@ object RaceRepositoryLive {
         fromFuture(
           coll
             .replaceOne(Filters.equal("_id", race._id), race, ReplaceOptions().upsert(false))
-            .toFuture(),
+            .toFuture()
         ).map(result => result.wasAcknowledged() && result.getModifiedCount > 0)
 
       override def delete(id: ObjectId): Task[Boolean] =

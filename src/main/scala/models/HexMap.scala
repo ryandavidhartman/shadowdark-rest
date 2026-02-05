@@ -3,43 +3,43 @@ package models
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class HexMapLayout(
-  columns: Int,
-  rows: Int,
+    columns: Int,
+    rows: Int
 )
 
 final case class HexPointOfInterest(
-  id: Int,
-  location: String,
-  development: String,
-  cataclysm: Option[String],
-  offsetX: Double,
-  offsetY: Double,
+    id: Int,
+    location: String,
+    development: String,
+    cataclysm: Option[String],
+    offsetX: Double,
+    offsetY: Double
 )
 
 final case class HexOverlay(
-  kind: String,
-  orientation: String,
-  baseTerrain: String,
+    kind: String,
+    orientation: String,
+    baseTerrain: String
 )
 
 final case class HexCell(
-  id: Int,
-  column: Int,
-  row: Int,
-  terrain: String,
-  terrainStep: Int,
-  pointOfInterest: Option[HexPointOfInterest],
-  overlay: Option[HexOverlay],
+    id: Int,
+    column: Int,
+    row: Int,
+    terrain: String,
+    terrainStep: Int,
+    pointOfInterest: Option[HexPointOfInterest],
+    overlay: Option[HexOverlay]
 )
 
 final case class HexMap(
-  name: String,
-  climate: String,
-  dangerLevel: String,
-  layout: HexMapLayout,
-  hexes: List[HexCell],
-  activeColumn: Int,
-  activeRow: Int,
+    name: String,
+    climate: String,
+    dangerLevel: String,
+    layout: HexMapLayout,
+    hexes: List[HexCell],
+    activeColumn: Int,
+    activeRow: Int
 )
 
 object HexMap {

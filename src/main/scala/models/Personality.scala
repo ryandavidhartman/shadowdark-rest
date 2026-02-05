@@ -4,9 +4,9 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class Personality(
-  _id: ObjectId,
-  name: String,
-  alignment: String,
+    _id: ObjectId,
+    name: String,
+    alignment: String
 )
 
 object Personality {

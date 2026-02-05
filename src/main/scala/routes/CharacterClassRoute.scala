@@ -11,7 +11,7 @@ final case class CharacterClassRoute(server: CharacterClassServer) {
       Method.GET / "classes" ->
         Handler
           .fromZIO(server.getClasses.map(cls => Response.json(cls.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

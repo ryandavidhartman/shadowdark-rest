@@ -14,12 +14,12 @@ object RaceServer {
   val live: ZLayer[RaceRepository, Throwable, RaceServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[RaceRepository]
+        repo <- ZIO.service[RaceRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield RaceServer(repo, cache)
     }
 }

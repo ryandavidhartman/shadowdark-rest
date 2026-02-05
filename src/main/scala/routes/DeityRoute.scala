@@ -11,7 +11,7 @@ final case class DeityRoute(server: DeityServer) {
       Method.GET / "deities" ->
         Handler
           .fromZIO(server.getDeities.map(deities => Response.json(deities.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

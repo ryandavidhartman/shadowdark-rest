@@ -4,12 +4,12 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class Title(
-  _id: ObjectId,
-  characterClass: String,
-  alignment: String,
-  minLevel: Int,
-  maxLevel: Int,
-  title: String,
+    _id: ObjectId,
+    characterClass: String,
+    alignment: String,
+    minLevel: Int,
+    maxLevel: Int,
+    title: String
 )
 
 object Title {

@@ -14,12 +14,12 @@ object MonsterServer {
   val live: ZLayer[MonsterRepository, Throwable, MonsterServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[MonsterRepository]
+        repo <- ZIO.service[MonsterRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield MonsterServer(repo, cache)
     }
 }

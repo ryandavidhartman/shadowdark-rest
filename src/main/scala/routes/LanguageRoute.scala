@@ -11,7 +11,7 @@ final case class LanguageRoute(server: LanguageServer) {
       Method.GET / "languages" ->
         Handler
           .fromZIO(server.getLanguages.map(languages => Response.json(languages.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

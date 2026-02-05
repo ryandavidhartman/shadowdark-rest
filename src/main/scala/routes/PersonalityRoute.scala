@@ -8,8 +8,8 @@ import zio.http._
 import zio.json._
 
 private[routes] final case class PersonalityCreate(
-  name: String,
-  alignment: String,
+    name: String,
+    alignment: String
 )
 private[routes] object PersonalityCreate {
   implicit val decoder: JsonDecoder[PersonalityCreate] = DeriveJsonDecoder.gen[PersonalityCreate]
@@ -20,13 +20,13 @@ final case class PersonalityRoute(server: PersonalityServer) {
   private def decodePersonality(req: Request): IO[Response, Personality] =
     for {
       body <- req.body.asString.orElseFail(Response.status(Status.BadRequest))
-      dto  <- ZIO
-               .fromEither(body.fromJson[PersonalityCreate])
-               .mapError(err => Response.text(err).status(Status.BadRequest))
+      dto <- ZIO
+        .fromEither(body.fromJson[PersonalityCreate])
+        .mapError(err => Response.text(err).status(Status.BadRequest))
     } yield Personality(
       _id = new ObjectId(),
       name = dto.name,
-      alignment = dto.alignment,
+      alignment = dto.alignment
     )
 
   val routes: Routes[Any, Response] =
@@ -40,13 +40,13 @@ final case class PersonalityRoute(server: PersonalityServer) {
           .fromFunctionZIO[Request] { req =>
             for {
               personality <- decodePersonality(req)
-              saved       <- server.createPersonality(personality)
+              saved <- server.createPersonality(personality)
             } yield Response.json(saved.toJson).status(Status.Created)
           }
           .mapError {
             case resp: Response => resp
             case err            => Response.internalServerError(err.toString)
-          },
+          }
     )
 }
 

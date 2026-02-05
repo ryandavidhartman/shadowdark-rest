@@ -5,12 +5,12 @@ import zio.json.{DeriveJsonEncoder, JsonEncoder, JsonFieldEncoder, JsonFieldDeco
 
 // Represents a name entry aligned with the provided schema.
 final case class Name(
-  _id: ObjectId,
-  name: String,
-  race: String,
-  gender: Option[String] = None,
-  firstName: Option[Boolean] = None,
-  lastName: Option[Boolean] = None
+    _id: ObjectId,
+    name: String,
+    race: String,
+    gender: Option[String] = None,
+    firstName: Option[Boolean] = None,
+    lastName: Option[Boolean] = None
 )
 
 object Name {

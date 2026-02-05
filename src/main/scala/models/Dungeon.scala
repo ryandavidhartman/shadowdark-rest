@@ -3,44 +3,44 @@ package models
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class DungeonSize(
-  name: String,
-  diceCount: Int,
-  dieSides: Int,
+    name: String,
+    diceCount: Int,
+    dieSides: Int
 )
 
 final case class DungeonRoom(
-  id: Int,
-  roll: Int,
-  roomType: String,
-  details: List[String],
-  position: Point,
-  width: Int,
-  height: Int,
-  objectiveRoom: Boolean,
+    id: Int,
+    roll: Int,
+    roomType: String,
+    details: List[String],
+    position: Point,
+    width: Int,
+    height: Int,
+    objectiveRoom: Boolean
 )
 
 final case class DungeonCorridor(
-  start: Point,
-  end: Point,
+    start: Point,
+    end: Point
 )
 
 final case class DungeonLayout(
-  width: Int,
-  height: Int,
-  gridSize: Int,
-  outline: List[Point],
-  entrances: List[Point],
-  seed: Long,
+    width: Int,
+    height: Int,
+    gridSize: Int,
+    outline: List[Point],
+    entrances: List[Point],
+    seed: Long
 )
 
 final case class Dungeon(
-  name: String,
-  siteType: String,
-  size: DungeonSize,
-  dangerLevel: String,
-  rooms: List[DungeonRoom],
-  corridors: List[DungeonCorridor],
-  layout: DungeonLayout,
+    name: String,
+    siteType: String,
+    size: DungeonSize,
+    dangerLevel: String,
+    rooms: List[DungeonRoom],
+    corridors: List[DungeonCorridor],
+    layout: DungeonLayout
 )
 
 object Dungeon {

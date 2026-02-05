@@ -4,18 +4,18 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class BackgroundRange(
-  min: Int,
-  max: Int,
+    min: Int,
+    max: Int
 )
 
 final case class Background(
-  _id: ObjectId,
-  name: String,
-  range: BackgroundRange,
-  possessions: String,
-  details: String,
-  poiKinds: Option[List[String]],
-  poiNames: Option[List[String]],
+    _id: ObjectId,
+    name: String,
+    range: BackgroundRange,
+    possessions: String,
+    details: String,
+    poiKinds: Option[List[String]],
+    poiNames: Option[List[String]]
 )
 
 object Background {

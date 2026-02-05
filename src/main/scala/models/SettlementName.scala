@@ -4,9 +4,9 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class SettlementName(
-  _id: ObjectId,
-  name: String,
-  settlementType: String,
+    _id: ObjectId,
+    name: String,
+    settlementType: String
 )
 
 object SettlementName {

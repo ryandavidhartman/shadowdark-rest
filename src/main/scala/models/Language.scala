@@ -16,7 +16,7 @@ object Language {
       "Orcish",
       "Reptilian",
       "Sylvan",
-      "Thanian",
+      "Thanian"
     ),
     rare = List(
       "Celestial",
@@ -24,8 +24,8 @@ object Language {
       "Draconic",
       "Primordial",
       "Thieves' Cant",
-      "Ancient",
-    ),
+      "Ancient"
+    )
   )
 
   implicit val jsonEncoder: JsonEncoder[Language] = DeriveJsonEncoder.gen[Language]

@@ -38,6 +38,7 @@
 - Target Scala 2.13; prefer ZIO over `Future`.
 - Two-space indentation, ~120-char lines, expression-oriented code, minimal vars/mutability.
 - Name packages by feature (`names`, `repositories`, `servers`); files after the main type; keep side effects at boundaries.
+- Scalafmt is enabled with config in `.scalafmt.conf` (maxColumn 120, scala213 dialect).
 
 ## Testing Guidelines
 - Place tests in `src/test/scala`, mirroring package paths.

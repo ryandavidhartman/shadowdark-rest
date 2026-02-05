@@ -11,7 +11,7 @@ final case class SettlementNameRoute(server: SettlementNameServer) {
       Method.GET / "settlement-names" ->
         Handler
           .fromZIO(server.getSettlementNames.map(names => Response.json(names.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

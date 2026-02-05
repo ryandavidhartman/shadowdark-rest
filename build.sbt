@@ -1,4 +1,5 @@
 ThisBuild / scalaVersion := "2.13.18"
+ThisBuild / scalafmtOnCompile := true
 
 lazy val swaggerVersion = "2.2.42"
 lazy val jacksonScalaVersion = "2.19.2"

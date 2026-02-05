@@ -19,17 +19,17 @@ final case class SettlementRoute(server: SettlementServer) {
           .fromFunctionZIO[Request] { _ =>
             for {
               settlement <- server.randomSettlement
-              pdf        <- server.renderSettlementPdf(settlement)
+              pdf <- server.renderSettlementPdf(settlement)
             } yield Response(
               status = Status.Ok,
               headers = Headers(
                 Header.Custom("Content-Type", "application/pdf"),
-                Header.Custom("Content-Disposition", "inline; filename=\"random-settlement.pdf\""),
+                Header.Custom("Content-Disposition", "inline; filename=\"random-settlement.pdf\"")
               ),
-              body = Body.fromChunk(Chunk.fromArray(pdf)),
+              body = Body.fromChunk(Chunk.fromArray(pdf))
             )
           }
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

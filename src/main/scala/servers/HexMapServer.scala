@@ -32,7 +32,7 @@ final case class HexMapServer() {
     ("Jungle", "Forest"),
     ("River/coast", "River/coast"),
     ("Ocean", "Ocean"),
-    ("Mountain", "Mountain"),
+    ("Mountain", "Mountain")
   )
   private val poiLocations = Vector(
     "Small tower",
@@ -54,7 +54,7 @@ final case class HexMapServer() {
     "Cave formation",
     "Ancient dolmens",
     "Barbarian camp",
-    "Holy shrine",
+    "Holy shrine"
   )
   private val poiDevelopments = Vector(
     "Disaster! Roll on Cataclysm table",
@@ -76,7 +76,7 @@ final case class HexMapServer() {
     "Controlled by a malevolent sorcerer",
     "Protected by an age-old guardian",
     "Hiding a great treasure",
-    "With a door to another plane",
+    "With a door to another plane"
   )
   private val cataclysms = Vector(
     "Volcano",
@@ -86,7 +86,7 @@ final case class HexMapServer() {
     "Flood",
     "War",
     "Pestilence",
-    "Magical disaster",
+    "Magical disaster"
   )
   private val riverOrientations = Vector("N-S", "E-W", "NE-SW", "NW-SE")
   private val coastOrientations = Vector("N", "NE", "SE", "S", "SW", "NW")
@@ -99,12 +99,12 @@ final case class HexMapServer() {
     "Forest" -> "images/forest.png",
     "Jungle" -> "images/forest.png",
     "Mountain" -> "images/mountain.png",
-    "Ocean" -> "images/ocean.png",
+    "Ocean" -> "images/ocean.png"
   )
   private val overlayTextures = Map(
     "River" -> "images/river_OVERLAY.png",
     "RiverCorner" -> "images/river_CORNER.png",
-    "Coast" -> "images/coast_OVERLAY.png",
+    "Coast" -> "images/coast_OVERLAY.png"
   )
   private val terrainFillColors = Map(
     "Desert" -> new Color(222, 201, 140),
@@ -116,7 +116,7 @@ final case class HexMapServer() {
     "Forest" -> new Color(110, 160, 120),
     "River/coast" -> new Color(120, 170, 205),
     "Ocean" -> new Color(88, 130, 178),
-    "Mountain" -> new Color(150, 150, 150),
+    "Mountain" -> new Color(150, 150, 150)
   )
   private lazy val terrainTextureCache: Map[String, BufferedImage] =
     terrainTextures.flatMap { case (terrain, path) => loadImage(path, trim = true).map(terrain -> _) }
@@ -126,8 +126,8 @@ final case class HexMapServer() {
   def randomMap: Task[HexMap] =
     ZIO.attempt {
       val climate = climateForRoll(rollDie(2))
-      val danger  = dangerForRoll(rollDie(6))
-      val step    = terrainStepForRoll(roll2d6())
+      val danger = dangerForRoll(rollDie(6))
+      val step = terrainStepForRoll(roll2d6())
       val centerHex = buildHex(0, 0, step, climate, 1, 1, allowOverlay = false)
       val allowOcean = centerHex.terrain == "Ocean"
       val neighborOffsets = neighborOffsetsFor(0)
@@ -146,14 +146,15 @@ final case class HexMapServer() {
         layout = layoutFor(hexes),
         hexes = hexes,
         activeColumn = 0,
-        activeRow = 0,
+        activeRow = 0
       )
     }
 
   def nextMap(current: HexMap, direction: String): Task[HexMap] =
     ZIO.attempt {
       val origin =
-        current.hexes.find(h => h.column == current.activeColumn && h.row == current.activeRow)
+        current.hexes
+          .find(h => h.column == current.activeColumn && h.row == current.activeRow)
           .getOrElse(throw new IllegalArgumentException("Origin hex not found in map"))
       val (targetCol, targetRow) = moveCoords(current.activeColumn, current.activeRow, direction)
       val existing = current.hexes.find(h => h.column == targetCol && h.row == targetRow)
@@ -162,7 +163,7 @@ final case class HexMapServer() {
           current.copy(
             layout = layoutFor(current.hexes),
             activeColumn = targetCol,
-            activeRow = targetRow,
+            activeRow = targetRow
           )
         case None =>
           val step = nextTerrainStep(origin.terrainStep)
@@ -175,14 +176,14 @@ final case class HexMapServer() {
             current.climate,
             nextId,
             nextPoiId,
-            allowOverlay = false,
+            allowOverlay = false
           )
           val updatedHexes = applyRiverCoastOverlays(current.hexes :+ nextHex, current.climate)
           current.copy(
             layout = layoutFor(updatedHexes),
             hexes = updatedHexes,
             activeColumn = targetCol,
-            activeRow = targetRow,
+            activeRow = targetRow
           )
       }
     }
@@ -193,7 +194,7 @@ final case class HexMapServer() {
         map,
         includeLegend = true,
         transparentBackground = false,
-        tightCrop = false,
+        tightCrop = false
       )
       val pageSize = new PDRectangle(pageWidth.toFloat, pageHeight.toFloat)
       val document = new PDDocument()
@@ -218,7 +219,7 @@ final case class HexMapServer() {
         map,
         includeLegend = false,
         transparentBackground = true,
-        tightCrop = true,
+        tightCrop = true
       )
       val output = new ByteArrayOutputStream()
       try {
@@ -238,31 +239,31 @@ final case class HexMapServer() {
 
   private def dangerForRoll(roll: Int): String =
     roll match {
-      case 1 => "Safe"
+      case 1     => "Safe"
       case 2 | 3 => "Unsafe"
       case 4 | 5 => "Risky"
-      case _ => "Deadly"
+      case _     => "Deadly"
     }
 
   private def terrainStepForRoll(roll: Int): Int =
     roll match {
-      case 2 => 0
-      case 3 => 1
+      case 2         => 0
+      case 3         => 1
       case 4 | 5 | 6 => 2
-      case 7 | 8 => 3
-      case 9 | 10 => 4
-      case 11 => 5
-      case _ => 6
+      case 7 | 8     => 3
+      case 9 | 10    => 4
+      case 11        => 5
+      case _         => 6
     }
 
   private def nextTerrainStep(currentStep: Int): Int = {
     val roll = roll2d6()
     val stepCount = terrainSteps.size
     roll match {
-      case 2 | 3 => (currentStep + 1) % stepCount
+      case 2 | 3             => (currentStep + 1) % stepCount
       case 4 | 5 | 6 | 7 | 8 => currentStep
-      case 9 | 10 | 11 => (currentStep + 2) % stepCount
-      case _ => terrainStepForRoll(roll2d6())
+      case 9 | 10 | 11       => (currentStep + 2) % stepCount
+      case _                 => terrainStepForRoll(roll2d6())
     }
   }
 
@@ -289,11 +290,12 @@ final case class HexMapServer() {
   private def applyRiverCoastOverlays(hexes: List[HexCell], climate: String): List[HexCell] = {
     val byCoord = hexes.map(h => (h.column, h.row) -> h).toMap
     val coastCoords = byCoord.collect {
-      case ((col, row), hex) if hex.terrain == "River/coast" &&
-        hexDirections.exists { direction =>
-          val (ncol, nrow) = neighborCoords(col, row, direction)
-          byCoord.get((ncol, nrow)).exists(_.terrain == "Ocean")
-        } =>
+      case ((col, row), hex)
+          if hex.terrain == "River/coast" &&
+            hexDirections.exists { direction =>
+              val (ncol, nrow) = neighborCoords(col, row, direction)
+              byCoord.get((ncol, nrow)).exists(_.terrain == "Ocean")
+            } =>
         (col, row)
     }.toSet
     val riverCoords = byCoord.collect {
@@ -339,7 +341,7 @@ final case class HexMapServer() {
               riverDirs,
               hex,
               axisByCoord,
-              phaseByCoord,
+              phaseByCoord
             )
             Some(HexOverlay(kind = kind, orientation = orientation, baseTerrain = baseTerrain))
           } else None
@@ -361,7 +363,7 @@ final case class HexMapServer() {
     val counts = Map(
       "N-S" -> directions.count(dir => dir == "N" || dir == "S"),
       "NE-SW" -> directions.count(dir => dir == "NE" || dir == "SW"),
-      "NW-SE" -> directions.count(dir => dir == "NW" || dir == "SE"),
+      "NW-SE" -> directions.count(dir => dir == "NW" || dir == "SE")
     )
     val maxCount = counts.values.maxOption.getOrElse(0)
     val candidates =
@@ -372,17 +374,17 @@ final case class HexMapServer() {
   }
 
   private def riverPhaseByAxis(
-    coords: Set[(Int, Int)],
-    axisByCoord: Map[(Int, Int), String],
+      coords: Set[(Int, Int)],
+      axisByCoord: Map[(Int, Int), String]
   ): Map[(Int, Int), Boolean] = {
     val remaining = scala.collection.mutable.Set.from(coords)
     val phaseByCoord = scala.collection.mutable.Map.empty[(Int, Int), Boolean]
     def axisDirs(axis: String): List[String] =
       axis match {
-        case "N-S" => List("N", "S")
+        case "N-S"   => List("N", "S")
         case "NE-SW" => List("NE", "SW")
         case "NW-SE" => List("NW", "SE")
-        case _ => Nil
+        case _       => Nil
       }
     while (remaining.nonEmpty) {
       val seed = remaining.head
@@ -409,11 +411,12 @@ final case class HexMapServer() {
   private def trimDisconnectedRivers(hexes: List[HexCell], climate: String): List[HexCell] = {
     val byCoord = hexes.map(h => (h.column, h.row) -> h).toMap
     val coastCoords = byCoord.collect {
-      case ((col, row), hex) if hex.terrain == "River/coast" &&
-        hexDirections.exists { direction =>
-          val (ncol, nrow) = neighborCoords(col, row, direction)
-          byCoord.get((ncol, nrow)).exists(_.terrain == "Ocean")
-        } =>
+      case ((col, row), hex)
+          if hex.terrain == "River/coast" &&
+            hexDirections.exists { direction =>
+              val (ncol, nrow) = neighborCoords(col, row, direction)
+              byCoord.get((ncol, nrow)).exists(_.terrain == "Ocean")
+            } =>
         (col, row)
     }.toSet
     val riverCoords = byCoord.collect {
@@ -501,16 +504,16 @@ final case class HexMapServer() {
   private def terrainStepForTerrain(terrain: String, climate: String, fallback: Int): Int = {
     val names = terrainSteps.map { case (warm, cold) => if (climate == "Warm") warm else cold }
     names.indexOf(terrain) match {
-      case -1 => fallback
+      case -1  => fallback
       case idx => idx
     }
   }
 
   private def riverOverlayForNeighborDirs(
-    directions: List[String],
-    hex: HexCell,
-    axisByCoord: Map[(Int, Int), String],
-    phaseByCoord: Map[(Int, Int), Boolean],
+      directions: List[String],
+      hex: HexCell,
+      axisByCoord: Map[(Int, Int), String],
+      phaseByCoord: Map[(Int, Int), Boolean]
   ): (String, String) = {
     val dirSet = directions.toSet
     val corner = if (dirSet.size == 2) cornerOrientationForDirs(dirSet) else ""
@@ -530,14 +533,14 @@ final case class HexMapServer() {
       ("SE", "S", "SE-S"),
       ("S", "SW", "S-SW"),
       ("SW", "NW", "SW-NW"),
-      ("NW", "N", "NW-N"),
+      ("NW", "N", "NW-N")
     )
-    orderedPairs.collectFirst {
-      case (a, b, orientation) if dirSet.contains(a) && dirSet.contains(b) => orientation
-    }.getOrElse("")
+    orderedPairs
+      .collectFirst {
+        case (a, b, orientation) if dirSet.contains(a) && dirSet.contains(b) => orientation
+      }
+      .getOrElse("")
   }
-
-  
 
   private def terrainName(step: Int, climate: String): String = {
     val (warm, cold) = terrainSteps(step)
@@ -545,13 +548,13 @@ final case class HexMapServer() {
   }
 
   private def buildHex(
-    column: Int,
-    row: Int,
-    step: Int,
-    climate: String,
-    hexId: Int,
-    nextPoiId: Int,
-    allowOverlay: Boolean = true,
+      column: Int,
+      row: Int,
+      step: Int,
+      climate: String,
+      hexId: Int,
+      nextPoiId: Int,
+      allowOverlay: Boolean = true
   ): HexCell = {
     val poi =
       if (rollDie(6) == 1) {
@@ -567,8 +570,8 @@ final case class HexMapServer() {
             development = development,
             cataclysm = cataclysm,
             offsetX = offsetX,
-            offsetY = offsetY,
-          ),
+            offsetY = offsetY
+          )
         )
       } else None
     val baseTerrain = terrainName(step, climate)
@@ -593,15 +596,15 @@ final case class HexMapServer() {
       terrain = terrain,
       terrainStep = terrainStep,
       pointOfInterest = poi,
-      overlay = overlay,
+      overlay = overlay
     )
   }
 
   private def layoutFor(hexes: List[HexCell]): HexMapLayout = {
     val columns = hexes.map(_.column)
-    val rows    = hexes.map(_.row)
-    val width   = columns.max - columns.min + 1
-    val height  = rows.max - rows.min + 1
+    val rows = hexes.map(_.row)
+    val width = columns.max - columns.min + 1
+    val height = rows.max - rows.min + 1
     HexMapLayout(columns = width, rows = height)
   }
 
@@ -609,17 +612,17 @@ final case class HexMapServer() {
     val dir = direction.trim.toUpperCase
     val odd = row % 2 != 0
     (dir, odd) match {
-      case ("N", _) => (column, row - 1)
-      case ("S", _) => (column, row + 1)
+      case ("N", _)      => (column, row - 1)
+      case ("S", _)      => (column, row + 1)
       case ("NE", false) => (column + 1, row - 1)
       case ("SE", false) => (column + 1, row)
       case ("SW", false) => (column - 1, row)
       case ("NW", false) => (column - 1, row - 1)
-      case ("NE", true) => (column + 1, row)
-      case ("SE", true) => (column + 1, row + 1)
-      case ("SW", true) => (column - 1, row + 1)
-      case ("NW", true) => (column - 1, row)
-      case _ => throw new IllegalArgumentException("Direction must be N, NE, SE, S, SW, or NW")
+      case ("NE", true)  => (column + 1, row)
+      case ("SE", true)  => (column + 1, row + 1)
+      case ("SW", true)  => (column - 1, row + 1)
+      case ("NW", true)  => (column - 1, row)
+      case _             => throw new IllegalArgumentException("Direction must be N, NE, SE, S, SW, or NW")
     }
   }
 
@@ -627,17 +630,17 @@ final case class HexMapServer() {
     val dir = direction.trim.toUpperCase
     val odd = row % 2 != 0
     (dir, odd) match {
-      case ("E", _) => (column + 1, row)
-      case ("W", _) => (column - 1, row)
+      case ("E", _)      => (column + 1, row)
+      case ("W", _)      => (column - 1, row)
       case ("NE", false) => (column, row - 1)
       case ("SE", false) => (column, row + 1)
       case ("SW", false) => (column - 1, row + 1)
       case ("NW", false) => (column - 1, row - 1)
-      case ("NE", true) => (column + 1, row - 1)
-      case ("SE", true) => (column + 1, row + 1)
-      case ("SW", true) => (column, row + 1)
-      case ("NW", true) => (column, row - 1)
-      case _ => throw new IllegalArgumentException("Direction must be NW, NE, E, SE, SW, or W")
+      case ("NE", true)  => (column + 1, row - 1)
+      case ("SE", true)  => (column + 1, row + 1)
+      case ("SW", true)  => (column, row + 1)
+      case ("NW", true)  => (column, row - 1)
+      case _             => throw new IllegalArgumentException("Direction must be NW, NE, E, SE, SW, or W")
     }
   }
 
@@ -650,7 +653,7 @@ final case class HexMapServer() {
         (1, -1),
         (0, -1),
         (1, 1),
-        (0, 1),
+        (0, 1)
       )
     } else {
       List(
@@ -659,16 +662,16 @@ final case class HexMapServer() {
         (0, -1),
         (-1, -1),
         (0, 1),
-        (-1, 1),
+        (-1, 1)
       )
     }
   }
 
   private def renderHexMapImage(
-    map: HexMap,
-    includeLegend: Boolean,
-    transparentBackground: Boolean,
-    tightCrop: Boolean,
+      map: HexMap,
+      includeLegend: Boolean,
+      transparentBackground: Boolean,
+      tightCrop: Boolean
   ): BufferedImage = {
     val (minCol, maxCol, minRow, maxRow) = boundsFor(map.hexes)
     val columns = maxCol - minCol + 1
@@ -815,9 +818,9 @@ final case class HexMapServer() {
   }
 
   private def drawTerrainOverlay(
-    g: Graphics2D,
-    polygon: java.awt.Polygon,
-    overlay: HexOverlay,
+      g: Graphics2D,
+      polygon: java.awt.Polygon,
+      overlay: HexOverlay
   ): Unit = {
     overlayTextureCache.get(overlay.kind).foreach { image =>
       val bounds = polygon.getBounds
@@ -848,43 +851,43 @@ final case class HexMapServer() {
           if (overlay.orientation.endsWith("-REV")) (overlay.orientation.stripSuffix("-REV"), true)
           else (overlay.orientation, false)
         val baseRotation = axis match {
-          case "N-S" => 0.0
-          case "E-W" => 90.0
+          case "N-S"   => 0.0
+          case "E-W"   => 90.0
           case "NE-SW" => -60.0
           case "NW-SE" => 60.0
-          case _ => 0.0
+          case _       => 0.0
         }
         if (reversed) baseRotation + 180.0 else baseRotation
       case "RiverCorner" =>
         overlay.orientation match {
-          case "N-NE" => 0.0
+          case "N-NE"  => 0.0
           case "NE-SE" => 60.0
-          case "SE-S" => 120.0
-          case "S-SW" => 180.0
+          case "SE-S"  => 120.0
+          case "S-SW"  => 180.0
           case "SW-NW" => 240.0
-          case "NW-N" => 300.0
-          case _ => 0.0
+          case "NW-N"  => 300.0
+          case _       => 0.0
         }
       case "Coast" =>
         val baseOffset = 90.0
         overlay.orientation match {
-          case "N" => 0.0 + baseOffset
+          case "N"  => 0.0 + baseOffset
           case "NE" => 60.0 + baseOffset
           case "SE" => 120.0 + baseOffset
-          case "S" => 180.0 + baseOffset
+          case "S"  => 180.0 + baseOffset
           case "SW" => 240.0 + baseOffset
           case "NW" => 300.0 + baseOffset
-          case _ => baseOffset
+          case _    => baseOffset
         }
       case _ => 0.0
     }
 
   private def overlayScaleMultiplier(kind: String): Double =
     kind match {
-      case "River" => 1.28
+      case "River"       => 1.28
       case "RiverCorner" => 1.28
-      case "Coast" => 1.22
-      case _ => 1.0
+      case "Coast"       => 1.22
+      case _             => 1.0
     }
 
   private def overlayOrientationScale(overlay: HexOverlay): Double =
@@ -894,12 +897,12 @@ final case class HexMapServer() {
           if (overlay.orientation.endsWith("-REV")) overlay.orientation.stripSuffix("-REV")
           else overlay.orientation
         orientation match {
-          case "N-S" | "E-W" => 1.10
+          case "N-S" | "E-W"     => 1.10
           case "NE-SW" | "NW-SE" => 1.12
-          case _ => 1.0
+          case _                 => 1.0
         }
       case "RiverCorner" => 1.10
-      case _ => 1.0
+      case _             => 1.0
     }
 
   private def drawPoiMarker(g: Graphics2D, hex: HexCell, centerX: Double, centerY: Double, size: Double): Unit = {
@@ -997,7 +1000,7 @@ final case class HexMapServer() {
     val roof = new java.awt.Polygon(
       Array(x + size / 2, x + size - 2, x + 2),
       Array(y + 2, y + size / 2, y + size / 2),
-      3,
+      3
     )
     g.fillPolygon(roof)
     g.fillRect(x + size / 5, y + size / 2, size * 3 / 5, size / 2)
@@ -1012,7 +1015,7 @@ final case class HexMapServer() {
     val rock = new java.awt.Polygon(
       Array(x + size / 5, x + size * 4 / 5, x + size - 2, x + size / 3),
       Array(y + size * 2 / 3, y + size * 2 / 3, y + size / 3, y + size / 5),
-      4,
+      4
     )
     g.fillPolygon(rock)
   }
@@ -1046,7 +1049,7 @@ final case class HexMapServer() {
     val roof = new java.awt.Polygon(
       Array(x + size / 2, x + size * 3 / 4, x + size / 4),
       Array(y + size / 3, y + size / 2, y + size / 2),
-      3,
+      3
     )
     g.fillPolygon(roof)
   }
@@ -1055,7 +1058,7 @@ final case class HexMapServer() {
     val tent = new java.awt.Polygon(
       Array(x + size / 2, x + size - 2, x + 2),
       Array(y + 2, y + size - 2, y + size - 2),
-      3,
+      3
     )
     g.fillPolygon(tent)
   }
@@ -1064,7 +1067,7 @@ final case class HexMapServer() {
     val flame = new java.awt.Polygon(
       Array(x + size / 2, x + size * 3 / 4, x + size * 2 / 3, x + size / 2, x + size / 3, x + size / 4),
       Array(y + 2, y + size / 3, y + size * 2 / 3, y + size - 2, y + size * 2 / 3, y + size / 3),
-      6,
+      6
     )
     g.fillPolygon(flame)
   }
@@ -1079,7 +1082,7 @@ final case class HexMapServer() {
     val gem = new java.awt.Polygon(
       Array(x + size / 2, x + size - 2, x + size / 2, x + 2),
       Array(y + 2, y + size / 2, y + size - 2, y + size / 2),
-      4,
+      4
     )
     g.fillPolygon(gem)
   }
@@ -1114,7 +1117,7 @@ final case class HexMapServer() {
         val overlay = HexOverlay(
           kind = "Coast",
           orientation = "N",
-          baseTerrain = baseTerrain,
+          baseTerrain = baseTerrain
         )
         drawTerrainOverlay(g, polygon, overlay)
       }
@@ -1132,7 +1135,8 @@ final case class HexMapServer() {
   }
 
   private def randomLandTerrain(climate: String): String = {
-    val land = terrainSteps.map { case (warm, cold) => if (climate == "Warm") warm else cold }
+    val land = terrainSteps
+      .map { case (warm, cold) => if (climate == "Warm") warm else cold }
       .filterNot(name => name == "River/coast" || name == "Ocean")
     land(rollDie(land.size) - 1)
   }

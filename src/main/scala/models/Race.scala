@@ -5,16 +5,16 @@ import zio.json.{DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 // Represents a race entry aligned with the provided schema.
 final case class Race(
-  _id: ObjectId,
-  race: String,
-  ability: RaceAbility,
-  languages: List[String],
-  chance: Double,
+    _id: ObjectId,
+    race: String,
+    ability: RaceAbility,
+    languages: List[String],
+    chance: Double
 )
 
 final case class RaceAbility(
-  name: String,
-  description: String,
+    name: String,
+    description: String
 )
 
 object Race {
@@ -25,5 +25,5 @@ object Race {
   }
 
   implicit val abilityEncoder: JsonEncoder[RaceAbility] = DeriveJsonEncoder.gen[RaceAbility]
-  implicit val jsonEncoder: JsonEncoder[Race]           = DeriveJsonEncoder.gen[Race]
+  implicit val jsonEncoder: JsonEncoder[Race] = DeriveJsonEncoder.gen[Race]
 }

@@ -44,7 +44,7 @@ object OpenAPIGen {
       tag = "System",
       responseDescription = "Service banner text",
       responseSchema = textSchema(),
-      contentType = "text/plain",
+      contentType = "text/plain"
     )
     addGetPath(
       openAPI,
@@ -53,7 +53,7 @@ object OpenAPIGen {
       tag = "System",
       responseDescription = "OK",
       responseSchema = textSchema(),
-      contentType = "text/plain",
+      contentType = "text/plain"
     )
   }
 
@@ -67,11 +67,18 @@ object OpenAPIGen {
       requestSchemaRef = "NameCreate",
       responseSchemaRef = "Name",
       responseCode = "201",
-      responseDescription = "Created name",
+      responseDescription = "Created name"
     )
 
     addGetPath(openAPI, "/races", "List races", "Content", "Race list", arrayRefSchema("GenericObject"))
-    addGetPath(openAPI, "/personalities", "List personalities", "Content", "Personalities list", arrayRefSchema("GenericObject"))
+    addGetPath(
+      openAPI,
+      "/personalities",
+      "List personalities",
+      "Content",
+      "Personalities list",
+      arrayRefSchema("GenericObject")
+    )
     addPostPath(
       openAPI,
       "/personalities",
@@ -80,9 +87,16 @@ object OpenAPIGen {
       requestSchemaRef = "PersonalityCreate",
       responseSchemaRef = "GenericObject",
       responseCode = "201",
-      responseDescription = "Created personality",
+      responseDescription = "Created personality"
     )
-    addGetPath(openAPI, "/backgrounds", "List backgrounds", "Content", "Background list", arrayRefSchema("GenericObject"))
+    addGetPath(
+      openAPI,
+      "/backgrounds",
+      "List backgrounds",
+      "Content",
+      "Background list",
+      arrayRefSchema("GenericObject")
+    )
     addGetPath(openAPI, "/classes", "List character classes", "Content", "Class list", arrayRefSchema("GenericObject"))
     addGetPath(openAPI, "/spells", "List spells", "Content", "Spell list", arrayRefSchema("GenericObject"))
     addGetPath(openAPI, "/items", "List items", "Content", "Item list", arrayRefSchema("GenericObject"))
@@ -90,7 +104,14 @@ object OpenAPIGen {
     addGetPath(openAPI, "/deities", "List deities", "Content", "Deity list", arrayRefSchema("GenericObject"))
     addGetPath(openAPI, "/languages", "List languages", "Content", "Language list", arrayRefSchema("GenericObject"))
     addGetPath(openAPI, "/monsters", "List monsters", "Content", "Monster list", arrayRefSchema("GenericObject"))
-    addGetPath(openAPI, "/settlement-names", "List settlement names", "Content", "Settlement name list", arrayRefSchema("GenericObject"))
+    addGetPath(
+      openAPI,
+      "/settlement-names",
+      "List settlement names",
+      "Content",
+      "Settlement name list",
+      arrayRefSchema("GenericObject")
+    )
 
     addGetPath(
       openAPI,
@@ -101,7 +122,7 @@ object OpenAPIGen {
       refSchema("GenericObject"),
       queryParameters = List(
         queryParam("zeroLevel", "Use true or 1 to generate a 0-level character", "string")
-      ),
+      )
     )
     addGetPath(
       openAPI,
@@ -113,7 +134,7 @@ object OpenAPIGen {
       contentType = "application/pdf",
       queryParameters = List(
         queryParam("zeroLevel", "Use true or 1 to generate a 0-level character", "string")
-      ),
+      )
     )
   }
 
@@ -124,7 +145,7 @@ object OpenAPIGen {
       "Generate a random settlement",
       "Settlements",
       "Settlement JSON",
-      refSchema("GenericObject"),
+      refSchema("GenericObject")
     )
     addGetPath(
       openAPI,
@@ -133,7 +154,7 @@ object OpenAPIGen {
       "Settlements",
       "Settlement PDF",
       binarySchema(),
-      contentType = "application/pdf",
+      contentType = "application/pdf"
     )
   }
 
@@ -144,7 +165,7 @@ object OpenAPIGen {
       "Generate a random dungeon",
       "Dungeons",
       "Dungeon JSON",
-      refSchema("GenericObject"),
+      refSchema("GenericObject")
     )
     addGetPath(
       openAPI,
@@ -153,7 +174,7 @@ object OpenAPIGen {
       "Dungeons",
       "Dungeon PDF",
       binarySchema(),
-      contentType = "application/pdf",
+      contentType = "application/pdf"
     )
   }
 
@@ -164,7 +185,7 @@ object OpenAPIGen {
       "Generate a random hex map",
       "Hexes",
       "Hex map JSON",
-      refSchema("HexMap"),
+      refSchema("HexMap")
     )
     addPostPath(
       openAPI,
@@ -174,7 +195,7 @@ object OpenAPIGen {
       requestSchemaRef = "HexNextRequest",
       responseSchemaRef = "HexMap",
       responseDescription = "Updated hex map",
-      errorSchemaRef = "Error",
+      errorSchemaRef = "Error"
     )
     addPostPath(
       openAPI,
@@ -185,7 +206,7 @@ object OpenAPIGen {
       responseSchemaRef = "HexMap",
       responseDescription = "Rendered output",
       responseContentTypes = List("application/pdf", "image/png", "application/json"),
-      errorSchemaRef = "Error",
+      errorSchemaRef = "Error"
     )
   }
 
@@ -194,7 +215,7 @@ object OpenAPIGen {
 
     components.addSchemas(
       "GenericObject",
-      new SwaggerSchema().`type`("object").additionalProperties(true),
+      new SwaggerSchema().`type`("object").additionalProperties(true)
     )
     components.addSchemas(
       "Error",
@@ -204,8 +225,8 @@ object OpenAPIGen {
         .addProperty("details", new SwaggerSchema().`type`("string"))
         .addProperty(
           "allowed",
-          new SwaggerSchema().`type`("array").items(new SwaggerSchema().`type`("string")),
-        ),
+          new SwaggerSchema().`type`("array").items(new SwaggerSchema().`type`("string"))
+        )
     )
     components.addSchemas(
       "NameCreate",
@@ -217,7 +238,7 @@ object OpenAPIGen {
         .addProperty("race", new SwaggerSchema().`type`("string"))
         .addProperty("gender", new SwaggerSchema().`type`("string").nullable(true))
         .addProperty("firstName", new SwaggerSchema().`type`("boolean").nullable(true))
-        .addProperty("lastName", new SwaggerSchema().`type`("boolean").nullable(true)),
+        .addProperty("lastName", new SwaggerSchema().`type`("boolean").nullable(true))
     )
     components.addSchemas(
       "Name",
@@ -228,7 +249,7 @@ object OpenAPIGen {
         .addProperty("race", new SwaggerSchema().`type`("string"))
         .addProperty("gender", new SwaggerSchema().`type`("string").nullable(true))
         .addProperty("firstName", new SwaggerSchema().`type`("boolean").nullable(true))
-        .addProperty("lastName", new SwaggerSchema().`type`("boolean").nullable(true)),
+        .addProperty("lastName", new SwaggerSchema().`type`("boolean").nullable(true))
     )
     components.addSchemas(
       "PersonalityCreate",
@@ -237,14 +258,14 @@ object OpenAPIGen {
         .addRequiredItem("name")
         .addRequiredItem("alignment")
         .addProperty("name", new SwaggerSchema().`type`("string"))
-        .addProperty("alignment", new SwaggerSchema().`type`("string")),
+        .addProperty("alignment", new SwaggerSchema().`type`("string"))
     )
     components.addSchemas(
       "HexMapLayout",
       new SwaggerSchema()
         .`type`("object")
         .addProperty("columns", new SwaggerSchema().`type`("integer"))
-        .addProperty("rows", new SwaggerSchema().`type`("integer")),
+        .addProperty("rows", new SwaggerSchema().`type`("integer"))
     )
     components.addSchemas(
       "HexPointOfInterest",
@@ -255,7 +276,7 @@ object OpenAPIGen {
         .addProperty("development", new SwaggerSchema().`type`("string"))
         .addProperty("cataclysm", new SwaggerSchema().`type`("string").nullable(true))
         .addProperty("offsetX", new SwaggerSchema().`type`("number"))
-        .addProperty("offsetY", new SwaggerSchema().`type`("number")),
+        .addProperty("offsetY", new SwaggerSchema().`type`("number"))
     )
     components.addSchemas(
       "HexOverlay",
@@ -263,7 +284,7 @@ object OpenAPIGen {
         .`type`("object")
         .addProperty("kind", new SwaggerSchema().`type`("string"))
         .addProperty("orientation", new SwaggerSchema().`type`("string"))
-        .addProperty("baseTerrain", new SwaggerSchema().`type`("string")),
+        .addProperty("baseTerrain", new SwaggerSchema().`type`("string"))
     )
     components.addSchemas(
       "HexCell",
@@ -275,7 +296,7 @@ object OpenAPIGen {
         .addProperty("terrain", new SwaggerSchema().`type`("string"))
         .addProperty("terrainStep", new SwaggerSchema().`type`("integer"))
         .addProperty("pointOfInterest", refSchema("HexPointOfInterest"))
-        .addProperty("overlay", refSchema("HexOverlay")),
+        .addProperty("overlay", refSchema("HexOverlay"))
     )
     components.addSchemas(
       "HexMap",
@@ -287,7 +308,7 @@ object OpenAPIGen {
         .addProperty("layout", refSchema("HexMapLayout"))
         .addProperty("hexes", arrayRefSchema("HexCell"))
         .addProperty("activeColumn", new SwaggerSchema().`type`("integer"))
-        .addProperty("activeRow", new SwaggerSchema().`type`("integer")),
+        .addProperty("activeRow", new SwaggerSchema().`type`("integer"))
     )
     components.addSchemas(
       "HexNextRequest",
@@ -296,7 +317,7 @@ object OpenAPIGen {
         .addRequiredItem("map")
         .addRequiredItem("direction")
         .addProperty("map", refSchema("HexMap"))
-        .addProperty("direction", new SwaggerSchema().`type`("string").description("One of NW, NE, E, SE, SW, W")),
+        .addProperty("direction", new SwaggerSchema().`type`("string").description("One of NW, NE, E, SE, SW, W"))
     )
     components.addSchemas(
       "HexRenderRequest",
@@ -305,21 +326,21 @@ object OpenAPIGen {
         .addRequiredItem("map")
         .addRequiredItem("type")
         .addProperty("map", refSchema("HexMap"))
-        .addProperty("type", new SwaggerSchema().`type`("string").description("One of pdf, png, json")),
+        .addProperty("type", new SwaggerSchema().`type`("string").description("One of pdf, png, json"))
     )
 
     val _ = openAPI.components(components)
   }
 
   private def addGetPath(
-    openAPI: OpenAPI,
-    path: String,
-    summary: String,
-    tag: String,
-    responseDescription: String,
-    responseSchema: SwaggerSchema[_],
-    contentType: String = "application/json",
-    queryParameters: List[Parameter] = Nil,
+      openAPI: OpenAPI,
+      path: String,
+      summary: String,
+      tag: String,
+      responseDescription: String,
+      responseSchema: SwaggerSchema[_],
+      contentType: String = "application/json",
+      queryParameters: List[Parameter] = Nil
   ): Unit = {
     val operation = new Operation()
       .summary(summary)
@@ -337,9 +358,9 @@ object OpenAPIGen {
         .content(
           new Content().addMediaType(
             contentType,
-            new MediaType().schema(responseSchema),
+            new MediaType().schema(responseSchema)
           )
-        ),
+        )
     )
     operation.responses(responses)
 
@@ -348,16 +369,16 @@ object OpenAPIGen {
   }
 
   private def addPostPath(
-    openAPI: OpenAPI,
-    path: String,
-    summary: String,
-    tag: String,
-    requestSchemaRef: String,
-    responseSchemaRef: String,
-    responseCode: String = "200",
-    responseDescription: String = "OK",
-    responseContentTypes: List[String] = List("application/json"),
-    errorSchemaRef: String = "Error",
+      openAPI: OpenAPI,
+      path: String,
+      summary: String,
+      tag: String,
+      requestSchemaRef: String,
+      responseSchemaRef: String,
+      responseCode: String = "200",
+      responseDescription: String = "OK",
+      responseContentTypes: List[String] = List("application/json"),
+      errorSchemaRef: String = "Error"
   ): Unit = {
     val operation = new Operation()
       .summary(summary)
@@ -376,7 +397,7 @@ object OpenAPIGen {
       responseCode,
       new ApiResponse()
         .description(responseDescription)
-        .content(content),
+        .content(content)
     )
     responses.addApiResponse(
       "400",
@@ -385,9 +406,9 @@ object OpenAPIGen {
         .content(
           new Content().addMediaType(
             "application/json",
-            new MediaType().schema(refSchema(errorSchemaRef)),
+            new MediaType().schema(refSchema(errorSchemaRef))
           )
-        ),
+        )
     )
 
     operation.responses(responses)
@@ -402,7 +423,7 @@ object OpenAPIGen {
       .content(
         new Content().addMediaType(
           "application/json",
-          new MediaType().schema(refSchema(schemaRef)),
+          new MediaType().schema(refSchema(schemaRef))
         )
       )
 

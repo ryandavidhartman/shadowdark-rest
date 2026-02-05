@@ -4,10 +4,10 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class LanguageEntry(
-  _id: ObjectId,
-  name: String,
-  speakers: String,
-  rarity: String,
+    _id: ObjectId,
+    name: String,
+    speakers: String,
+    rarity: String
 )
 
 object LanguageEntry {

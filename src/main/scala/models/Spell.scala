@@ -4,24 +4,24 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class Spell(
-  _id: ObjectId,
-  name: String,
-  tier: Int,
-  castingAttribute: List[String] = List.empty[String],
-  prohibitedAlignments: Option[List[String]] = None,
-  spellType: Option[String] = None,
-  range: Option[String] = None,
-  duration: Option[String] = None,
-  dc: Option[Int] = None,
-  description: String,
-  damage: Option[String] = None,
-  damageType: Option[String] = None,
-  healing: Option[String] = None,
-  levelScaling: Option[String] = None,
-  multiplier: Option[Int] = None,
-  opposed: Option[Int] = None,
-  opposedDc: Option[Int] = None,
-  opposedAbility: Option[String] = None,
+    _id: ObjectId,
+    name: String,
+    tier: Int,
+    castingAttribute: List[String] = List.empty[String],
+    prohibitedAlignments: Option[List[String]] = None,
+    spellType: Option[String] = None,
+    range: Option[String] = None,
+    duration: Option[String] = None,
+    dc: Option[Int] = None,
+    description: String,
+    damage: Option[String] = None,
+    damageType: Option[String] = None,
+    healing: Option[String] = None,
+    levelScaling: Option[String] = None,
+    multiplier: Option[Int] = None,
+    opposed: Option[Int] = None,
+    opposedDc: Option[Int] = None,
+    opposedAbility: Option[String] = None
 )
 
 object Spell {

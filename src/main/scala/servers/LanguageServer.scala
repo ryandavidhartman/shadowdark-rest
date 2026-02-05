@@ -14,12 +14,12 @@ object LanguageServer {
   val live: ZLayer[LanguageRepository, Throwable, LanguageServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[LanguageRepository]
+        repo <- ZIO.service[LanguageRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield LanguageServer(repo, cache)
     }
 }

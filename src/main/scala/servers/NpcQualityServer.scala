@@ -14,12 +14,12 @@ object NpcQualityServer {
   val live: ZLayer[NpcQualityRepository, Throwable, NpcQualityServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[NpcQualityRepository]
+        repo <- ZIO.service[NpcQualityRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield NpcQualityServer(repo, cache)
     }
 }

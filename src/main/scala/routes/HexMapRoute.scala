@@ -7,8 +7,8 @@ import zio.http._
 import zio.json._
 
 final case class HexNextRequest(
-  map: HexMap,
-  direction: String,
+    map: HexMap,
+    direction: String
 )
 
 object HexNextRequest {
@@ -16,8 +16,8 @@ object HexNextRequest {
 }
 
 final case class HexRenderRequest(
-  map: HexMap,
-  `type`: String,
+    map: HexMap,
+    `type`: String
 )
 
 object HexRenderRequest {
@@ -25,9 +25,9 @@ object HexRenderRequest {
 }
 
 final case class HexError(
-  error: String,
-  details: Option[String] = None,
-  allowed: Option[List[String]] = None,
+    error: String,
+    details: Option[String] = None,
+    allowed: Option[List[String]] = None
 )
 
 object HexError {
@@ -77,9 +77,9 @@ final case class HexMapRoute(server: HexMapServer) {
                             status = Status.Ok,
                             headers = Headers(
                               Header.Custom("Content-Type", "application/pdf"),
-                              Header.Custom("Content-Disposition", "inline; filename=\"hex-map.pdf\""),
+                              Header.Custom("Content-Disposition", "inline; filename=\"hex-map.pdf\"")
                             ),
-                            body = Body.fromChunk(Chunk.fromArray(pdf)),
+                            body = Body.fromChunk(Chunk.fromArray(pdf))
                           )
                         }
                     case "png" =>
@@ -90,9 +90,9 @@ final case class HexMapRoute(server: HexMapServer) {
                             status = Status.Ok,
                             headers = Headers(
                               Header.Custom("Content-Type", "image/png"),
-                              Header.Custom("Content-Disposition", "inline; filename=\"hex-map.png\""),
+                              Header.Custom("Content-Disposition", "inline; filename=\"hex-map.png\"")
                             ),
-                            body = Body.fromChunk(Chunk.fromArray(png)),
+                            body = Body.fromChunk(Chunk.fromArray(png))
                           )
                         }
                     case "json" =>
@@ -100,14 +100,14 @@ final case class HexMapRoute(server: HexMapServer) {
                     case other =>
                       val payload = HexError(
                         error = s"Unsupported render type: $other",
-                        allowed = Some(List("pdf", "png", "json")),
+                        allowed = Some(List("pdf", "png", "json"))
                       )
                       ZIO.succeed(Response.json(payload.toJson).status(Status.BadRequest))
                   }
               }
             }
           }
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

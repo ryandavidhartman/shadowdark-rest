@@ -14,12 +14,12 @@ object TitleServer {
   val live: ZLayer[TitleRepository, Throwable, TitleServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[TitleRepository]
+        repo <- ZIO.service[TitleRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield TitleServer(repo, cache)
     }
 }

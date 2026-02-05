@@ -11,7 +11,7 @@ final case class ItemRoute(server: ItemServer) {
       Method.GET / "items" ->
         Handler
           .fromZIO(server.getItems.map(items => Response.json(items.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

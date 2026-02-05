@@ -11,7 +11,7 @@ final case class BackgroundRoute(server: BackgroundServer) {
       Method.GET / "backgrounds" ->
         Handler
           .fromZIO(server.getBackgrounds.map(bgs => Response.json(bgs.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

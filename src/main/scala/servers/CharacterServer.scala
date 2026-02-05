@@ -10,18 +10,18 @@ import java.util.concurrent.ThreadLocalRandom
 import scala.util.Random
 
 final case class CharacterServer(
-  characterRepository: CharacterRepository,
-  nameServer: NameServer,
-  raceServer: RaceServer,
-  personalityServer: PersonalityServer,
-  backgroundServer: BackgroundServer,
-  characterClassServer: CharacterClassServer,
-  itemServer: ItemServer,
-  titleServer: TitleServer,
-  deityServer: DeityServer,
+    characterRepository: CharacterRepository,
+    nameServer: NameServer,
+    raceServer: RaceServer,
+    personalityServer: PersonalityServer,
+    backgroundServer: BackgroundServer,
+    characterClassServer: CharacterClassServer,
+    itemServer: ItemServer,
+    titleServer: TitleServer,
+    deityServer: DeityServer
 ) {
 
-  private val alignments  = List("Lawful", "Neutral", "Chaotic")
+  private val alignments = List("Lawful", "Neutral", "Chaotic")
   private val baseLanguages = Language.default
   private val gearChoices = List(
     "Backpack",
@@ -33,7 +33,7 @@ final case class CharacterServer(
     "Dagger",
     "Short sword",
     "Sling (10 bullets)",
-    "Lantern",
+    "Lantern"
   )
   private val zeroLevelGearResource = "/zero-level-gear.json"
 
@@ -84,7 +84,7 @@ final case class CharacterServer(
   private def matchesRace(name: Name, race: Option[String]): Boolean =
     race.forall { r =>
       val target = r.toLowerCase
-      val nameR  = name.race.toLowerCase
+      val nameR = name.race.toLowerCase
       target match {
         case "half-orc" => nameR == "orc" || nameR == "human" || nameR == "half-orc"
         case "half-elf" => nameR == "elf" || nameR == "human" || nameR == "half-elf"
@@ -96,10 +96,10 @@ final case class CharacterServer(
     gender.forall(g => name.gender.exists(_.equalsIgnoreCase(g)))
 
   private def pickTitle(
-    titles: List[Title],
-    className: Option[String],
-    alignment: Option[String],
-    level: Int,
+      titles: List[Title],
+      className: Option[String],
+      alignment: Option[String],
+      level: Int
   ): Option[String] =
     for {
       cls <- className
@@ -120,7 +120,7 @@ final case class CharacterServer(
 
     for {
       first <- pickOne(firstNames)
-      last  <- pickOne(lastNames)
+      last <- pickOne(lastNames)
     } yield (first.map(_.name), last.map(_.name)) match {
       case (Some(f), Some(l)) => s"$f $l"
       case (Some(f), None)    => f
@@ -149,7 +149,7 @@ final case class CharacterServer(
         val weight = Math.max(0, bg.range.max - bg.range.min + 1)
         (bg, weight)
       }
-      val total    = weighted.map(_._2).sum
+      val total = weighted.map(_._2).sum
       if (backgrounds.isEmpty || total <= 0) None
       else {
         val roll = rng.nextInt(1, total + 1)
@@ -173,7 +173,7 @@ final case class CharacterServer(
       .flatMap(raw =>
         ZIO
           .fromEither(raw.fromJson[List[String]])
-          .mapError(err => new IllegalArgumentException(s"Invalid zero-level gear JSON: $err")),
+          .mapError(err => new IllegalArgumentException(s"Invalid zero-level gear JSON: $err"))
       )
 
   private val abilityNames = List("strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma")
@@ -184,15 +184,15 @@ final case class CharacterServer(
       .getOrElse(List.empty)
 
     val missing = abilityNames.filterNot(prioritized.contains)
-    val merged  = prioritized ++ missing
+    val merged = prioritized ++ missing
 
     if (merged.nonEmpty) merged else abilityNames
   }
 
   private def orderedAbilityScores(rolled: List[Int], pickedClass: Option[StoredCharacterClass]): AbilityScores = {
-    val priority    = normalizedAbilityPriority(pickedClass)
+    val priority = normalizedAbilityPriority(pickedClass)
     val sortedRolls = rolled.sorted(Ordering[Int].reverse)
-    val assigned    = priority.zip(sortedRolls).toMap
+    val assigned = priority.zip(sortedRolls).toMap
 
     AbilityScores(
       AbilityScore(assigned("strength")),
@@ -200,143 +200,144 @@ final case class CharacterServer(
       AbilityScore(assigned("constitution")),
       AbilityScore(assigned("intelligence")),
       AbilityScore(assigned("wisdom")),
-      AbilityScore(assigned("charisma")),
+      AbilityScore(assigned("charisma"))
     )
   }
 
   private def generateCharacter: Task[Character] =
     for {
       // fall back to defaults if name/race collections are empty; still fail on repo errors
-      names         <- nameServer.getNames
-      races         <- raceServer.getRaces
-      classes       <- ensureClasses
-      backgrounds   <- backgroundServer.getBackgrounds
-      titles        <- titleServer.getTitles
+      names <- nameServer.getNames
+      races <- raceServer.getRaces
+      classes <- ensureClasses
+      backgrounds <- backgroundServer.getBackgrounds
+      titles <- titleServer.getTitles
       personalities <- personalityServer.getPersonalities
-      deities       <- deityServer.getDeities
-      items         <- itemServer.getItems
-      randomRace    <- pickWeightedRace(races).flatMap {
-                         case some @ Some(_) => ZIO.succeed(some)
-                         case None           => pickOne(races)
-                       }
-      randomGender  <- pickOne(List("male", "female"))
-      randomName    <- randomFullName(names, randomRace.map(_.race), randomGender)
+      deities <- deityServer.getDeities
+      items <- itemServer.getItems
+      randomRace <- pickWeightedRace(races).flatMap {
+        case some @ Some(_) => ZIO.succeed(some)
+        case None           => pickOne(races)
+      }
+      randomGender <- pickOne(List("male", "female"))
+      randomName <- randomFullName(names, randomRace.map(_.race), randomGender)
 
-      strScore      <- roll3d6
-      dexScore      <- roll3d6
-      conScore      <- roll3d6
-      intScore      <- roll3d6
-      wisScore      <- roll3d6
-      chaScore      <- roll3d6
-      pickedClass   <- pickOne(classes)
-      pickedAlign   <- pickOne(alignments)
-      pickedBg      <- pickWeightedBackground(backgrounds)
-      pickedDeity   <- {
-                          val aligned = pickedAlign
-                            .map(aln => deities.filter(_.alignment.equalsIgnoreCase(aln)))
-                            .getOrElse(deities)
-                          val pool = if (aligned.nonEmpty) aligned else deities
-                          pickOne(pool).map(_.map(_.name))
-                        }
-      gold          <- ZIO.succeed(rng.nextInt(0, 21))
-      silver        <- ZIO.succeed(rng.nextInt(0, 51))
-      copper        <- ZIO.succeed(rng.nextInt(0, 101))
-      languages       = {
-                          val extraCommonPattern = "(?i)(\\d+) extra common language[s]?".r
-                          val extraRarePattern   = "(?i)(\\d+) extra rare language[s]?".r
+      strScore <- roll3d6
+      dexScore <- roll3d6
+      conScore <- roll3d6
+      intScore <- roll3d6
+      wisScore <- roll3d6
+      chaScore <- roll3d6
+      pickedClass <- pickOne(classes)
+      pickedAlign <- pickOne(alignments)
+      pickedBg <- pickWeightedBackground(backgrounds)
+      pickedDeity <- {
+        val aligned = pickedAlign
+          .map(aln => deities.filter(_.alignment.equalsIgnoreCase(aln)))
+          .getOrElse(deities)
+        val pool = if (aligned.nonEmpty) aligned else deities
+        pickOne(pool).map(_.map(_.name))
+      }
+      gold <- ZIO.succeed(rng.nextInt(0, 21))
+      silver <- ZIO.succeed(rng.nextInt(0, 51))
+      copper <- ZIO.succeed(rng.nextInt(0, 101))
+      languages = {
+        val extraCommonPattern = "(?i)(\\d+) extra common language[s]?".r
+        val extraRarePattern = "(?i)(\\d+) extra rare language[s]?".r
 
-                          val racialRaw       = randomRace.map(_.languages).getOrElse(List.empty)
-                          var extraCommonPick = 0
-                          var extraRarePick   = 0
+        val racialRaw = randomRace.map(_.languages).getOrElse(List.empty)
+        var extraCommonPick = 0
+        var extraRarePick = 0
 
-                          val racialLangs = racialRaw.flatMap {
-                            case extraCommonPattern(n) =>
-                              extraCommonPick += n.toInt
-                              None
-                            case extraRarePattern(n) =>
-                              extraRarePick += n.toInt
-                              None
-                            case other => Some(other)
-                          }
+        val racialLangs = racialRaw.flatMap {
+          case extraCommonPattern(n) =>
+            extraCommonPick += n.toInt
+            None
+          case extraRarePattern(n) =>
+            extraRarePick += n.toInt
+            None
+          case other => Some(other)
+        }
 
-                          val classLangs = pickedClass
-                            .flatMap(_.languages)
-                            .map { lb =>
-                              val chosen = pickDistinct(lb.choices, lb.choose)
-                              extraCommonPick += lb.extraCommon
-                              extraRarePick += lb.extraRare
-                              chosen
-                            }
-                            .getOrElse(List.empty)
+        val classLangs = pickedClass
+          .flatMap(_.languages)
+          .map { lb =>
+            val chosen = pickDistinct(lb.choices, lb.choose)
+            extraCommonPick += lb.extraCommon
+            extraRarePick += lb.extraRare
+            chosen
+          }
+          .getOrElse(List.empty)
 
-                          val known       = (List("Common") ++ racialLangs ++ classLangs).toSet
-                          val extraCommon = pickDistinctFromPool(baseLanguages.common, extraCommonPick, known)
-                          val knownPlus   = known ++ extraCommon
-                          val extraRare   = pickDistinctFromPool(baseLanguages.rare, extraRarePick, knownPlus)
+        val known = (List("Common") ++ racialLangs ++ classLangs).toSet
+        val extraCommon = pickDistinctFromPool(baseLanguages.common, extraCommonPick, known)
+        val knownPlus = known ++ extraCommon
+        val extraRare = pickDistinctFromPool(baseLanguages.rare, extraRarePick, knownPlus)
 
-                          (known ++ extraCommon ++ extraRare).toSet
-       }
-      abilities      = orderedAbilityScores(
-                         List(strScore, dexScore, conScore, intScore, wisScore, chaScore),
-                         pickedClass,
-                       )
-      hasHauler      = pickedClass.exists(_.features.exists(f => f.name.equalsIgnoreCase("Hauler")))
-      gearLoadout    = util.GearUtilities.selectStartingGear(
-                         items,
-                         allowedWeapons = pickedClass.map(_.weapons).getOrElse(List.empty),
-                         allowedArmor = pickedClass.map(_.armor).getOrElse(List.empty),
-                         conMod = if (hasHauler) abilities.constitution.modifier else 0,
-                         strengthScore = abilities.strength.score,
-                         dexMod = abilities.dexterity.modifier,
-                         strMod = abilities.strength.modifier,
-                         baseArmorClass = 10 + abilities.dexterity.modifier,
-                         rng = rng,
-                       )
+        (known ++ extraCommon ++ extraRare).toSet
+      }
+      abilities = orderedAbilityScores(
+        List(strScore, dexScore, conScore, intScore, wisScore, chaScore),
+        pickedClass
+      )
+      hasHauler = pickedClass.exists(_.features.exists(f => f.name.equalsIgnoreCase("Hauler")))
+      gearLoadout = util.GearUtilities.selectStartingGear(
+        items,
+        allowedWeapons = pickedClass.map(_.weapons).getOrElse(List.empty),
+        allowedArmor = pickedClass.map(_.armor).getOrElse(List.empty),
+        conMod = if (hasHauler) abilities.constitution.modifier else 0,
+        strengthScore = abilities.strength.score,
+        dexMod = abilities.dexterity.modifier,
+        strMod = abilities.strength.modifier,
+        baseArmorClass = 10 + abilities.dexterity.modifier,
+        rng = rng
+      )
       allowedPersonalityAlignments = pickedAlign
         .map(_.toLowerCase match {
           case "lawful"  => Set("lawful", "neutral")
           case "neutral" => Set("neutral")
           case "chaotic" => Set("chaotic", "neutral")
-          case other      => Set(other.toLowerCase)
+          case other     => Set(other.toLowerCase)
         })
         .getOrElse(Set("lawful", "neutral", "chaotic"))
       pickedPersonalities <- {
-                               val eligible = personalities.filter(p => allowedPersonalityAlignments.contains(p.alignment.toLowerCase))
-                               val pool     = if (eligible.nonEmpty) eligible else personalities
-                               pickSome(pool.map(_.name), 3)
-                             }
-      conMod         = abilities.constitution.modifier
-      hpSides        = pickedClass.map(hitDieSides).getOrElse(8)
-      hpRoll         = rng.nextInt(1, hpSides + 1)
-      hitPoints      = Math.max(1, hpRoll + conMod)
-      armorClass     = gearLoadout.armorClass
-      attacks        = if (gearLoadout.attacks.nonEmpty)
-                         gearLoadout.attacks
-                       else
-                         List(s"Weapon attack ${formatMod(abilities.strength.modifier)} (1d6)")
-      level          = 1
-      pickedTitle    = pickTitle(titles, pickedClass.map(_.name), pickedAlign, level)
-      talentRolls    = (level + 1) / 2
-      classTalents   <- pickedClass
-                          .map { cls =>
-                            ZIO
-                              .foreach(List.fill(talentRolls)(())) { _ =>
-                                roll2d6.map(roll => cls.talents.find(t => roll >= t.range.min && roll <= t.range.max))
-                              }
-                              .map(_.flatten.map(_.effect))
-                          }
-                          .getOrElse(ZIO.succeed(List.empty[String]))
-      classFeatures   = pickedClass.map(_.features).getOrElse(List.empty)
-      raceFeatures     = randomRace.map(r => ClassFeature(r.ability.name, r.ability.description)).toList
-      classSpells     = pickedClass
-                          .flatMap(_.spellcasting)
-                          .map { sc =>
-                            val known = sc.initialKnown.toList.sortBy(_._1).map { case (tier, count) =>
-                              s"Tier $tier spells known: $count"
-                            }
-                            known ++ sc.notes
-                          }
-                          .getOrElse(List.empty)
+        val eligible = personalities.filter(p => allowedPersonalityAlignments.contains(p.alignment.toLowerCase))
+        val pool = if (eligible.nonEmpty) eligible else personalities
+        pickSome(pool.map(_.name), 3)
+      }
+      conMod = abilities.constitution.modifier
+      hpSides = pickedClass.map(hitDieSides).getOrElse(8)
+      hpRoll = rng.nextInt(1, hpSides + 1)
+      hitPoints = Math.max(1, hpRoll + conMod)
+      armorClass = gearLoadout.armorClass
+      attacks =
+        if (gearLoadout.attacks.nonEmpty)
+          gearLoadout.attacks
+        else
+          List(s"Weapon attack ${formatMod(abilities.strength.modifier)} (1d6)")
+      level = 1
+      pickedTitle = pickTitle(titles, pickedClass.map(_.name), pickedAlign, level)
+      talentRolls = (level + 1) / 2
+      classTalents <- pickedClass
+        .map { cls =>
+          ZIO
+            .foreach(List.fill(talentRolls)(())) { _ =>
+              roll2d6.map(roll => cls.talents.find(t => roll >= t.range.min && roll <= t.range.max))
+            }
+            .map(_.flatten.map(_.effect))
+        }
+        .getOrElse(ZIO.succeed(List.empty[String]))
+      classFeatures = pickedClass.map(_.features).getOrElse(List.empty)
+      raceFeatures = randomRace.map(r => ClassFeature(r.ability.name, r.ability.description)).toList
+      classSpells = pickedClass
+        .flatMap(_.spellcasting)
+        .map { sc =>
+          val known = sc.initialKnown.toList.sortBy(_._1).map { case (tier, count) =>
+            s"Tier $tier spells known: $count"
+          }
+          known ++ sc.notes
+        }
+        .getOrElse(List.empty)
     } yield Character(
       _id = new ObjectId(),
       name = randomName,
@@ -363,7 +364,7 @@ final case class CharacterServer(
       goldPieces = gold,
       silverPieces = silver,
       copperPieces = copper,
-      freeToCarry = gearLoadout.freeGear,
+      freeToCarry = gearLoadout.freeGear
     )
 
   private def zeroLevelAttacks(gear: List[String], abilities: AbilityScores): List[String] = {
@@ -371,7 +372,7 @@ final case class CharacterServer(
       "Dagger" -> s"Dagger ${formatMod(abilities.strength.modifier)} (1d6)",
       "Pole" -> s"Pole ${formatMod(abilities.strength.modifier)} (1d6)",
       "Club" -> s"Club ${formatMod(abilities.strength.modifier)} (1d6)",
-      "Shortbow" -> s"Shortbow ${formatMod(abilities.dexterity.modifier)} (1d6)",
+      "Shortbow" -> s"Shortbow ${formatMod(abilities.dexterity.modifier)} (1d6)"
     )
 
     val attacks = weaponEntries.collect {
@@ -383,84 +384,84 @@ final case class CharacterServer(
 
   private def generateZeroLevelCharacter: Task[Character] =
     for {
-      names         <- nameServer.getNames
-      races         <- raceServer.getRaces
-      backgrounds   <- backgroundServer.getBackgrounds
+      names <- nameServer.getNames
+      races <- raceServer.getRaces
+      backgrounds <- backgroundServer.getBackgrounds
       personalities <- personalityServer.getPersonalities
-      deities       <- deityServer.getDeities
-      randomRace    <- pickWeightedRace(races).flatMap {
-                         case some @ Some(_) => ZIO.succeed(some)
-                         case None           => pickOne(races)
-                       }
-      randomGender  <- pickOne(List("male", "female"))
-      randomName    <- randomFullName(names, randomRace.map(_.race), randomGender)
-      strScore      <- roll3d6
-      dexScore      <- roll3d6
-      conScore      <- roll3d6
-      intScore      <- roll3d6
-      wisScore      <- roll3d6
-      chaScore      <- roll3d6
-      pickedAlign   <- pickOne(alignments)
-      pickedBg      <- pickWeightedBackground(backgrounds)
-      pickedDeity   <- {
-                         val aligned = pickedAlign
-                           .map(aln => deities.filter(_.alignment.equalsIgnoreCase(aln)))
-                           .getOrElse(deities)
-                         val pool = if (aligned.nonEmpty) aligned else deities
-                         pickOne(pool).map(_.map(_.name))
-                       }
-      gearTable     <- loadZeroLevelGear
-      gearCount     <- roll1d4
-      zeroGear       = pickDistinct(gearTable, gearCount)
-      languages       = {
-                          val extraCommonPattern = "(?i)(\\d+) extra common language[s]?".r
-                          val extraRarePattern   = "(?i)(\\d+) extra rare language[s]?".r
+      deities <- deityServer.getDeities
+      randomRace <- pickWeightedRace(races).flatMap {
+        case some @ Some(_) => ZIO.succeed(some)
+        case None           => pickOne(races)
+      }
+      randomGender <- pickOne(List("male", "female"))
+      randomName <- randomFullName(names, randomRace.map(_.race), randomGender)
+      strScore <- roll3d6
+      dexScore <- roll3d6
+      conScore <- roll3d6
+      intScore <- roll3d6
+      wisScore <- roll3d6
+      chaScore <- roll3d6
+      pickedAlign <- pickOne(alignments)
+      pickedBg <- pickWeightedBackground(backgrounds)
+      pickedDeity <- {
+        val aligned = pickedAlign
+          .map(aln => deities.filter(_.alignment.equalsIgnoreCase(aln)))
+          .getOrElse(deities)
+        val pool = if (aligned.nonEmpty) aligned else deities
+        pickOne(pool).map(_.map(_.name))
+      }
+      gearTable <- loadZeroLevelGear
+      gearCount <- roll1d4
+      zeroGear = pickDistinct(gearTable, gearCount)
+      languages = {
+        val extraCommonPattern = "(?i)(\\d+) extra common language[s]?".r
+        val extraRarePattern = "(?i)(\\d+) extra rare language[s]?".r
 
-                          val racialRaw       = randomRace.map(_.languages).getOrElse(List.empty)
-                          var extraCommonPick = 0
-                          var extraRarePick   = 0
+        val racialRaw = randomRace.map(_.languages).getOrElse(List.empty)
+        var extraCommonPick = 0
+        var extraRarePick = 0
 
-                          val racialLangs = racialRaw.flatMap {
-                            case extraCommonPattern(n) =>
-                              extraCommonPick += n.toInt
-                              None
-                            case extraRarePattern(n) =>
-                              extraRarePick += n.toInt
-                              None
-                            case other => Some(other)
-                          }
+        val racialLangs = racialRaw.flatMap {
+          case extraCommonPattern(n) =>
+            extraCommonPick += n.toInt
+            None
+          case extraRarePattern(n) =>
+            extraRarePick += n.toInt
+            None
+          case other => Some(other)
+        }
 
-                          val known       = (List("Common") ++ racialLangs).toSet
-                          val extraCommon = pickDistinctFromPool(baseLanguages.common, extraCommonPick, known)
-                          val knownPlus   = known ++ extraCommon
-                          val extraRare   = pickDistinctFromPool(baseLanguages.rare, extraRarePick, knownPlus)
+        val known = (List("Common") ++ racialLangs).toSet
+        val extraCommon = pickDistinctFromPool(baseLanguages.common, extraCommonPick, known)
+        val knownPlus = known ++ extraCommon
+        val extraRare = pickDistinctFromPool(baseLanguages.rare, extraRarePick, knownPlus)
 
-                          (known ++ extraCommon ++ extraRare).toSet
-       }
-      abilities      = orderedAbilityScores(
-                         List(strScore, dexScore, conScore, intScore, wisScore, chaScore),
-                         None,
-                       )
-      conMod         = abilities.constitution.modifier
-      totalSlots     = math.max(abilities.strength.score, 10)
-      zeroGearSlots   = util.GearUtilities.formatGearSlots(zeroGear, totalSlots)
-      hitPoints      = Math.max(1, conMod)
-      armorClass     = 10 + abilities.dexterity.modifier
-      attacks        = zeroLevelAttacks(zeroGear, abilities)
+        (known ++ extraCommon ++ extraRare).toSet
+      }
+      abilities = orderedAbilityScores(
+        List(strScore, dexScore, conScore, intScore, wisScore, chaScore),
+        None
+      )
+      conMod = abilities.constitution.modifier
+      totalSlots = math.max(abilities.strength.score, 10)
+      zeroGearSlots = util.GearUtilities.formatGearSlots(zeroGear, totalSlots)
+      hitPoints = Math.max(1, conMod)
+      armorClass = 10 + abilities.dexterity.modifier
+      attacks = zeroLevelAttacks(zeroGear, abilities)
       allowedPersonalityAlignments = pickedAlign
         .map(_.toLowerCase match {
           case "lawful"  => Set("lawful", "neutral")
           case "neutral" => Set("neutral")
           case "chaotic" => Set("chaotic", "neutral")
-          case other      => Set(other.toLowerCase)
+          case other     => Set(other.toLowerCase)
         })
         .getOrElse(Set("lawful", "neutral", "chaotic"))
       pickedPersonalities <- {
-                               val eligible = personalities.filter(p => allowedPersonalityAlignments.contains(p.alignment.toLowerCase))
-                               val pool     = if (eligible.nonEmpty) eligible else personalities
-                               pickSome(pool.map(_.name), 3)
-                             }
-      raceFeatures     = randomRace.map(r => ClassFeature(r.ability.name, r.ability.description)).toList
+        val eligible = personalities.filter(p => allowedPersonalityAlignments.contains(p.alignment.toLowerCase))
+        val pool = if (eligible.nonEmpty) eligible else personalities
+        pickSome(pool.map(_.name), 3)
+      }
+      raceFeatures = randomRace.map(r => ClassFeature(r.ability.name, r.ability.description)).toList
     } yield Character(
       _id = new ObjectId(),
       name = randomName,
@@ -487,7 +488,7 @@ final case class CharacterServer(
       goldPieces = 0,
       silverPieces = 0,
       copperPieces = 0,
-      freeToCarry = List.empty,
+      freeToCarry = List.empty
     )
 
   def randomCharacter(zeroLevel: Boolean): Task[Character] =
@@ -495,7 +496,7 @@ final case class CharacterServer(
     else
       for {
         stored <- characterRepository.list()
-        pick   <- pickOne(stored)
+        pick <- pickOne(stored)
         result <- pick.map(c => ZIO.succeed(c)).getOrElse(generateCharacter)
       } yield result
 
@@ -515,7 +516,7 @@ object CharacterServer {
       with TitleServer
       with DeityServer,
     Nothing,
-    CharacterServer,
+    CharacterServer
   ] =
     ZLayer.fromFunction(CharacterServer.apply _)
 }

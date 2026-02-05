@@ -12,7 +12,7 @@ final case class NameServer(repo: NameRepository, cache: Cache[Unit, Throwable, 
   def createName(name: Name): Task[Name] =
     for {
       saved <- repo.create(name)
-      _     <- cache.invalidate(())
+      _ <- cache.invalidate(())
     } yield saved
 }
 
@@ -20,12 +20,12 @@ object NameServer {
   val live: ZLayer[NameRepository, Throwable, NameServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[NameRepository]
+        repo <- ZIO.service[NameRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield NameServer(repo, cache)
     }
 }

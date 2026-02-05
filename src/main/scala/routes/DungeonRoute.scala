@@ -19,17 +19,17 @@ final case class DungeonRoute(server: DungeonServer) {
           .fromFunctionZIO[Request] { _ =>
             for {
               dungeon <- server.randomDungeon
-              pdf     <- server.renderDungeonPdf(dungeon)
+              pdf <- server.renderDungeonPdf(dungeon)
             } yield Response(
               status = Status.Ok,
               headers = Headers(
                 Header.Custom("Content-Type", "application/pdf"),
-                Header.Custom("Content-Disposition", "inline; filename=\"random-dungeon.pdf\""),
+                Header.Custom("Content-Disposition", "inline; filename=\"random-dungeon.pdf\"")
               ),
-              body = Body.fromChunk(Chunk.fromArray(pdf)),
+              body = Body.fromChunk(Chunk.fromArray(pdf))
             )
           }
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

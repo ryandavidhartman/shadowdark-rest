@@ -14,12 +14,12 @@ object SpellServer {
   val live: ZLayer[SpellRepository, Throwable, SpellServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[SpellRepository]
+        repo <- ZIO.service[SpellRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield SpellServer(repo, cache)
     }
 }

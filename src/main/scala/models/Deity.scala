@@ -4,10 +4,10 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class Deity(
-  _id: ObjectId,
-  name: String,
-  alignment: String,
-  description: String,
+    _id: ObjectId,
+    name: String,
+    alignment: String,
+    description: String
 )
 
 object Deity {

@@ -11,7 +11,7 @@ final case class TitleRoute(server: TitleServer) {
       Method.GET / "titles" ->
         Handler
           .fromZIO(server.getTitles.map(titles => Response.json(titles.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

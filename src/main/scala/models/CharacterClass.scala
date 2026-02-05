@@ -17,78 +17,78 @@ sealed trait CharacterClass {
 }
 
 final case class LanguageBenefit(
-  choices: List[String],
-  choose: Int,
-  extraCommon: Int = 0,
-  extraRare: Int = 0,
-  notes: Option[String] = None,
+    choices: List[String],
+    choose: Int,
+    extraCommon: Int = 0,
+    extraRare: Int = 0,
+    notes: Option[String] = None
 )
 
 final case class ClassFeature(
-  name: String,
-  description: String,
+    name: String,
+    description: String
 )
 
 final case class Spellcasting(
-  spellList: String,
-  initialKnown: Map[String, Int],
-  progression: List[SpellProgression],
-  notes: List[String] = Nil,
+    spellList: String,
+    initialKnown: Map[String, Int],
+    progression: List[SpellProgression],
+    notes: List[String] = Nil
 )
 
 final case class SpellProgression(
-  level: Int,
-  tiers: SpellTiers,
+    level: Int,
+    tiers: SpellTiers
 )
 
 final case class SpellTiers(
-  tier1: Int,
-  tier2: Int,
-  tier3: Int,
-  tier4: Int,
-  tier5: Int,
+    tier1: Int,
+    tier2: Int,
+    tier3: Int,
+    tier4: Int,
+    tier5: Int
 )
 
 final case class Talent(
-  range: DiceRange,
-  effect: String,
+    range: DiceRange,
+    effect: String
 )
 
 final case class DiceRange(
-  min: Int,
-  max: Int,
+    min: Int,
+    max: Int
 ) {
   def label: String =
     if (min == max) min.toString else s"$min-$max"
 }
 
 final case class ClassTitle(
-  levels: LevelRange,
-  lawful: String,
-  chaotic: String,
-  neutral: String,
+    levels: LevelRange,
+    lawful: String,
+    chaotic: String,
+    neutral: String
 )
 
 final case class LevelRange(
-  min: Int,
-  max: Int,
+    min: Int,
+    max: Int
 ) {
   def label: String =
     if (min == max) min.toString else s"$min-$max"
 }
 
 final case class StoredCharacterClass(
-  _id: ObjectId,
-  name: String,
-  weapons: List[String],
-  armor: List[String],
-  hitPointsPerLevel: String,
-  languages: Option[LanguageBenefit],
-  abilityPriority: List[String] = List.empty,
-  features: List[ClassFeature],
-  spellcasting: Option[Spellcasting],
-  talents: List[Talent],
-  titles: List[ClassTitle],
+    _id: ObjectId,
+    name: String,
+    weapons: List[String],
+    armor: List[String],
+    hitPointsPerLevel: String,
+    languages: Option[LanguageBenefit],
+    abilityPriority: List[String] = List.empty,
+    features: List[ClassFeature],
+    spellcasting: Option[Spellcasting],
+    talents: List[Talent],
+    titles: List[ClassTitle]
 ) extends CharacterClass
 
 object StoredCharacterClass {
@@ -104,7 +104,7 @@ object StoredCharacterClass {
       features = characterClass.features,
       spellcasting = characterClass.spellcasting,
       talents = characterClass.talents,
-      titles = characterClass.titles,
+      titles = characterClass.titles
     )
 
   implicit val objectIdEncoder: JsonEncoder[ObjectId] = JsonEncoder.string.contramap[ObjectId](_.toHexString)

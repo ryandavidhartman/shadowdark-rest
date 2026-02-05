@@ -16,7 +16,7 @@ import routes.{
   SettlementRoute,
   SpellRoute,
   SwaggerRoutes,
-  TitleRoute,
+  TitleRoute
 }
 import repositories.{
   BackgroundRepositoryLive,
@@ -32,7 +32,7 @@ import repositories.{
   RaceRepositoryLive,
   SettlementNameRepositoryLive,
   SpellRepositoryLive,
-  TitleRepositoryLive,
+  TitleRepositoryLive
 }
 import servers.{
   BackgroundServer,
@@ -51,7 +51,7 @@ import servers.{
   SettlementNameServer,
   SettlementServer,
   SpellServer,
-  TitleServer,
+  TitleServer
 }
 import zio._
 import zio.http._
@@ -70,26 +70,26 @@ object Main extends ZIOAppDefault {
       .attempt(ConfigFactory.load().getInt("server.port"))
       .flatMap { port =>
         val program = for {
-          nameRoutes      <- ZIO.serviceWith[NameRoute](_.routes)
-          raceRoutes      <- ZIO.serviceWith[RaceRoute](_.routes)
+          nameRoutes <- ZIO.serviceWith[NameRoute](_.routes)
+          raceRoutes <- ZIO.serviceWith[RaceRoute](_.routes)
           characterRoutes <- ZIO.serviceWith[CharacterRoute](_.routes)
           personalityRoutes <- ZIO.serviceWith[PersonalityRoute](_.routes)
-          backgroundRoutes  <- ZIO.serviceWith[BackgroundRoute](_.routes)
-          classRoutes       <- ZIO.serviceWith[CharacterClassRoute](_.routes)
-          spellRoutes       <- ZIO.serviceWith[SpellRoute](_.routes)
-          itemRoutes        <- ZIO.serviceWith[ItemRoute](_.routes)
-          titleRoutes       <- ZIO.serviceWith[TitleRoute](_.routes)
-          deityRoutes       <- ZIO.serviceWith[DeityRoute](_.routes)
-          languageRoutes    <- ZIO.serviceWith[LanguageRoute](_.routes)
-          monsterRoutes     <- ZIO.serviceWith[MonsterRoute](_.routes)
+          backgroundRoutes <- ZIO.serviceWith[BackgroundRoute](_.routes)
+          classRoutes <- ZIO.serviceWith[CharacterClassRoute](_.routes)
+          spellRoutes <- ZIO.serviceWith[SpellRoute](_.routes)
+          itemRoutes <- ZIO.serviceWith[ItemRoute](_.routes)
+          titleRoutes <- ZIO.serviceWith[TitleRoute](_.routes)
+          deityRoutes <- ZIO.serviceWith[DeityRoute](_.routes)
+          languageRoutes <- ZIO.serviceWith[LanguageRoute](_.routes)
+          monsterRoutes <- ZIO.serviceWith[MonsterRoute](_.routes)
           settlementNameRoutes <- ZIO.serviceWith[SettlementNameRoute](_.routes)
-          settlementRoutes  <- ZIO.serviceWith[SettlementRoute](_.routes)
-          dungeonRoutes     <- ZIO.serviceWith[DungeonRoute](_.routes)
-          hexMapRoutes      <- ZIO.serviceWith[HexMapRoute](_.routes)
-          swaggerRoutes     <- ZIO.succeed(SwaggerRoutes.routes)
-          _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementNameRoutes ++ settlementRoutes ++ dungeonRoutes ++ hexMapRoutes ++ swaggerRoutes,
-                               )
+          settlementRoutes <- ZIO.serviceWith[SettlementRoute](_.routes)
+          dungeonRoutes <- ZIO.serviceWith[DungeonRoute](_.routes)
+          hexMapRoutes <- ZIO.serviceWith[HexMapRoute](_.routes)
+          swaggerRoutes <- ZIO.succeed(SwaggerRoutes.routes)
+          _ <- Server.serve(
+            app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementNameRoutes ++ settlementRoutes ++ dungeonRoutes ++ hexMapRoutes ++ swaggerRoutes
+          )
         } yield ()
 
         program.provide(
@@ -140,7 +140,7 @@ object Main extends ZIOAppDefault {
           SettlementNameRoute.live,
           SettlementRoute.live,
           DungeonRoute.live,
-          HexMapRoute.live,
+          HexMapRoute.live
         )
       }
       .orDie

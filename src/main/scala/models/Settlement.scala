@@ -5,100 +5,100 @@ import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 final case class Point(x: Int, y: Int)
 
 final case class SettlementType(
-  name: String,
-  diceCount: Int,
-  dieSides: Int,
+    name: String,
+    diceCount: Int,
+    dieSides: Int
 )
 
 final case class SettlementLayout(
-  width: Int,
-  height: Int,
-  gridSize: Int,
-  outline: List[Point],
-  seed: Long,
+    width: Int,
+    height: Int,
+    gridSize: Int,
+    outline: List[Point],
+    seed: Long
 )
 
 final case class Drink(
-  name: String,
-  cost: String,
-  effect: String,
+    name: String,
+    cost: String,
+    effect: String
 )
 
 final case class Food(
-  name: String,
-  cost: String,
+    name: String,
+    cost: String
 )
 
 final case class Tavern(
-  name: String,
-  knownFor: String,
-  drinks: List[Drink],
-  food: List[Food],
+    name: String,
+    knownFor: String,
+    drinks: List[Drink],
+    food: List[Food]
 )
 
 final case class Npc(
-  name: String,
-  ancestry: String,
-  age: String,
-  alignment: String,
-  wealth: String,
-  appearance: String,
-  mannerism: String,
-  secret: String,
-  background: Option[String],
-  personality: Option[String],
+    name: String,
+    ancestry: String,
+    age: String,
+    alignment: String,
+    wealth: String,
+    appearance: String,
+    mannerism: String,
+    secret: String,
+    background: Option[String],
+    personality: Option[String]
 )
 
 final case class Shop(
-  name: String,
-  shopType: String,
-  knownFor: String,
-  interestingCustomer: String,
+    name: String,
+    shopType: String,
+    knownFor: String,
+    interestingCustomer: String
 )
 
 final case class PointOfInterest(
-  id: Int,
-  name: String,
-  kind: String,
-  location: Point,
-  tavern: Option[Tavern],
-  shop: Option[Shop],
-  npc: Option[Npc],
-  buildingId: Option[Int],
+    id: Int,
+    name: String,
+    kind: String,
+    location: Point,
+    tavern: Option[Tavern],
+    shop: Option[Shop],
+    npc: Option[Npc],
+    buildingId: Option[Int]
 )
 
 final case class Building(
-  id: Int,
-  footprint: List[Point],
-  usage: String,
-  poiId: Option[Int],
+    id: Int,
+    footprint: List[Point],
+    usage: String,
+    poiId: Option[Int]
 )
 
 final case class Plaza(
-  center: Point,
-  radius: Int,
+    center: Point,
+    radius: Int
 )
 
 final case class District(
-  id: Int,
-  roll: Int,
-  districtType: String,
-  alignment: String,
-  seatOfGovernment: Boolean,
-  position: Point,
-  boundary: List[Point],
-  plazas: List[Plaza],
-  pointsOfInterest: List[PointOfInterest],
-  buildings: List[Building],
+    id: Int,
+    roll: Int,
+    districtType: String,
+    alignment: String,
+    seatOfGovernment: Boolean,
+    position: Point,
+    boundary: List[Point],
+    plazas: List[Plaza],
+    pointsOfInterest: List[PointOfInterest],
+    buildings: List[Building]
 )
 
 final case class Settlement(
-  name: String,
-  settlementType: SettlementType,
-  alignment: String,
-  districts: List[District],
-  seatOfGovernment: Int,
-  layout: SettlementLayout,
+    name: String,
+    settlementType: SettlementType,
+    alignment: String,
+    districts: List[District],
+    seatOfGovernment: Int,
+    layout: SettlementLayout
 )
 
 object Settlement {

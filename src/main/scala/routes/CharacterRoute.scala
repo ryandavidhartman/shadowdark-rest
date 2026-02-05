@@ -36,17 +36,17 @@ final case class CharacterRoute(server: CharacterServer) {
           .fromFunctionZIO[Request] { req =>
             for {
               character <- server.randomCharacter(zeroLevel = isZeroLevel(req))
-              pdf       <- renderCharacterPdf(character)
+              pdf <- renderCharacterPdf(character)
             } yield Response(
               status = Status.Ok,
               headers = Headers(
                 Header.Custom("Content-Type", "application/pdf"),
-                Header.Custom("Content-Disposition", "inline; filename=\"random-character.pdf\""),
+                Header.Custom("Content-Disposition", "inline; filename=\"random-character.pdf\"")
               ),
-              body = Body.fromChunk(Chunk.fromArray(pdf)),
+              body = Body.fromChunk(Chunk.fromArray(pdf))
             )
           }
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 
   private val templatePath = "/ShadowdarkSheet.pdf"
@@ -64,13 +64,13 @@ final case class CharacterRoute(server: CharacterServer) {
           .getOrElse(throw new IllegalStateException(s"Missing template at $templatePath"))
 
       val randomAccess = new RandomAccessReadBuffer(templateStream)
-      val document     = Loader.loadPDF(randomAccess)
+      val document = Loader.loadPDF(randomAccess)
       try {
         val form =
           Option(document.getDocumentCatalog.getAcroForm)
             .getOrElse(throw new IllegalStateException("Template does not contain an AcroForm"))
         val defaultResources = Option(form.getDefaultResources).getOrElse(new PDResources())
-        val defaultFontName  = COSName.getPDFName("Helv")
+        val defaultFontName = COSName.getPDFName("Helv")
         if (defaultResources.getFont(defaultFontName) == null) {
           defaultResources.put(defaultFontName, new PDType1Font(Standard14Fonts.FontName.HELVETICA))
         }
@@ -120,8 +120,8 @@ final case class CharacterRoute(server: CharacterServer) {
 
         val talentsAndSpells = {
           val features = character.features.map(f => s"${f.name}: ${f.description}")
-          val talents  = character.talents.map(t => s"Talent: $t")
-          val spells   = character.spells.map(s => s"Spell: $s")
+          val talents = character.talents.map(t => s"Talent: $t")
+          val spells = character.spells.map(s => s"Spell: $s")
           (features ++ talents ++ spells) match {
             case Nil => "None recorded"
             case xs  => xs.mkString("\n")
@@ -133,9 +133,9 @@ final case class CharacterRoute(server: CharacterServer) {
         setField("Silver Pieces", character.silverPieces.toString)
         setField("Copper Pieces", character.copperPieces.toString)
 
-        val gearLinesRaw     = character.gear.map(stripGearSlotLabel)
-        val gearLines        = gearLinesRaw.filterNot(_.equalsIgnoreCase("Empty"))
-        val gearFieldCount   = 20
+        val gearLinesRaw = character.gear.map(stripGearSlotLabel)
+        val gearLines = gearLinesRaw.filterNot(_.equalsIgnoreCase("Empty"))
+        val gearFieldCount = 20
         val (primaryGear, extraGear) = gearLines.splitAt(gearFieldCount)
         primaryGear.zipWithIndex.foreach { case (item, idx) =>
           setField(s"Gear ${idx + 1}", item)
@@ -182,7 +182,7 @@ final case class CharacterRoute(server: CharacterServer) {
         val rect = widget.getRectangle
         if (rect != null) {
           val shifted = new PDRectangle(rect.getLowerLeftX, rect.getLowerLeftY, rect.getWidth, rect.getHeight)
-          val shift   = 3.2f
+          val shift = 3.2f
           shifted.setLowerLeftX(rect.getLowerLeftX - shift)
           shifted.setUpperRightX(rect.getUpperRightX - shift)
           widget.setRectangle(shifted)
@@ -208,7 +208,7 @@ final case class CharacterRoute(server: CharacterServer) {
         case vt: PDVariableText =>
           vt.setDefaultAppearance(appearance)
           vt.getWidgets.asScala.foreach(_.getCOSObject.setString(COSName.DA, appearance))
-        case _                  => ()
+        case _ => ()
       }
     }
   }

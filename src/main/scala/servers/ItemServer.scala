@@ -14,12 +14,12 @@ object ItemServer {
   val live: ZLayer[ItemRepository, Throwable, ItemServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[ItemRepository]
+        repo <- ZIO.service[ItemRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield ItemServer(repo, cache)
     }
 }

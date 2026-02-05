@@ -11,7 +11,7 @@ final case class MonsterRoute(server: MonsterServer) {
       Method.GET / "monsters" ->
         Handler
           .fromZIO(server.getMonsters.map(monsters => Response.json(monsters.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 

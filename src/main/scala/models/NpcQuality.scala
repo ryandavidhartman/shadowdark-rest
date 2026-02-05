@@ -4,9 +4,9 @@ import org.mongodb.scala.bson.ObjectId
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 final case class NpcQuality(
-  _id: ObjectId,
-  category: String,
-  value: String,
+    _id: ObjectId,
+    category: String,
+    value: String
 )
 
 object NpcQuality {

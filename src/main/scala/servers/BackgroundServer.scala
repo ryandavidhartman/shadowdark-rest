@@ -14,12 +14,12 @@ object BackgroundServer {
   val live: ZLayer[BackgroundRepository, Throwable, BackgroundServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[BackgroundRepository]
+        repo <- ZIO.service[BackgroundRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield BackgroundServer(repo, cache)
     }
 }

@@ -14,12 +14,12 @@ object DeityServer {
   val live: ZLayer[DeityRepository, Throwable, DeityServer] =
     ZLayer.fromZIO {
       for {
-        repo  <- ZIO.service[DeityRepository]
+        repo <- ZIO.service[DeityRepository]
         cache <- Cache.make(
-                   capacity = 1,
-                   timeToLive = 5.minutes,
-                   lookup = Lookup((_: Unit) => repo.list()),
-                 )
+          capacity = 1,
+          timeToLive = 5.minutes,
+          lookup = Lookup((_: Unit) => repo.list())
+        )
       } yield DeityServer(repo, cache)
     }
 }

@@ -11,7 +11,7 @@ final case class SpellRoute(server: SpellServer) {
       Method.GET / "spells" ->
         Handler
           .fromZIO(server.getSpells.map(spells => Response.json(spells.toJson)))
-          .mapError(err => Response.internalServerError(err.getMessage)),
+          .mapError(err => Response.internalServerError(err.getMessage))
     )
 }
 
