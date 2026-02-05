@@ -15,6 +15,7 @@ import routes.{
   SettlementNameRoute,
   SettlementRoute,
   SpellRoute,
+  SwaggerRoutes,
   TitleRoute,
 }
 import repositories.{
@@ -85,8 +86,9 @@ object Main extends ZIOAppDefault {
           settlementRoutes  <- ZIO.serviceWith[SettlementRoute](_.routes)
           dungeonRoutes     <- ZIO.serviceWith[DungeonRoute](_.routes)
           hexMapRoutes      <- ZIO.serviceWith[HexMapRoute](_.routes)
+          swaggerRoutes     <- ZIO.succeed(SwaggerRoutes.routes)
           _                 <- Server.serve(
-                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementNameRoutes ++ settlementRoutes ++ dungeonRoutes ++ hexMapRoutes,
+                                 app ++ nameRoutes ++ raceRoutes ++ characterRoutes ++ personalityRoutes ++ backgroundRoutes ++ classRoutes ++ spellRoutes ++ itemRoutes ++ titleRoutes ++ deityRoutes ++ languageRoutes ++ monsterRoutes ++ settlementNameRoutes ++ settlementRoutes ++ dungeonRoutes ++ hexMapRoutes ++ swaggerRoutes,
                                )
         } yield ()
 

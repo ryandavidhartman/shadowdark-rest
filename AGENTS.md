@@ -57,6 +57,7 @@
 
 ## HTTP & Persistence Notes
 - HTTP: zio-http server in `Main.scala` exposes `/health`, `/`, `/names` (list/create), `/races` (list), `/random-character` (random or stored character; supports `?zeroLevel=true|1` for 0-level), `/random-character.pdf` (fills `src/main/resources/ShadowdarkSheet.pdf` AcroForm with a random character; supports `?zeroLevel=true|1`), `/personalities` (list/create), `/backgrounds` (list), `/classes` (list), `/spells` (list), `/items` (list), `/titles` (list), `/deities` (list), `/languages` (list), `/monsters` (list), `/settlement-names` (list), `/settlements/random` (random settlement JSON), `/settlements/random.pdf` (settlement map PDF with keyed index).
+- Swagger: `/api/openapi.json` serves the OpenAPI 3.0 spec and `/api/docs` serves Swagger UI (CDN assets).
 - Models: `Name`, `Race` (+ `RaceAbility`), `Character` (abilities, HP/AC, gear, features, talents, spells, languages), `CharacterClass` (+ `ClassFeature`, `Talent`, `Spellcasting`, etc.), `Background`, `Personality`, `Title`, `Monster`, `Deity`, `Language`, `LanguageEntry`, `Spell`, `Item`, `NpcQuality`, `SettlementName`, `Settlement`; all have zio-json codecs and Mongo ObjectId encode/decode where needed.
 - Persistence: `NameRepository`, `RaceRepository`, `CharacterRepository`, `CharacterClassRepository`, `PersonalityRepository`, `BackgroundRepository`, `SpellRepository`, `ItemRepository`, `TitleRepository`, `DeityRepository`, `LanguageRepository`, `MonsterRepository`, `NpcQualityRepository`, `SettlementNameRepository` with live Mongo implementations using codec registries. Race codec registry must include `RaceAbility`; class registry must include class support types.
 - Characters: `CharacterServer` builds random characters with weighted races, class-driven HP, features, talents (rolled 2d6 per talent level), spell summaries, gear, and language selection (Common + race languages + class-granted picks, resolving “extra” placeholders to actual common/rare languages). Gear slots are filled from Items (class weapon/armor allowances, slots, deduped gear, ammo for ranged, crawling-kit fillers; zero-slot gear goes to `freeToCarry`). `CharacterRoute` renders the random character both as JSON and as a filled PDF using the bundled sheet template.
@@ -162,7 +163,7 @@
   - `buildHex` now has a 1-in-10 chance to promote non-ocean land terrain to `River/coast`, increasing river overlay frequency.
   - River/coast density now caps at 3 tiles for 7-hex maps (and ~35% for larger maps); extras downgrade to land.
   - Disconnected river components are now trimmed to the single largest connected river cluster (coasts are preserved separately).
-  - Added `/hexes/random.png` route using `HexMapServer.renderHexMapPng` for PNG output; PNG rendering omits the legend, clears to transparent, and tight-crops to the hex bounds.
+  - PNG rendering is available via `POST /hexes/render` with `type: "png"`; it omits the legend, clears to transparent, and tight-crops to the hex bounds.
   - Adjusted river overlay diagonal rotations (swap NE-SW/NW-SE angles) to better align continuous rivers.
   - River straight orientations now include a `-REV` phase (picked by hex parity) to flip the texture 180° for better across-hex continuity.
   - River orientation scaling now strips the `-REV` suffix so boosted scales still apply to flipped rivers.
