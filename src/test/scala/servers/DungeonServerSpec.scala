@@ -1,5 +1,6 @@
 package servers
 
+import zio.ZIO
 import zio.test.{ZIOSpecDefault, assertTrue, suite, test}
 
 object DungeonServerSpec extends ZIOSpecDefault {
