@@ -8,13 +8,30 @@ import zio.json._
 
 final case class HexNextRequest(
   map: HexMap,
-  fromColumn: Int,
-  fromRow: Int,
   direction: String,
 )
 
 object HexNextRequest {
   implicit val decoder: JsonDecoder[HexNextRequest] = DeriveJsonDecoder.gen[HexNextRequest]
+}
+
+final case class HexRenderRequest(
+  map: HexMap,
+  `type`: String,
+)
+
+object HexRenderRequest {
+  implicit val decoder: JsonDecoder[HexRenderRequest] = DeriveJsonDecoder.gen[HexRenderRequest]
+}
+
+final case class HexError(
+  error: String,
+  details: Option[String] = None,
+  allowed: Option[List[String]] = None,
+)
+
+object HexError {
+  implicit val encoder: JsonEncoder[HexError] = DeriveJsonEncoder.gen[HexError]
 }
 
 final case class HexMapRoute(server: HexMapServer) {
@@ -32,45 +49,63 @@ final case class HexMapRoute(server: HexMapServer) {
             request.body.asString.flatMap { body =>
               body.fromJson[HexNextRequest] match {
                 case Left(error) =>
-                  ZIO.succeed(Response.text(error).status(Status.BadRequest))
+                  val payload = HexError(error = "Invalid next-hex payload", details = Some(error))
+                  ZIO.succeed(Response.json(payload.toJson).status(Status.BadRequest))
                 case Right(payload) =>
                   server
-                    .nextMap(payload.map, payload.fromColumn, payload.fromRow, payload.direction)
+                    .nextMap(payload.map, payload.direction)
                     .map(map => Response.json(map.toJson))
               }
             }
           }
           .mapError(err => Response.internalServerError(err.getMessage)),
-      Method.GET / "hexes" / "random.pdf" ->
+      Method.POST / "hexes" / "render" ->
         Handler
-          .fromFunctionZIO[Request] { _ =>
-            for {
-              map <- server.randomMap
-              pdf <- server.renderHexMapPdf(map)
-            } yield Response(
-              status = Status.Ok,
-              headers = Headers(
-                Header.Custom("Content-Type", "application/pdf"),
-                Header.Custom("Content-Disposition", "inline; filename=\"random-hex-map.pdf\""),
-              ),
-              body = Body.fromChunk(Chunk.fromArray(pdf)),
-            )
-          }
-          .mapError(err => Response.internalServerError(err.getMessage)),
-      Method.GET / "hexes" / "random.png" ->
-        Handler
-          .fromFunctionZIO[Request] { _ =>
-            for {
-              map <- server.randomMap
-              png <- server.renderHexMapPng(map)
-            } yield Response(
-              status = Status.Ok,
-              headers = Headers(
-                Header.Custom("Content-Type", "image/png"),
-                Header.Custom("Content-Disposition", "inline; filename=\"random-hex-map.png\""),
-              ),
-              body = Body.fromChunk(Chunk.fromArray(png)),
-            )
+          .fromFunctionZIO[Request] { request =>
+            request.body.asString.flatMap { body =>
+              body.fromJson[HexRenderRequest] match {
+                case Left(error) =>
+                  val payload = HexError(error = "Invalid render payload", details = Some(error))
+                  ZIO.succeed(Response.json(payload.toJson).status(Status.BadRequest))
+                case Right(payload) =>
+                  payload.`type`.trim.toLowerCase match {
+                    case "pdf" =>
+                      server
+                        .renderHexMapPdf(payload.map)
+                        .map { pdf =>
+                          Response(
+                            status = Status.Ok,
+                            headers = Headers(
+                              Header.Custom("Content-Type", "application/pdf"),
+                              Header.Custom("Content-Disposition", "inline; filename=\"hex-map.pdf\""),
+                            ),
+                            body = Body.fromChunk(Chunk.fromArray(pdf)),
+                          )
+                        }
+                    case "png" =>
+                      server
+                        .renderHexMapPng(payload.map)
+                        .map { png =>
+                          Response(
+                            status = Status.Ok,
+                            headers = Headers(
+                              Header.Custom("Content-Type", "image/png"),
+                              Header.Custom("Content-Disposition", "inline; filename=\"hex-map.png\""),
+                            ),
+                            body = Body.fromChunk(Chunk.fromArray(png)),
+                          )
+                        }
+                    case "json" =>
+                      ZIO.succeed(Response.json(payload.map.toJson))
+                    case other =>
+                      val payload = HexError(
+                        error = s"Unsupported render type: $other",
+                        allowed = Some(List("pdf", "png", "json")),
+                      )
+                      ZIO.succeed(Response.json(payload.toJson).status(Status.BadRequest))
+                  }
+              }
+            }
           }
           .mapError(err => Response.internalServerError(err.getMessage)),
     )

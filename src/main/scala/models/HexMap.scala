@@ -38,6 +38,8 @@ final case class HexMap(
   dangerLevel: String,
   layout: HexMapLayout,
   hexes: List[HexCell],
+  activeColumn: Int,
+  activeRow: Int,
 )
 
 object HexMap {

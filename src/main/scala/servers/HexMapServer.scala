@@ -23,6 +23,8 @@ final case class HexMapServer() {
   private val sqrt3 = Math.sqrt(3.0)
   private val poiInsetFactor = 0.7
   private val hexDirections = List("N", "NE", "SE", "S", "SW", "NW")
+  private val activeHexStroke = new BasicStroke(4.0f)
+  private val activeHexColor = new Color(25, 92, 54)
   private val terrainSteps = Vector(
     ("Desert", "Arctic"),
     ("Swamp", "Taiga"),
@@ -143,18 +145,25 @@ final case class HexMapServer() {
         dangerLevel = danger,
         layout = layoutFor(hexes),
         hexes = hexes,
+        activeColumn = 0,
+        activeRow = 0,
       )
     }
 
-  def nextMap(current: HexMap, fromColumn: Int, fromRow: Int, direction: String): Task[HexMap] =
+  def nextMap(current: HexMap, direction: String): Task[HexMap] =
     ZIO.attempt {
       val origin =
-        current.hexes.find(h => h.column == fromColumn && h.row == fromRow)
+        current.hexes.find(h => h.column == current.activeColumn && h.row == current.activeRow)
           .getOrElse(throw new IllegalArgumentException("Origin hex not found in map"))
-      val (targetCol, targetRow) = neighborCoords(fromColumn, fromRow, direction)
+      val (targetCol, targetRow) = moveCoords(current.activeColumn, current.activeRow, direction)
       val existing = current.hexes.find(h => h.column == targetCol && h.row == targetRow)
       existing match {
-        case Some(_) => current.copy(layout = layoutFor(current.hexes))
+        case Some(_) =>
+          current.copy(
+            layout = layoutFor(current.hexes),
+            activeColumn = targetCol,
+            activeRow = targetRow,
+          )
         case None =>
           val step = nextTerrainStep(origin.terrainStep)
           val nextId = current.hexes.map(_.id).maxOption.getOrElse(0) + 1
@@ -169,7 +178,12 @@ final case class HexMapServer() {
             allowOverlay = false,
           )
           val updatedHexes = applyRiverCoastOverlays(current.hexes :+ nextHex, current.climate)
-          current.copy(layout = layoutFor(updatedHexes), hexes = updatedHexes)
+          current.copy(
+            layout = layoutFor(updatedHexes),
+            hexes = updatedHexes,
+            activeColumn = targetCol,
+            activeRow = targetRow,
+          )
       }
     }
 
@@ -609,6 +623,24 @@ final case class HexMapServer() {
     }
   }
 
+  private def moveCoords(column: Int, row: Int, direction: String): (Int, Int) = {
+    val dir = direction.trim.toUpperCase
+    val odd = row % 2 != 0
+    (dir, odd) match {
+      case ("E", _) => (column + 1, row)
+      case ("W", _) => (column - 1, row)
+      case ("NE", false) => (column, row - 1)
+      case ("SE", false) => (column, row + 1)
+      case ("SW", false) => (column - 1, row + 1)
+      case ("NW", false) => (column - 1, row - 1)
+      case ("NE", true) => (column + 1, row - 1)
+      case ("SE", true) => (column + 1, row + 1)
+      case ("SW", true) => (column, row + 1)
+      case ("NW", true) => (column, row - 1)
+      case _ => throw new IllegalArgumentException("Direction must be NW, NE, E, SE, SW, or W")
+    }
+  }
+
   private def neighborOffsetsFor(row: Int): List[(Int, Int)] = {
     val odd = row % 2 != 0
     if (odd) {
@@ -678,6 +710,11 @@ final case class HexMapServer() {
         g.setColor(new Color(60, 55, 50))
         g.setStroke(new BasicStroke(2.0f))
         g.draw(polygon)
+        if (hex.column == map.activeColumn && hex.row == map.activeRow) {
+          g.setColor(activeHexColor)
+          g.setStroke(activeHexStroke)
+          g.draw(polygon)
+        }
         drawPoiMarker(g, hex, centerX, centerY, size)
       }
 

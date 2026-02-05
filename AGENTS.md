@@ -167,6 +167,11 @@
   - River straight orientations now include a `-REV` phase (picked by hex parity) to flip the texture 180° for better across-hex continuity.
   - River orientation scaling now strips the `-REV` suffix so boosted scales still apply to flipped rivers.
   - River `-REV` phase now propagates along straight river axes (per-axis BFS), alternating phase between adjacent hexes on the same axis for better continuity.
+  - Added `HexMap.activeColumn`/`activeRow`; `/hexes/next` now moves from the active hex by direction only (NW/NE/E/SE/SW/W) and updates the active hex, rendering it with a dark green border.
+  - Replaced `/hexes/random.pdf` and `/hexes/random.png` with `POST /hexes/render` (accepts `{ map, type: "pdf" | "png" | "json" }`) for rendering.
+  - `POST /hexes/render` returns JSON error payloads for invalid bodies or unsupported types (includes `allowed` list).
+  - `POST /hexes/next` now returns JSON error payloads for invalid request bodies.
+  - Split movement vs adjacency: `moveCoords` handles NW/NE/E/SE/SW/W while `neighborCoords` keeps N/NE/SE/S/SW/NW for overlay adjacency so `/hexes/random` no longer errors.
 - Code detail:
   - `randomMap` builds 7 hexes with `allowOverlay = false`, then calls `applyRiverCoastOverlays` to assign overlays based on neighbor terrain.
   - `buildHex` now has `allowOverlay` flag; overlay selection is skipped during the first pass.
