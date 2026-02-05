@@ -14,6 +14,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import zio.{Task, ZIO, ZLayer}
 
 final case class HexMapServer() {
+  import HexMapServer._
   private val rng: ThreadLocalRandom = ThreadLocalRandom.current()
   private val pageWidth = 1275
   private val pageHeight = 1650
@@ -943,8 +944,6 @@ final case class HexMapServer() {
     ax <= (sqrt3 * size / 2.0) && ay <= size && (ax / sqrt3 + ay) <= size
   }
 
-  private final case class PoiMarkerStyle(color: Color, draw: (Graphics2D, Int, Int, Int) => Unit)
-
   private def poiMarkerStyle(location: String, development: String): PoiMarkerStyle = {
     val loc = location.toLowerCase
     val dev = development.toLowerCase
@@ -1148,6 +1147,8 @@ final case class HexMapServer() {
 }
 
 object HexMapServer {
+  private final case class PoiMarkerStyle(color: Color, draw: (Graphics2D, Int, Int, Int) => Unit)
+
   val live: ZLayer[Any, Nothing, HexMapServer] =
     ZLayer.succeed(HexMapServer())
 }

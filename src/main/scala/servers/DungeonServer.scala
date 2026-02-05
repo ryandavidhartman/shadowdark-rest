@@ -15,6 +15,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import zio.{Task, ZIO, ZLayer}
 
 final case class DungeonServer() {
+  import DungeonServer._
   private val pageWidth = 1275
   private val pageHeight = 1650
   private val pageMargin = 60
@@ -147,12 +148,6 @@ final case class DungeonServer() {
         (w, h)
     }
   }
-
-  private final case class RoomRect(x: Int, y: Int, width: Int, height: Int) {
-    def center: Point = Point(x + width / 2, y + height / 2)
-  }
-
-  private final case class FloorCell(rect: RoomRect, isHall: Boolean)
 
   private def floorPlanBounds(): RoomRect = {
     val margin = mapPadding + 20
@@ -1385,6 +1380,15 @@ final case class DungeonServer() {
     corridors.toList
   }
 
+}
+
+object DungeonServer {
+  private final case class RoomRect(x: Int, y: Int, width: Int, height: Int) {
+    def center: Point = Point(x + width / 2, y + height / 2)
+  }
+
+  private final case class FloorCell(rect: RoomRect, isHall: Boolean)
+
   private final case class DungeonStyle(
       backgroundTop: Color,
       backgroundBottom: Color,
@@ -1400,9 +1404,7 @@ final case class DungeonServer() {
       roomStrokeDash: Option[Array[Float]],
       floorPlan: Boolean
   )
-}
 
-object DungeonServer {
   val live: ZLayer[Any, Nothing, DungeonServer] =
     ZLayer.succeed(DungeonServer())
 }

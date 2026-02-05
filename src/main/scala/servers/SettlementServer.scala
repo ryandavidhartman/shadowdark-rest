@@ -38,6 +38,7 @@ final case class SettlementServer(
     npcQualityServer: NpcQualityServer,
     settlementNameServer: SettlementNameServer
 ) {
+  import SettlementServer._
   private val pageWidth = 1275
   private val pageHeight = 1650
   private val pageMargin = 50
@@ -579,13 +580,6 @@ final case class SettlementServer(
       }
     }
   }
-
-  private final case class BuildingProfile(
-      minWidth: Int,
-      maxWidth: Int,
-      minHeight: Int,
-      maxHeight: Int
-  )
 
   private def buildingProfileFor(districtType: String, rand: Random): BuildingProfile =
     districtType match {
@@ -1361,14 +1355,6 @@ final case class SettlementServer(
     g.setStroke(new BasicStroke(3f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND))
     g.draw(path)
   }
-
-  private sealed trait TexturePattern
-  private case object DiagonalHatch extends TexturePattern
-  private case object CrossHatch extends TexturePattern
-  private case object DotPattern extends TexturePattern
-  private case object HorizontalHatch extends TexturePattern
-
-  private final case class DistrictStyle(fill: Color, pattern: TexturePattern)
 
   private def clampColor(value: Int): Int =
     math.max(0, math.min(255, value))
@@ -2545,6 +2531,21 @@ final case class SettlementServer(
 }
 
 object SettlementServer {
+  private final case class BuildingProfile(
+      minWidth: Int,
+      maxWidth: Int,
+      minHeight: Int,
+      maxHeight: Int
+  )
+
+  private sealed trait TexturePattern
+  private case object DiagonalHatch extends TexturePattern
+  private case object CrossHatch extends TexturePattern
+  private case object DotPattern extends TexturePattern
+  private case object HorizontalHatch extends TexturePattern
+
+  private final case class DistrictStyle(fill: Color, pattern: TexturePattern)
+
   val live: ZLayer[
     NameServer
       with RaceServer

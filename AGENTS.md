@@ -33,6 +33,7 @@
 - `sbt run` — launch the ZIO HTTP app; binds to `server.port` (override with `SERVER_PORT`).
 - `sbt test` — run the suite; add your test framework dependency in `build.sbt` if absent.
 - `sbt console` — REPL with project classes for quick checks; `sbt clean` to clear compiled artifacts.
+- `sbt dependencyUpdates` — report newer dependency versions via sbt-updates plugin.
 
 ## Coding Style & Naming Conventions
 - Target Scala 2.13; prefer ZIO over `Future`.
