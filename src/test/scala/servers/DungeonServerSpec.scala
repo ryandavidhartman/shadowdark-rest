@@ -1,5 +1,6 @@
 package servers
 
+import org.apache.pdfbox.Loader
 import zio.ZIO
 import zio.test.{ZIOSpecDefault, assertTrue, suite, test}
 
@@ -12,7 +13,7 @@ object DungeonServerSpec extends ZIOSpecDefault {
         } yield assertTrue(
           dungeon.rooms.nonEmpty,
           dungeon.rooms.map(_.id).distinct.size == dungeon.rooms.size,
-          dungeon.rooms.exists(_.objectiveRoom),
+          dungeon.rooms.count(_.objectiveRoom) == 1,
           dungeon.rooms.forall(room => room.width > 0 && room.height > 0),
           dungeon.layout.outline.size >= 3,
           dungeon.layout.entrances.nonEmpty
@@ -23,7 +24,14 @@ object DungeonServerSpec extends ZIOSpecDefault {
           server <- ZIO.succeed(DungeonServer())
           dungeon <- server.randomDungeon
           pdf <- server.renderDungeonPdf(dungeon)
-        } yield assertTrue(pdf.nonEmpty)
+          doc <- ZIO.attempt(Loader.loadPDF(pdf))
+          pages <- ZIO.attempt(doc.getNumberOfPages)
+          _ <- ZIO.attempt(doc.close())
+        } yield assertTrue(
+          pdf.nonEmpty,
+          new String(pdf.take(5), java.nio.charset.StandardCharsets.US_ASCII) == "%PDF-",
+          pages >= 1
+        )
       }
     )
 }

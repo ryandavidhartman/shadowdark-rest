@@ -49,6 +49,9 @@
 - Added generator invariant specs for dungeons and hex maps in `src/test/scala/servers/DungeonServerSpec.scala` and `src/test/scala/servers/HexMapServerSpec.scala`.
 - Added settlement generator invariant spec with in-memory repos in `src/test/scala/servers/SettlementServerSpec.scala`.
 - Added PDF/PNG smoke tests for dungeon, settlement, and hex map rendering in the server specs.
+- Added route smoke tests in `src/test/scala/routes/RouteSmokeSpec.scala` and shared test fixtures in `src/test/scala/support/TestData.scala`.
+- Added in-memory `NameRepository` CRUD spec in `src/test/scala/repositories/NameRepositorySpec.scala`.
+- Tests use PDFBox 3 `Loader.loadPDF` for PDF validation (not `PDDocument.load`).
 
 ## Commit & Pull Request Guidelines
 - Commits: imperative, concise subjects (`Add character routes`, `Fix Mongo codec registration`); keep diffs focused.

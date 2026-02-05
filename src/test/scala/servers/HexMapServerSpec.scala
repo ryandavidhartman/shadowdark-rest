@@ -1,5 +1,6 @@
 package servers
 
+import org.apache.pdfbox.Loader
 import zio.ZIO
 import zio.test.{ZIOSpecDefault, assertTrue, suite, test}
 
@@ -30,19 +31,42 @@ object HexMapServerSpec extends ZIOSpecDefault {
           updated.hexes.size == 7
         )
       },
+      test("nextMap adds a new hex when moving beyond the initial ring") {
+        val server = HexMapServer()
+        for {
+          map <- server.randomMap
+          moved <- server.nextMap(map, "E")
+          expanded <- server.nextMap(moved, "E")
+        } yield assertTrue(
+          moved.hexes.size == 7,
+          expanded.hexes.size == 8,
+          expanded.activeColumn == 2,
+          expanded.activeRow == 0
+        )
+      },
       test("renderHexMapPdf returns a non-empty PDF payload") {
         for {
           server <- ZIO.succeed(HexMapServer())
           map <- server.randomMap
           pdf <- server.renderHexMapPdf(map)
-        } yield assertTrue(pdf.nonEmpty)
+          doc <- ZIO.attempt(Loader.loadPDF(pdf))
+          pages <- ZIO.attempt(doc.getNumberOfPages)
+          _ <- ZIO.attempt(doc.close())
+        } yield assertTrue(
+          pdf.nonEmpty,
+          new String(pdf.take(5), java.nio.charset.StandardCharsets.US_ASCII) == "%PDF-",
+          pages >= 1
+        )
       },
       test("renderHexMapPng returns a non-empty PNG payload") {
         for {
           server <- ZIO.succeed(HexMapServer())
           map <- server.randomMap
           png <- server.renderHexMapPng(map)
-        } yield assertTrue(png.nonEmpty)
+        } yield assertTrue(
+          png.nonEmpty,
+          png.take(8).sameElements(Array(0x89.toByte, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a))
+        )
       }
     )
 }
